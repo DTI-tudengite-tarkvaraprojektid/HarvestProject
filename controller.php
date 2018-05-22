@@ -78,9 +78,12 @@ function submitFish(){
     $stmt->execute();
     $stmt->bind_result($id);
     $result = $stmt->fetch();
+    $stmt->close();
     $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
     $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
-    $stmt->execute();            
+    $stmt->execute();   
+    $stmt->close();
+    $mysqli->close();         
 }
 
 function createGame(){
@@ -88,10 +91,13 @@ function createGame(){
     $stmt = $mysqli->prepare("INSERT INTO game (gameCode , currentRound) VALUES(?,?)"); 
     $stmt->bind_param("si",$gameCode, $currentround);
     $stmt->execute();
+    $stmt->close();
     $stmt = $mysqli->prepare("SELECT id FROM game WHERE game_id = ?"); 
     $stmt->bind_param("i",$game_id);
     $stmt->bind_result($id);
     $result = $stmt->fetch();
+    $stmt->close();
+    $mysqli->close(); 
     return([$id , $gameCode]);            
 }
 
@@ -102,18 +108,23 @@ function startGame(){
     $stmt->execute();
     $stmt->bind_result($maxPlayers);
     $result = $stmt->fetch();
+    $stmt->close();
     $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '1' WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
     $stmt->execute();
     $result = $stmt->fetch();
+    $stmt->close();
     $stmt = $mysqli->prepare("UPDATE game SET players = ? WHERE id = ?");
     $stmt->bind_param("ii",$maxPlayers, $game_id);
     $stmt->execute();
     $result = $stmt->fetch();
+    $stmt->close();
     $stmt = $mysqli->prepare("INSERT INTO round (game_id, roundNr, fish_start) VALUES(?, ?, ?)"); 
     $stmt->bind_param("sii", $gameCode,$roundNr,$fish_start);
     $stmt->execute();
     $result = $stmt->fetch();
+    $stmt->close();
+    $mysqli->close();
 }
 
 function getPlayers($game_id){
@@ -123,6 +134,8 @@ function getPlayers($game_id){
     $stmt->execute();
     $stmt->bind_result($name);
     $result = $stmt->fetch();
+    $stmt->close();
+    $mysqli->close();
     return $name;            
 }
 
@@ -133,6 +146,8 @@ function gameStarted($game_id){
     $stmt->execute();
     $stmt->bind_result($gameStarted);
     $result = $stmt->fetch();
+    $stmt->close();
+    $mysqli->close();
     if($gameStarted == 1){
         $object = json_decode(gameStats());
         return $obect;
@@ -141,10 +156,12 @@ function gameStarted($game_id){
 
 function playersReady(){
     $stmt = $mysqli->prepare("SELECT COUNT(*) FROM turn WHERE round_id = ?;"); 
-        $stmt->bind_param("i", $round_id);
-        $stmt->execute();
-        $stmt->bind_result($playersReady);
-        $result = $stmt->fetch();
+    $stmt->bind_param("i", $round_id);
+    $stmt->execute();
+    $stmt->bind_result($playersReady);
+    $result = $stmt->fetch();
+    $stmt->close();
+    $mysqli->close();
 }
 
 function gameStats($game_id){
@@ -155,16 +172,20 @@ function gameStats($game_id){
         $stmt->execute();
         $stmt->bind_result($currentRound);
         $result = $stmt->fetch();
+        $stmt->close();
         $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND turn_id =?;");
         $stmt->bind_param("ii", $game_id, $currentRound); 
         $stmt->execute();
         $stmt->bind_result($round_id);
         $result = $stmt->fetch();
+        $stmt->close();
         $stmt = $mysqli->prepare("SELECT COUNT(players) FROM game WHERE id = ?;"); 
         $stmt->bind_param("i", $game_id);
         $stmt->execute();
         $stmt->bind_result($maxPlayers);
         $result = $stmt->fetch();
+        $stmt->close();
+        $mysqli->close();
         return json_encode(["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);     
     }
 }
