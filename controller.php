@@ -67,8 +67,25 @@ switch($action) {
         
     case "roundOver":
         if(isset($_POST["submit"])) {
-            echo gameStats($game_id);
-            /*võtab suvalises järjekorras playerid turn tabelist, kus round = currentRound ja game_id ka. iga playeri kohta vaatab palju kalu tahab, lahutab selle max kaladest mis saab game statsist(aga eraldi muutujas $fishInSea)
+            $gameStats = gameStats($game_id);
+        $turns = [];
+        mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+        $stmt = $mysqli->prepare(("SELECT id, team_id, fish_wanted FROM turn WHERE round_id = (SELECT id FROM round WHERE game_id = '?' AND roundNr = ?)"); 
+        $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
+        $stmt->bind_result($turn_id, $team_id, $fish_wanted);
+        $stmt->execute()
+        while($stmt->fetch()) {
+            $turns[] = ["turn_id" => $turn_id, "team_id" => $team_id,"fish_wanted" => $fish_wanted]
+        }
+        $stmt->close();
+        $mysqli->close();
+
+        shuffle($turns);
+        //pooleli
+
+        
+            /*võtab suvalises järjekorras playerid turn tabelist, kus round = currentRound ja game_id ka.
+            iga playeri kohta vaatab palju kalu tahab, lahutab selle max kaladest mis saab game statsist(aga eraldi muutujas $fishInSea)
             pärast kalade ära jagamist, muutab current roundi +1, ja lisab kalu vette vastavalt ($fishInSea = $fishInSea * 2, if($fishInSea > maxFish) siis $fishInSea = maxFish); samuti updatib vana roundi "fish_end'i"
             teeb uue roundi kirje insert into round(game_id, roundNr, fish_start) values($game_id, 1, 5*playersCount*2)*/
             break;
