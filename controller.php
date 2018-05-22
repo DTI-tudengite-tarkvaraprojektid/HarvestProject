@@ -12,11 +12,13 @@ session_start();
 switch($action) {
     case "gameStarted" : 
         if(isset($_GET["game_id"])) {
-            echo gameStarted($_GET["game_id"]);
+            
+        echo gameStarted($_GET["game_id"]);
+            
         }
     case "gameStats":
         if(isset($_GET["game_id"])) {
-            echo gamestats($_GET["game_id"]);
+            echo json_encode(gamestats($_GET["game_id"]));
         }
     case "playersReady":
     if(isset($_GET["game_id"])) {
@@ -44,7 +46,9 @@ switch($action) {
     case "startGame":
         if (isset($_SESSION["loggedIn"])){
             if(isset($_POST["submit"])) {
-                echo startGame();
+                if(is_numeric($_GET["game_id"])){
+                    echo startGame($_GET["game_id"]);
+                }
             }
         }
 
@@ -101,7 +105,8 @@ function createGame(){
     return([$id , $gameCode]);            
 }
 
-function startGame(){
+function startGame($game_id){
+    
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT COUNT(name) FROM team WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
@@ -184,7 +189,7 @@ function gameStats($game_id){
         $result = $stmt->fetch();
         $stmt->close();
         $mysqli->close();
-        return json_encode(["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);     
+        return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);     
     }
 }
 ?>
