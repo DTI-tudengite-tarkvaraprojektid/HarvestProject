@@ -109,14 +109,14 @@ function createGame(){
 }
 
 function generateGameCode(){
-    $codeExists = false;
-    while(!$codeExsists) {
+    $codeExists = true;
+    while($codeExsists) {
         
         $lenght = 5;
         $gameCode = ""; 
         $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        $max = strlen($characters) - 1;
-        for ($i = 0; $i <= $max; $i++) {
+        $max = strlen($characters);
+        for ($i = 0; $i < $max; $i++) {
             $gameCode .= $characters[mt_rand(0, $max)];
         }
         $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -127,12 +127,11 @@ function generateGameCode(){
         $result = $stmt->fetch();
         $stmt->close();
         if(empty($gameCodeDB)){
-            $codeExists  = true;
-            return $gameCode;
-        }else{
-            return "game already exists";
+            $codeExists  = false;
+            
         }
     }
+    return $gameCode;
 }
 function startGame($game_id){
     
