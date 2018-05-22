@@ -13,7 +13,7 @@ switch($action) {
     case "gameStarted" : 
         if(isset($_GET["game_id"])) {
             
-        echo gameStarted($_GET["game_id"]);
+        echo json_encode(gameStarted($_GET["game_id"]));
             
         }
     case "gameStats":
@@ -203,5 +203,30 @@ function gameStats($game_id){
         $mysqli->close();
         return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);     
     }
+}
+
+function joinGame($gameCode, $teamName) {   
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+
+    if (mysqli_connect_errno()) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        exit();
+    }
+    
+    $gameCode = $mysqli->real_escape_string($gameCode);
+    if ($result = $mysqli->query("SELECT id FROM game WHERE gameCode = '$gameCode'")) {
+        $obj = $result->fetch_object();
+        $result->close();
+    }
+
+    if(gameStarted($obj->id)) {
+        $mysqli->close();
+        return 0;
+    } else {
+        $teamName = $mysqli->real_escape_string($teamName);
+        $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
+        $mysqli->close();
+        return 1;
+    } 
 }
 ?>
