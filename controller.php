@@ -15,11 +15,13 @@ switch($action) {
             echo gameStarted($_GET["game_id"]);
         }
     case "gameStats":
+        if(isset($_GET["game_id"])) {
+            echo gamestats($_GET["game_id"]));
+        }
+    case "playersReady":
     if(isset($_GET["game_id"])) {
-        echo gamestats($_GET["game_id"]));
+        echo playersReady($_GET["round_id"]));
     }
-    break;
-
     case "getPlayers":
         if(isset($_GET["game_id"])) {
             echo gerPlayers($_GET["game_id"]);
@@ -61,7 +63,7 @@ switch($action) {
         
     case "roundOver":
         if(isset($_POST["submit"])) {
-            gameStats();
+            echo gameStats($game_id);
             /*võtab suvalises järjekorras playerid turn tabelist, kus round = currentRound ja game_id ka. iga playeri kohta vaatab palju kalu tahab, lahutab selle max kaladest mis saab game statsist(aga eraldi muutujas $fishInSea)
             pärast kalade ära jagamist, muutab current roundi +1, ja lisab kalu vette vastavalt ($fishInSea = $fishInSea * 2, if($fishInSea > maxFish) siis $fishInSea = maxFish); samuti updatib vana roundi "fish_end'i"
             teeb uue roundi kirje insert into round(game_id, roundNr, fish_start) values($game_id, 1, 5*playersCount*2)*/
@@ -70,14 +72,14 @@ switch($action) {
 }
 function submitFish(){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-            $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND roundNr = ?"); 
-            $stmt->bind_param("ii",$game_id, $currentRound);
-            $stmt->execute();
-            $stmt->bind_result($id);
-            $result = $stmt->fetch();
-            $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
-            $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
-            $stmt->execute();
+    $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND roundNr = ?"); 
+    $stmt->bind_param("ii",$game_id, $currentRound);
+    $stmt->execute();
+    $stmt->bind_result($id);
+    $result = $stmt->fetch();
+    $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
+    $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
+    $stmt->execute();
             
 }
 function createGame(){
@@ -130,9 +132,16 @@ function gameStarted($game_id){
     $stmt->bind_result($gameStarted);
     $result = $stmt->fetch();
     if($gameStarted == 1){
-        echo gameStats();
+    echo gameStats();
     }
            
+}
+function playersReady(){
+    $stmt = $mysqli->prepare("SELECT COUNT(*) FROM turn WHERE round_id = ?;"); 
+        $stmt->bind_param("i", $round_id);
+        $stmt->execute();
+        $stmt->bind_result($playersReady);
+        $result = $stmt->fetch();
 }
 function gameStats($game_id){
     if(isset($_GET["game_id"])) {
@@ -146,11 +155,6 @@ function gameStats($game_id){
         $stmt->bind_param("ii", $game_id, $currentRound); 
         $stmt->execute();
         $stmt->bind_result($round_id);
-        $result = $stmt->fetch();
-        $stmt = $mysqli->prepare("SELECT COUNT(*) FROM turn WHERE round_id = ?;"); 
-        $stmt->bind_param("i", $round_id);
-        $stmt->execute();
-        $stmt->bind_result($playersReady);
         $result = $stmt->fetch();
         $stmt = $mysqli->prepare("SELECT COUNT(players) FROM game WHERE id = ?;"); 
         $stmt->bind_param("i", $game_id);
