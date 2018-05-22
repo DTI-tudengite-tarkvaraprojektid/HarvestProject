@@ -79,8 +79,8 @@ function submitFish(){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND roundNr = ?"); 
     $stmt->bind_param("ii",$game_id, $currentRound);
-    $stmt->execute();
     $stmt->bind_result($id);
+    $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
@@ -101,6 +101,7 @@ function createGame(){
     $stmt = $mysqli->prepare("SELECT id FROM game WHERE game_id = ?"); 
     $stmt->bind_param("i",$game_id);
     $stmt->bind_result($id);
+    $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close(); 
@@ -122,8 +123,8 @@ function generateGameCode(){
         $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
         $stmt = $mysqli->prepare("SELECT gameCode FROM game WHERE gameCode = ?"); 
         $stmt->bind_param("i", $gameCode);
-        $stmt->execute();
         $stmt->bind_result($gameCodeDB);
+        $stmt->execute();
         $result = $stmt->fetch();
         $stmt->close();
         if(empty($gameCodeDB)){
@@ -138,8 +139,8 @@ function startGame($game_id){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT COUNT(name) FROM team WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
-    $stmt->execute();
     $stmt->bind_result($maxPlayers);
+    $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '1' WHERE id = ?"); 
@@ -164,8 +165,8 @@ function getPlayers($game_id){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT name FROM team WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
-    $stmt->execute();
     $stmt->bind_result($name);
+    $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
@@ -176,8 +177,8 @@ function gameStarted($game_id){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT gameStarted FROM game WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
-    $stmt->execute();
     $stmt->bind_result($gameStarted);
+    $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
@@ -187,8 +188,8 @@ function gameStarted($game_id){
 function playersReady(){
     $stmt = $mysqli->prepare("SELECT COUNT(*) FROM turn WHERE round_id = ?;"); 
     $stmt->bind_param("i", $round_id);
-    $stmt->execute();
     $stmt->bind_result($playersReady);
+    $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
@@ -200,22 +201,23 @@ function gameStats($game_id){
         $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
         $stmt = $mysqli->prepare("SELECT currentRound FROM game WHERE game_id = ?"); 
         $stmt->bind_param("i", $game_id);
-        $stmt->execute();
         $stmt->bind_result($currentRound);
+        $stmt->execute();
         $result = $stmt->fetch();
         $stmt->close();
-        $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND turn_id =?;");
+        $stmt = $mysqli->prepare("SELECT fish_start FROM round WHERE game_id = ? AND roundNr =?;");
         $stmt->bind_param("ii", $game_id, $currentRound); 
+        $stmt->bind_result($fishInSea);
         $stmt->execute();
-        $stmt->bind_result($round_id);
         $result = $stmt->fetch();
         $stmt->close();
-        $stmt = $mysqli->prepare("SELECT COUNT(players) FROM game WHERE id = ?;"); 
+        $stmt = $mysqli->prepare("SELECT players FROM game WHERE id = ?;"); 
         $stmt->bind_param("i", $game_id);
-        $stmt->execute();
         $stmt->bind_result($maxPlayers);
+        $stmt->execute();
         $result = $stmt->fetch();
         $stmt->close();
+        
         $mysqli->close();
         return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);     
     }
