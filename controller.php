@@ -73,6 +73,16 @@ switch($action) {
             teeb uue roundi kirje insert into round(game_id, roundNr, fish_start) values($game_id, 1, 5*playersCount*2)*/
             break;
         }
+
+    case "joinGame":
+        if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
+            echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
+            /*võtab suvalises järjekorras playerid turn tabelist, kus round = currentRound ja game_id ka. iga playeri kohta vaatab palju kalu tahab, lahutab selle max kaladest mis saab game statsist(aga eraldi muutujas $fishInSea)
+            pärast kalade ära jagamist, muutab current roundi +1, ja lisab kalu vette vastavalt ($fishInSea = $fishInSea * 2, if($fishInSea > maxFish) siis $fishInSea = maxFish); samuti updatib vana roundi "fish_end'i"
+            teeb uue roundi kirje insert into round(game_id, roundNr, fish_start) values($game_id, 1, 5*playersCount*2)*/
+            break;
+        }
+
 }
 
 function submitFish(){
