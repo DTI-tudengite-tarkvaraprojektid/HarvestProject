@@ -60,32 +60,32 @@ switch($action) {
         }
     
     case "startGame":
-    if isset($_SESSION["loggedIn"]{
-        if(isset($_POST["submit"])) {
-            $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-            $stmt = $mysqli->prepare("SELECT COUNT(name) FROM team WHERE game_id = '$game_id'"); 
-            $stmt->bind_param("i", $game_id);
-            $stmt->execute();
-            $stmt->bind_result($maxPlayers);
-            $result = $stmt->fetch();
-            $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '1' WHERE id = '$game_id'"); 
-            $stmt->bind_param("i", $game_id);
-            $stmt->execute();
-            $result = $stmt->fetch();
-            $stmt = $mysqli->prepare("UPDATE game SET players = '$maxPlayers' WHERE id = '$game_id'");
-            $stmt->bind_param("ii",$maxPlayers, $game_id);
-            $stmt->execute();
-            $result = $stmt->fetch();
-            $stmt = $mysqli->prepare("INSERT INTO round (game_id, roundNr, fish_start) VALUES('$gameCode', '1', '50')"); 
-            $stmt->bind_param("sii", $gameCode,$roundNr,$fish_start);
-            $stmt->execute();
-            $result = $stmt->fetch();
-            break;
-        }
+        if (isset($_SESSION["loggedIn"])){
+            if(isset($_POST["submit"])) {
+                $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+                $stmt = $mysqli->prepare("SELECT COUNT(name) FROM team WHERE game_id = '$game_id'"); 
+                $stmt->bind_param("i", $game_id);
+                $stmt->execute();
+                $stmt->bind_result($maxPlayers);
+                $result = $stmt->fetch();
+                $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '1' WHERE id = '$game_id'"); 
+                $stmt->bind_param("i", $game_id);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                $stmt = $mysqli->prepare("UPDATE game SET players = '$maxPlayers' WHERE id = '$game_id'");
+                $stmt->bind_param("ii",$maxPlayers, $game_id);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                $stmt = $mysqli->prepare("INSERT INTO round (game_id, roundNr, fish_start) VALUES('$gameCode', '1', '50')"); 
+                $stmt->bind_param("sii", $gameCode,$roundNr,$fish_start);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                break;
+            }
         }
 
     case "createGame":
-    if isset($_SESSION["loggedIn"]{
+    if (isset($_SESSION["loggedIn"])){
         if(isset($_POST["submit"])) {
             $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
             $stmt = $mysqli->prepare("INSERT INTO game (gameCode , currentRound) VALUES('$gameCode', 1)"); 
