@@ -92,6 +92,7 @@ function submitFish(){
 
 function createGame(){
     $gameCode = generatecode();
+    
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("INSERT INTO game (gameCode , currentRound) VALUES(?,?)"); 
     $stmt->bind_param("si",$gameCode, $currentround);
@@ -103,20 +104,36 @@ function createGame(){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close(); 
-    return([$id , $gameCode]);            
+    return([$id , $gameCode]); 
+               
 }
 
 function generateGameCode(){
-    $lenght = 5;
-    $gameCode = ""; 
-    $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    $max = strlen($characters) - 1;
-    for ($i = 0; $i <= $max; $i++) {
-         $gameCode .= $characters[mt_rand(0, $max)];
+    $codeExists = false;
+    while(!$codeExsists) {
+        
+        $lenght = 5;
+        $gameCode = ""; 
+        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $max = strlen($characters) - 1;
+        for ($i = 0; $i <= $max; $i++) {
+            $gameCode .= $characters[mt_rand(0, $max)];
+        }
+        $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+        $stmt = $mysqli->prepare("SELECT gameCode FROM game WHERE gameCode = ?"); 
+        $stmt->bind_param("i", $gameCode);
+        $stmt->execute();
+        $stmt->bind_result($gameCodeDB);
+        $result = $stmt->fetch();
+        $stmt->close();
+        if(empty($gameCodeDB)){
+            $codeExists  = true;
+            return $gameCode;
+        }else{
+            return "game already exists";
+        }
     }
-    return $gameCode;
 }
-
 function startGame($game_id){
     
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
