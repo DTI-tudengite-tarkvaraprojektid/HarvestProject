@@ -148,10 +148,7 @@ function gameStarted($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    if($gameStarted == 1){
-        $object = json_decode(gameStats());
-        return $obect;
-    }           
+    return $gameStarted;         
 }
 
 function playersReady(){
@@ -162,6 +159,7 @@ function playersReady(){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
+    return $playersReady;
 }
 
 function gameStats($game_id){
