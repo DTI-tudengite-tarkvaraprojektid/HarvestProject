@@ -91,6 +91,7 @@ function submitFish(){
 }
 
 function createGame(){
+    $gameCode = generatecode();
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("INSERT INTO game (gameCode , currentRound) VALUES(?,?)"); 
     $stmt->bind_param("si",$gameCode, $currentround);
@@ -103,6 +104,17 @@ function createGame(){
     $stmt->close();
     $mysqli->close(); 
     return([$id , $gameCode]);            
+}
+
+function generateGameCode(){
+    $lenght = 5;
+    $gameCode = ""; 
+    $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    $max = strlen($characters) - 1;
+    for ($i = 0; $i <= $max; $i++) {
+         $gameCode .= $characters[mt_rand(0, $max)];
+    }
+    return $gameCode;
 }
 
 function startGame($game_id){
