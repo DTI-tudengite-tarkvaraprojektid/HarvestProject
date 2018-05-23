@@ -24,3 +24,26 @@ function loadHTML (myDivId, url, callback) { // https://stackoverflow.com/questi
   xmlhttp.open('GET', url, true)
   xmlhttp.send()
 }
+
+function ajaxPost (action, data, callback) {
+  let request = new XMLHttpRequest()
+  let url = '/controller.php?action=' + action
+  // let data = new FormData()
+  // data.append('userName', userName)
+  // data.append('passWord', passWord)
+  request.open('POST', url, true)
+  // request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+  request.onreadystatechange = function () {
+    if (request.readyState === XMLHttpRequest.DONE) {
+      if (request.status === 200) {
+        let response = JSON.parse(request.ressponse)
+        if (response.result === 1) {
+          return response.result
+        } else {
+          console.log('ajaxPostError')
+        }
+      }
+    }
+  }
+  request.send(data)
+}
