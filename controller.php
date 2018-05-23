@@ -78,6 +78,16 @@ switch($action) {
             echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
         }
         break;
+
+    case "isLoggedIn":
+        $response = array();
+        if(isset($_SESSION["loggedIn"])) {
+            $response['loggedIn'] = false;
+        } else {
+            $response['loggedIn'] = true;
+        }
+        echo json_encode($response);
+        break;
 }
 
 function login($username, $password){
