@@ -1,10 +1,10 @@
 
 window.onload = function () {
-
+  isLoggedIn()
 }
 
 function isLoggedIn () {
-  let response = getAjax('isLoggedIn')
+  let response = ajaxGet('isLoggedIn')
   if(response.loggedIn){
     loadHTML('content', 'views/joinedScreen.html', function(){  
     })
