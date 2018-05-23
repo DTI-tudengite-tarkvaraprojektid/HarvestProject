@@ -319,10 +319,5 @@ function roundOver($game_id) {
     $stmt->bind_param("ii",$gameStats['currentRound'],$game_id);
     $stmt->execute();
     $stmt->close();
-    /*võtab suvalises järjekorras playerid turn tabelist, kus round = currentRound ja game_id ka.
-    iga playeri kohta vaatab palju kalu tahab, lahutab selle max kaladest mis saab game statsist(aga eraldi muutujas $fishInSea)
-    pärast kalade ära jagamist, muutab current roundi (currentRound) +1, ja lisab kalu vette vastavalt 
-    ($fishInSea = $fishInSea * 2, if($fishInSea > maxFish) siis $fishInSea = maxFish); samuti updatib vana roundi "fish_end'i"
-    teeb uue roundi kirje insert into round(game_id, roundNr, fish_start) values($game_id, 1, 5*playersCount*2)*/
     }
 ?>
