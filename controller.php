@@ -35,7 +35,6 @@ switch($action) {
         break;
 
     case "login":
-<<<<<<< HEAD
         if(isset($_POST["username"]) && isset($_POST['password'])) {
             $success = login($_POST['username'], $_POST['password']);
             if($success) {
@@ -43,15 +42,6 @@ switch($action) {
 			}
             //kontrollib username ja parooli õigsust.
             // return(1,0)
-=======
-        if(isset($_POST["submit"])) {
-            $success = loginUser($_POST['username'], $_POST['password']);
-            if($success) {
-				$messages[] = ["Logged in"];
-			} else {
-				$messages[] = ["error","Wrong username and password combination"];
-			}
->>>>>>> 645d4529d5c1da82029877ec251d5c0aec2df3b3
         }
         break;
 
