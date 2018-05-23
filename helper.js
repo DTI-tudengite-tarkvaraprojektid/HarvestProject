@@ -24,12 +24,3 @@ function loadHTML (myDivId, url, callback) { // https://stackoverflow.com/questi
   xmlhttp.open('GET', url, true)
   xmlhttp.send()
 }
-
-window.onload = function () {
-  let button = document.getElementById('loginButton')
-  button.addEventListener('click', function (event) {
-    loadHTML('content', 'views/joinedScreen.html', function () {
-
-    })
-  })
-}
