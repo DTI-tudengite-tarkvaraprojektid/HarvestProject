@@ -264,12 +264,12 @@ function joinGame($gameCode, $teamName) {
         $result->close();
         if(gameStarted($obj->id)) {
         $mysqli->close();
-        return 0;
+        return ['success' => false];
     } else {
         $teamName = $mysqli->real_escape_string($teamName);
         $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
         $mysqli->close();
-        return 1;
+        return ['gameId' => $gameId];
     } 
 }
 
