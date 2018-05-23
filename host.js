@@ -6,8 +6,7 @@ window.onload = function () {
 function isLoggedIn () {
   ajaxGet('isLoggedIn', function (response) {
     if (response.loggedIn) {
-      loadHTML('content', 'views/joinedScreen.html', function () {
-      })
+      loggedIn(){
     } else {
       login() 
     }
@@ -23,6 +22,20 @@ function login(){
       let data = new FormData()
       data.append('username', userName)
       data.append('password', passWord)
+      ajaxPost('login', data, function(response){
+        if(response.succsess){
+          loggedIn()
+        } else {
+          let loginError = document.getElementById('errorDiv')
+          loginError.innerHTML = 'Vale kasutajanimi või parool!'
+        }
+      })
     })
     })
+}
+
+function loggedIn(){
+  loadHTML('content', 'views/joinedScreen.html', function () {
+
+  })
 }
