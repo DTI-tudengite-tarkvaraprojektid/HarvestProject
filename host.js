@@ -1,15 +1,16 @@
 
 window.onload = function () {
-
+  isLoggedIn()
 }
 
 function isLoggedIn () {
-  let response = getAjax('isLoggedIn')
-  if(response.loggedIn){
-    loadHTML('content', 'views/joinedScreen.html', function(){  
-    })
-  } else {
-    loadHTML('content', 'views/login.html', function(){
-    })
-  }
+  ajaxGet('isLoggedIn', function (response) {
+    if (response.loggedIn) {
+      loadHTML('content', 'views/joinedScreen.html', function () {
+      })
+    } else {
+      loadHTML('content', 'views/login.html', function () {
+      })
+    }
+  })
 }
