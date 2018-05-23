@@ -37,16 +37,12 @@ switch($action) {
         break;
 
     case "login":
-        if(isset($_POST["submit"])) {
-
-            $success = loginUser($_POST['username'], $_POST['password']);
+        if(isset($_POST["username"]) && isset($_POST['password'])) {
+            $success = login($_POST['username'], $_POST['password']);
             if($success) {
-				$messages[] = ["Logged in"];
-			} else {
-				
-				$messages[] = ["error","Wrong username and password combination"];
+				echo json_encode(['success'=> true]);
 			}
-                //kontrollib username ja parooli õigsust.
+            //kontrollib username ja parooli õigsust.
             // return(1,0)
         }
         break;
