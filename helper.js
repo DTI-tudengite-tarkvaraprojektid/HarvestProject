@@ -1,4 +1,4 @@
-function loadHTML (myDivId, url, callback) { // https://stackoverflow.com/questions/34330919/jquery-load-template-html-in-pure-javascript
+function loadHTML (myDivId, url, cFunction) { // https://stackoverflow.com/questions/34330919/jquery-load-template-html-in-pure-javascript
   let xmlhttp
   if (window.XMLHttpRequest) {
     xmlhttp = new XMLHttpRequest()
@@ -14,7 +14,7 @@ function loadHTML (myDivId, url, callback) { // https://stackoverflow.com/questi
         for (let n = 0; n < allScripts.length; n++) {
           eval(allScripts[n].innerHTML)// run script inside div generally not a good idea but these scripts are anyways intended to be executed.
         }
-        callback()
+        cFunction()
       } else {
         alert('Error')
       }
@@ -25,7 +25,7 @@ function loadHTML (myDivId, url, callback) { // https://stackoverflow.com/questi
   xmlhttp.send()
 }
 
-function ajaxPost (action, data, callback) {
+function ajaxPost (action, data, cFunction) {
   let request = new XMLHttpRequest()
   let url = 'controller.php?action=' + action
   // let data = new FormData()
@@ -36,12 +36,7 @@ function ajaxPost (action, data, callback) {
   request.onreadystatechange = function () {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
-        let response = JSON.parse(request.ressponse)
-        if (response.result) {
-          return response.result
-        } else {
-          console.log('ajaxPostError')
-        }
+        cFunction(this)
       }
     }
   }
@@ -59,7 +54,6 @@ function ajaxGet (action, cFunction) {
   request.onreadystatechange = function () {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
-        console.log(this)
         cFunction(this)
       }
     }
