@@ -16,25 +16,25 @@ switch($action) {
         echo json_encode(gameStarted($_GET["game_id"]));
             
         }
-    break;
+        break;
 
     case "gameStats":
         if(isset($_GET["game_id"])) {
             echo json_encode(gamestats($_GET["game_id"]));
         }
-    break;
+        break;
 
     case "playersReady":
     if(isset($_GET["game_id"])) {
         echo json_encode(playersReady($_GET["game_id"]));
     }
-    break;
+        break;
 
     case "getPlayers":
         if(isset($_GET["game_id"])) {
             echo json_encode(gerPlayers($_GET["game_id"]));
         }
-    break;
+        break;
 
     case "login":
         if(isset($_POST["submit"])) {
@@ -49,7 +49,7 @@ switch($action) {
                 //kontrollib username ja parooli õigsust.
             // return(1,0)
         }
-    break;
+        break;
 
     case "startGame":
         if (isset($_SESSION["loggedIn"])){
@@ -59,7 +59,7 @@ switch($action) {
                 }
             }
         }
-    break;
+        break;
 
     case "createGame":
     if (isset($_SESSION["loggedIn"])){
@@ -67,26 +67,26 @@ switch($action) {
             echo json_encode(createGame());
         }
     }
-    break;
+        break;
         
     case "submitFish":
         if(isset($_POST["submit"]) && isset($_POST['game_id']) && isset($_POST['playerFish']) ) {
             echo json_encode(gameStats($game_id));
             echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish']));
         }
-    break;
+        break;
 
     case "roundOver":
         if(isset($_POST['game_id'])) { 
             echo json_encode(roundOver($_POST['game_id'])); 
     }
-    break;
+        break;
 
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
             echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
         }
-    break;
+        break;
 
 function login($username, $password){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
