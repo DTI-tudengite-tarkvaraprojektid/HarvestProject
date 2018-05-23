@@ -276,10 +276,10 @@ function roundOver($game_id) {
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare(("SELECT id, team_id, fish_wanted FROM turn WHERE round_id = (SELECT id FROM round WHERE game_id = '?' AND roundNr = ?)"); 
     $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
-    stmt->bind_result($turn_id, $team_id, $fish_wanted);
-    $stmt->execute()
+    $stmt->bind_result($turn_id, $team_id, $fish_wanted);
+    $stmt->execute();
     while($stmt->fetch()) {
-        $turns[] = ["turn_id" => $turn_id, "team_id" => $team_id,"fish_wanted" => $fish_wanted]
+        $turns[] = ["turn_id" => $turn_id, "team_id" => $team_id,"fish_wanted" => $fish_wanted];
     }
     $stmt->close();
     $mysqli->close();
@@ -290,7 +290,7 @@ function roundOver($game_id) {
             $fishCaught = $fish_wanted;
             $gameStats['fishInSea'] = $gameStats['fishInSea']-$fish_wanted;
         }else{
-            $fishCaught=$gameStats['fishInSea']
+            $fishCaught=$gameStats['fishInSea'];
             $gameStats['fishInSea'] = 0;
         }
     $stmt = $mysqli->prepare("UPDATE turn SET fish_caught = ? WHERE id = ?");
