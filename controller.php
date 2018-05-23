@@ -274,7 +274,7 @@ function joinGame($gameCode, $teamName) {
 
 function roundOver($game_id) {
     $gameStats = gameStats($game_id);
-    $turns = [];
+    $turns = array();
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT id, team_id, fish_wanted FROM turn WHERE round_id = (SELECT id FROM round WHERE game_id = '?' AND roundNr = ?)"); 
     $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
