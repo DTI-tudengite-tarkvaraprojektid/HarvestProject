@@ -155,7 +155,7 @@ function generateGameCode(){
         $result = $stmt->fetch();
         $stmt->close();
         if(empty($gameCodeDB)){
-            $codeExists  = false;
+            $codeExists = false;
         }
     }
     return (['gameCode' => $gameCode]);
@@ -286,20 +286,21 @@ function roundOver($game_id) {
     shuffle($turns);
     for ($i = 0; $i < count($turns); $i++)) {
         $fishCaught = 0;
-        if($fish_wanted < $gameStats['fishInSea']){
-            $fishCaught = $fish_wanted;
-            $gameStats['fishInSea'] = $gameStats['fishInSea'] - $fish_wanted;
+        if($turns[$i]['fish_wanted'] < $gameStats['fishInSea']){
+            $fishCaught = $turns[$i]['fish_wanted'];
+            $gameStats['fishInSea'] = $gameStats['fishInSea'] - $turns[$i]['fish_wanted'];
         }else{
             $fishCaught = $gameStats['fishInSea'];
             $gameStats['fishInSea'] = 0;
         }
     $stmt = $mysqli->prepare("UPDATE turn SET fish_caught = ? WHERE id = ?");
-    $stmt->bind_param("ii",$fishCaught,$team_id );
+    $stmt->bind_param("ii",$fishCaught,$turns[$i]['turn_id']);
     $stmt->execute();
     $stmt->close();
     }
-    $stmt = $mysqli->prepare("UPDATE round SET fish_end = ? WHERE id = ?");
-    $stmt->bind_param("ii",$gameStats['currentRound'],$game_id );
+
+    $stmt = $mysqli->prepare("UPDATE round SET fish_end = ? WHERE id = (SELECT id FROM round WHERE game_id = '?' AND roundNr = ?)");
+    $stmt->bind_param("iii",$gameStats['fishInSea'],$game_id,$gameStats['currentRound'] );
     $stmt->execute();
     $stmt->close();
     $gameStats['currentRound'] += 1;
