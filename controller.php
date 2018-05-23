@@ -88,6 +88,26 @@ switch($action) {
         }
     break;
 
+function login($username, $password){
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+    $stmt= $mysqli->prepare("SELECT id, username, password FROM users WHERE username = ?");
+	$stmt->bind_param("s", $username);
+	$stmt->bind_result($id, $username, $passwordDB);
+	$stmt->execute();
+
+    if($stmt->fetch()){
+        if(hash("sha512", $password) == $passwordDB){	
+			$_SESSION["loggedIn"] = $loggedIn;
+	}
+    $stmt->close();
+	$mysqli->close();
+    if(isset ($_SESSION["loggedIn"])){
+            return true;			
+        } else {
+            return false;
+        }
+    }
+}
 
 function submitFish($game_id, $playerFish){
     $gameStats = gameStats();
