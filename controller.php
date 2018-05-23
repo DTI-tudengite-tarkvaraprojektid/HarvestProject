@@ -78,6 +78,7 @@ switch($action) {
             echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
         }
         break;
+}
 
 function login($username, $password){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
@@ -260,8 +261,9 @@ function joinGame($gameCode, $teamName) {
         $obj = $result->fetch_object();
         $result->close();
         if(gameStarted($obj->id)) {
-        $mysqli->close();
-        return ['success' => false];
+            $mysqli->close();
+            return ['success' => false];
+        }
     } else {
         $teamName = $mysqli->real_escape_string($teamName);
         $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
@@ -274,7 +276,7 @@ function roundOver($game_id) {
     $gameStats = gameStats($game_id);
     $turns = [];
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-    $stmt = $mysqli->prepare(("SELECT id, team_id, fish_wanted FROM turn WHERE round_id = (SELECT id FROM round WHERE game_id = '?' AND roundNr = ?)"); 
+    $stmt = $mysqli->prepare("SELECT id, team_id, fish_wanted FROM turn WHERE round_id = (SELECT id FROM round WHERE game_id = '?' AND roundNr = ?)"); 
     $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
     $stmt->bind_result($turn_id, $team_id, $fish_wanted);
     $stmt->execute();
@@ -284,11 +286,11 @@ function roundOver($game_id) {
     $stmt->close();
     $mysqli->close();
     shuffle($turns);
-    for ($i = 0; $i < count($turns); $i++)) {
+    for ($i = 0; $i < count($turns); $i++) {
         $fishCaught = 0;
         if($fish_wanted < $gameStats['fishInSea']){
             $fishCaught = $fish_wanted;
-            $gameStats['fishInSea'] = $gameStats['fishInSea']-$fish_wanted;
+            $gameStats['fishInSea'] = $gameStats['fishInSea']-$fish_wanted ;
         }else{
             $fishCaught=$gameStats['fishInSea'];
             $gameStats['fishInSea'] = 0;
@@ -316,5 +318,5 @@ function roundOver($game_id) {
     $stmt->bind_param("ii",$gameStats['currentRound'],$game_id);
     $stmt->execute();
     $stmt->close();
-    }
+}
 ?>
