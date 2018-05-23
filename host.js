@@ -23,12 +23,12 @@ function login () {
       let data = new FormData()
       data.append('username', userName)
       data.append('password', passWord)
-      ajaxPost('login', data, function (response) {
-        if (response.success) {
+      ajaxPost('login', data, function(response){
+        if(response.succsess){
           loggedIn()
         } else {
-          let errorDiv = document.getElementById('errorDiv')
-          errorDiv.innerHTML = 'Vale kasutaja nimi või parool!'
+          let loginError = document.getElementById('errorDiv')
+          loginError.innerHTML = 'Vale kasutajanimi või parool!'
         }
       })
     })
