@@ -317,5 +317,7 @@ function roundOver($game_id) {
     $stmt->bind_param("ii",$gameStats['currentRound'],$game_id);
     $stmt->execute();
     $stmt->close();
+
+    $mysqli->close();
     }
 ?>
