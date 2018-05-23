@@ -96,9 +96,9 @@ function login($username, $password){
     $stmt->close();
 	$mysqli->close();
     if(isset ($_SESSION["loggedIn"])){
-            return true;			
+            return ['success' => true];			
         } else {
-            return false;
+            return ['success' => false];
         }
     }
 }
@@ -119,7 +119,7 @@ function submitFish($game_id, $playerFish){
         $stmt->close();
         $mysqli->close();
     }else{
-        return false;
+        return ['success' => false];
     }         
 }
 
@@ -137,7 +137,7 @@ function createGame(){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close(); 
-    return([$id , $gameCode]); 
+    return(['id' => $id ,'gameCode' => $gameCode]); 
 }
 
 function generateGameCode(){
@@ -161,7 +161,7 @@ function generateGameCode(){
             $codeExists  = false;
         }
     }
-    return $gameCode;
+    return (['gameCode' => $gameCode]);
 }
 
 function startGame($game_id){
@@ -194,7 +194,7 @@ function getPlayers($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return $name;            
+    return (['name' => $name]);          
 }
 
 function gameStarted($game_id){
@@ -206,7 +206,7 @@ function gameStarted($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return $gameStarted;         
+    return (['gameStarted' => $gameStarted]);         
 }
 
 function playersReady($game_id){
@@ -229,7 +229,7 @@ function playersReady($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return $playersReady;
+    return (['playersReady' => $playersReady]); 
 }
 
 function gameStats($game_id){
