@@ -32,11 +32,12 @@ function ajaxPost (action, data, cFunction) {
   // data.append('userName', userName)
   // data.append('passWord', passWord)
   request.open('POST', url, true)
+
   // request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
   request.onreadystatechange = function () {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
-        cFunction(this)
+        cFunction(JSON.parse(this.response))
       }
     }
   }
@@ -54,7 +55,7 @@ function ajaxGet (action, cFunction) {
   request.onreadystatechange = function () {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
-        cFunction(this)
+        cFunction(JSON.parse(this.response))
       }
     }
   }

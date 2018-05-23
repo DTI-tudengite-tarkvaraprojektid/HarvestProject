@@ -5,20 +5,21 @@ window.onload = function () {
 
 function isLoggedIn () {
   ajaxGet('isLoggedIn', function (response) {
+    console.log(response)
     if (response.loggedIn) {
-      loggedIn(){
+      loggedIn()
     } else {
-      login() 
+      login()
     }
   })
 }
 
-function login(){
-  loadHTML('content', 'views/login.html', function(){
-    let button = document.getElementById('loginButton') 
-    button.addEventListener('click', function(event){
-      let userName = document.getElementsByName('username').value
-      let passWord = document.getElementsByName('password').value
+function login () {
+  loadHTML('content', 'views/login.html', function () {
+    let button = document.getElementById('loginButton')
+    button.addEventListener('click', function (event) {
+      let userName = document.getElementById('username').value
+      let passWord = document.getElementById('password').value
       let data = new FormData()
       data.append('username', userName)
       data.append('password', passWord)
@@ -34,7 +35,7 @@ function login(){
   })
 }
 
-function loggedIn(){
+function loggedIn () {
   loadHTML('content', 'views/joinedScreen.html', function () {
 
   })

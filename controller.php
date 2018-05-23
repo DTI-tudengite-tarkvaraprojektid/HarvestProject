@@ -36,7 +36,7 @@ switch($action) {
 
     case "login":
         if(isset($_POST["username"]) && isset($_POST['password'])) {
-			echo json_encode(login($_POST['username'], $_POST['password']));
+            echo json_encode(login($_POST['username'], $_POST['password']));
             //kontrollib username ja parooli õigsust.
             // return(1,0)
         }
@@ -82,11 +82,16 @@ switch($action) {
     case "isLoggedIn":
         $response = array();
         if(isset($_SESSION["loggedIn"])) {
-            $response['loggedIn'] = false;
-        } else {
             $response['loggedIn'] = true;
+        } else {
+            $response['loggedIn'] = false;
         }
         echo json_encode($response);
+        break;
+
+    case "logOut":
+        session_unset();
+        echo json_encode(["success" => true]);
         break;
 }
 
@@ -99,16 +104,18 @@ function login($username, $password){
 
     if($stmt->fetch()){
         if(hash("sha512", $password) == $passwordDB){	
-			$_SESSION["loggedIn"] = $loggedIn;
+            $_SESSION["loggedIn"] = true;
+        }
 	}
     $stmt->close();
-	$mysqli->close();
+    $mysqli->close();
+    $_SESSION["loggedIn"] = true; //kuna kasutajat pole veel debug reasons
+    return ["success" => true];	//kuna kasutajat pole veel debug reasons
     if(isset ($_SESSION["loggedIn"])){
             return ['success' => true];			
         } else {
             return ['success' => false];
         }
-    }
 }
 
 function submitFish($game_id, $playerFish){
