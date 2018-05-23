@@ -288,7 +288,7 @@ function roundOver($game_id) {
         $fishCaught = 0;
         if($fish_wanted < $gameStats['fishInSea']){
             $fishCaught = $fish_wanted;
-            $gameStats['fishInSea'] = $gameStats['fishInSea']-$fish_wanted;
+            $gameStats['fishInSea'] = $gameStats['fishInSea'] - $fish_wanted;
         }else{
             $fishCaught=$gameStats['fishInSea'];
             $gameStats['fishInSea'] = 0;
@@ -302,8 +302,8 @@ function roundOver($game_id) {
     $stmt->bind_param("ii",$gameStats['currentRound'],$game_id );
     $stmt->execute();
     $stmt->close();
-    $gameStats['currentRound']+=1;
-    $maxFish = $gameStats['maxPlayers']*10;
+    $gameStats['currentRound'] += 1;
+    $maxFish = $gameStats['maxPlayers'] * 10;
     $gameStats['fishInSea'] = $gameStats['fishInSea'] * 2;
     if($gameStats['fishInSea'] > $maxFish){
         $gameStats['fishInSea'] = $maxFish; 
