@@ -290,7 +290,7 @@ function roundOver($game_id) {
             $fishCaught = $fish_wanted;
             $gameStats['fishInSea'] = $gameStats['fishInSea'] - $fish_wanted;
         }else{
-            $fishCaught=$gameStats['fishInSea'];
+            $fishCaught = $gameStats['fishInSea'];
             $gameStats['fishInSea'] = 0;
         }
     $stmt = $mysqli->prepare("UPDATE turn SET fish_caught = ? WHERE id = ?");
