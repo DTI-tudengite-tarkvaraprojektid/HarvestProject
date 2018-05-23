@@ -48,7 +48,7 @@ function ajaxPost (action, data, callback) {
   request.send(data)
 }
 
-function ajaxGet (action, callback) {
+function ajaxGet (action) {
   let request = new XMLHttpRequest()
   let url = '/controller.php?action=' + action
   // let data = new FormData()
