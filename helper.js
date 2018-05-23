@@ -37,7 +37,7 @@ function ajaxPost (action, data, callback) {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
         let response = JSON.parse(request.ressponse)
-        if (response.result === 1) {
+        if (response.result) {
           return response.result
         } else {
           console.log('ajaxPostError')
@@ -46,4 +46,27 @@ function ajaxPost (action, data, callback) {
     }
   }
   request.send(data)
+}
+
+function ajaxGet (action, callback) {
+  let request = new XMLHttpRequest()
+  let url = '/controller.php?action=' + action
+  // let data = new FormData()
+  // data.append('userName', userName)
+  // data.append('passWord', passWord)
+  request.open('GET', url, false)
+  // request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+  request.onreadystatechange = function () {
+    if (request.readyState === XMLHttpRequest.DONE) {
+      if (request.status === 200) {
+        let response = JSON.parse(request.ressponse)
+        if (response.result) {
+          return response.result
+        } else {
+          console.log('ajaxGetError')
+        }
+      }
+    }
+  }
+  request.send()
 }
