@@ -204,10 +204,13 @@ function getPlayers($game_id){
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($name);
     $stmt->execute();
-    $result = $stmt->fetch();
+    while ($stmt->fetch()){
+        $names .= $name;
+    }
+    
     $stmt->close();
     $mysqli->close();
-    return (['name' => $name]);          
+    return (['names' => $names]);          
 }
 
 function gameStarted($game_id){

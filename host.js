@@ -39,4 +39,14 @@ function loggedIn () {
   loadHTML('content', 'views/joinedScreen.html', function () {
 
   })
+  loadHTML('content', 'views/panel.html', function () {
+
+  })
+}
+
+function showView (view, toView) {
+  let X = document.getElementById(view)
+  let Y = document.getElementById(toView)
+  X.style.display = 'none'
+  Y.style.display = 'block'
 }
