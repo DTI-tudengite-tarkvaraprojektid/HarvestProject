@@ -16,23 +16,25 @@
             </section>
 
             <section id="start-view" style="display: none;">
-                <div id="gameInfoStart">
-                    gameCode ja lisanduvad playerid
+                <span> gameCode</span>
+                <div id="playersReady">
                 </div>
                 <button type="button" id="startGame"  onclick="showView('start-view','game-view')" ><h2>Alusta Mängu</h2></button>
             </section>
 
             <section id="game-view" style="display: none;">
-                <div id="gameInfoDuring">
-                    kalad ja nõude esitanud playerid
+                <div id="playersReady"></div>
+                <div id="Fishes">
+                    
                 </div>
                 <button type="button" id="stopGame"  onclick="showView('game-view','statistics-view')"><h2>Lõpeta Mäng</h2></button> 
             </section>
 
             <section id="statistics-view" style="display: none;">
-                <div id="gameInfoEnd">
-                    mängu statistika
+                <div id="statistics">
+                    
                 </div>
+                <button type="button" id="stopGame"  onclick="showView('statistics-view','create-view')"><h2>Loo uus mäng</h2></button> 
             </section>
            
 			
