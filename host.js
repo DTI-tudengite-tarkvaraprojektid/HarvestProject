@@ -36,17 +36,24 @@ function login () {
 }
 
 function loggedIn () {
-  loadHTML('content', 'views/joinedScreen.html', function () {
-
-  })
   loadHTML('content', 'views/panel.html', function () {
-
+    let createGameButton = document.getElementById('createGame')
+    createGameButton.addEventListener('click', function (event) {
+      ajaxGet('createGame', function (response) {
+        if (response.id && response.gameCode) {
+          let id = response.id
+          let gameCode = response.gameCode
+        } else {
+          alert('Viga mängu loomisel')
+        }
+      })
+    })
   })
 }
 
-function showView (view, toView) {
-  let X = document.getElementById(view)
-  let Y = document.getElementById(toView)
-  X.style.display = 'none'
-  Y.style.display = 'block'
+function switchView (view, toView) {
+  let currentView = document.getElementById(view)
+  let newView = document.getElementById(toView)
+  currentView.style.display = 'none'
+  newView.style.display = 'block'
 }

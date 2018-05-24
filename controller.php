@@ -49,12 +49,20 @@ switch($action) {
             }
         }
         break;
+        
+    case "default":
+        echo  "Invalid action";
+        break;
 
     case "createGame":
         if (isset($_SESSION["loggedIn"])){
-            if(isset($_POST["submit"])) {
+
+                echo 1;
+                echo 2;
+                echo $_SESSION["loggedIn"];
+                die;
                 echo json_encode(createGame());
-            }
+            
         }
         break;
         
