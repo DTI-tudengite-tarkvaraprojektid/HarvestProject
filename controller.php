@@ -37,6 +37,8 @@ switch($action) {
     case "login":
         if(isset($_POST["username"]) && isset($_POST['password'])) {
             echo json_encode(login($_POST['username'], $_POST['password']));
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
 
@@ -50,19 +52,9 @@ switch($action) {
         }
         break;
         
-    case "default":
-        echo  "Invalid action";
-        break;
-
     case "createGame":
-        if (isset($_SESSION["loggedIn"])){
-
-                echo 1;
-                echo 2;
-                echo $_SESSION["loggedIn"];
-                die;
-                echo json_encode(createGame());
-            
+        if (isset($_SESSION["loggedIn"])){     
+            echo json_encode(createGame());
         }
         break;
         
@@ -98,6 +90,10 @@ switch($action) {
     case "logOut":
         session_unset();
         echo json_encode(["success" => true]);
+        break;
+
+    default:
+        echo  "Invalid action";
         break;
 }
 
@@ -145,7 +141,7 @@ function submitFish($game_id, $playerFish){
 }
 
 function createGame(){
-    $gameCode = generatecode();
+    $gameCode = generateGameCode();
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("INSERT INTO game (gameCode) VALUES(?)"); 
     $stmt->bind_param("si",$gameCode);

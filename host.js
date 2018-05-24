@@ -5,7 +5,6 @@ window.onload = function () {
 
 function isLoggedIn () {
   ajaxGet('isLoggedIn', function (response) {
-    console.log(response)
     if (response.loggedIn) {
       loggedIn()
     } else {
@@ -24,7 +23,7 @@ function login () {
       data.append('username', userName)
       data.append('password', passWord)
       ajaxPost('login', data, function (response) {
-        if (response.succsess) {
+        if (response.success) {
           loggedIn()
         } else {
           let loginError = document.getElementById('errorDiv')

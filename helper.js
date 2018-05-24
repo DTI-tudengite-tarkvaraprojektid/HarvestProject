@@ -37,7 +37,12 @@ function ajaxPost (action, data, cFunction) {
   request.onreadystatechange = function () {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
-        cFunction(JSON.parse(this.response))
+        try {
+          let response = JSON.parse(this)
+          cFunction(response.response)
+        } catch (e) {
+          alert(e)
+        }
       }
     }
   }
@@ -55,7 +60,12 @@ function ajaxGet (action, cFunction) {
   request.onreadystatechange = function () {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
-        cFunction(JSON.parse(this.response))
+        try {
+          let response = JSON.parse(this)
+          cFunction(response.response)
+        } catch (e) {
+          alert(e)
+        }
       }
     }
   }
