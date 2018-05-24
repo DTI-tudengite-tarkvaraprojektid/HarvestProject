@@ -23,8 +23,8 @@ function login () {
       let data = new FormData()
       data.append('username', userName)
       data.append('password', passWord)
-      ajaxPost('login', data, function(response){
-        if(response.succsess){
+      ajaxPost('login', data, function (response) {
+        if (response.succsess) {
           loggedIn()
         } else {
           let loginError = document.getElementById('errorDiv')

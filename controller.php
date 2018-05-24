@@ -37,8 +37,6 @@ switch($action) {
     case "login":
         if(isset($_POST["username"]) && isset($_POST['password'])) {
             echo json_encode(login($_POST['username'], $_POST['password']));
-            //kontrollib username ja parooli õigsust.
-            // return(1,0)
         }
         break;
 

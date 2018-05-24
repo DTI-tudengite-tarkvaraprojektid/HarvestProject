@@ -3,8 +3,8 @@ let errorDiv = document.getElementById('errorDiv')
 
 window.onload = function () {
   let button = document.getElementById('joinButton')
-  let gameCode = document.getElementsByName('gameCode').value
-  let teamName = document.getElementsByName('teamName').value
+  let gameCode = document.getElementById('gameCode').value
+  let teamName = document.getElementById('teamName').value
   let gameId
   button.addEventListener('click', function (event) {
     let request = new XMLHttpRequest()
