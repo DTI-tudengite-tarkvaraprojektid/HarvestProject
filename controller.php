@@ -146,20 +146,15 @@ function createGame(){
     $stmt = $mysqli->prepare("INSERT INTO game (gameCode) VALUES(?)"); 
     $stmt->bind_param("si",$gameCode);
     $stmt->execute();
-    $stmt->close();
-    $stmt = $mysqli->prepare("SELECT id FROM game WHERE game_id = ?"); 
-    $stmt->bind_param("i",$game_id);
-    $stmt->bind_result($id);
-    $stmt->execute();
-    $result = $stmt->fetch();
+    $game_id = $stmt->insert_id;
     $stmt->close();
     $mysqli->close(); 
-    return(['id' => $id ,'gameCode' => $gameCode]); 
+    return(['id' => $game_id ,'gameCode' => $gameCode]); 
 }
 
 function generateGameCode(){
     $codeExists = true;
-    while($codeExsists) {
+    while($codeExists) {
         $lenght = 5;
         $gameCode = ""; 
         $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';

@@ -1,4 +1,4 @@
-
+let gameId
 window.onload = function () {
   isLoggedIn()
 }
@@ -40,8 +40,10 @@ function loggedIn () {
     createGameButton.addEventListener('click', function (event) {
       ajaxGet('createGame', function (response) {
         if (response.id && response.gameCode) {
-          let id = response.id
+          gameId = response.id
           let gameCode = response.gameCode
+          switchView('create-view', 'start-view')
+          document.getElementById('gameCode').innetHTML = gameCode
         } else {
           alert('Viga mängu loomisel')
         }
