@@ -38,8 +38,8 @@ function ajaxPost (action, data, cFunction) {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
         try {
-          let response = JSON.parse(this)
-          cFunction(response.response)
+          let response = JSON.parse(this.response)
+          cFunction(response)
         } catch (e) {
           alert(e)
         }
@@ -61,8 +61,8 @@ function ajaxGet (action, cFunction) {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
         try {
-          let response = JSON.parse(this)
-          cFunction(response.response)
+          let response = JSON.parse(this.response)
+          cFunction(response)
         } catch (e) {
           alert(e)
         }
