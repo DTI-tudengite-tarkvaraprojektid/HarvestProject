@@ -141,10 +141,25 @@ function submitFish($game_id, $playerFish){
 }
 
 function createGame(){
-    $gameCode = generateGameCode();
+    $dateNow = new DateTime();
+    $dateNow->modify('-2 week');
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-    $stmt = $mysqli->prepare("INSERT INTO game (gameCode) VALUES(?)"); 
-    $stmt->bind_param("si",$gameCode);
+    $stmt = $mysqli->prepare("SELECT id, created FROM game"); 
+    $stmt->bind_result($id, $created);
+    $stmt->execute();
+    while ($stmt->fetch()){
+        $dateDB = new DateTime($created);
+        if($dateNow > $dateDB) {
+            $stmt2 = $mysqli->prepare("UPDATE game SET gameStarted = 3 WHERE id = ?");
+            $stmt2->bind_param("i", $id);
+            $stmt2->execute();
+            $stmt2->close();
+        }
+    }    
+    $stmt->close();
+    $gameCode = generateGameCode();
+    $stmt = $mysqli->prepare("INSERT INTO game (gameCode, gameStarted) VALUES(?, 0)"); 
+    $stmt->bind_param("s",$gameCode);
     $stmt->execute();
     $game_id = $stmt->insert_id;
     $stmt->close();
@@ -153,26 +168,25 @@ function createGame(){
 }
 
 function generateGameCode(){
-    $codeExists = true;
-    while($codeExists) {
-        $lenght = 5;
-        $gameCode = ""; 
-        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        $max = strlen($characters);
-        for ($i = 0; $i < $max; $i++) {
-            $gameCode .= $characters[mt_rand(0, $max)];
-        }
-        $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-        $stmt = $mysqli->prepare("SELECT gameCode FROM game WHERE gameCode = ?"); 
-        $stmt->bind_param("i", $gameCode);
-        $stmt->bind_result($gameCodeDB);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stmt->close();
-        if(empty($gameCodeDB)){
-            $codeExists = false;
-        }
+    $codeLenght = 4;
+    $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    $charArrayLength = strlen($characters)-1;
+    $codesArray = [];
+
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("SELECT gameCode FROM game where gameStarted = 0"); 
+    $stmt->bind_result($codeDB);
+    $stmt->execute();
+    while ($stmt->fetch()){
+        $codesArray[] = $codeDB;
     }
+    $stmt->close();
+    do {
+        $gameCode = ""; 
+        for ($i = 0; $i < $codeLenght; $i++) {
+            $gameCode .= $characters[mt_rand(0, $charArrayLength)];
+        }
+    } while(in_array($gameCode, $codesArray)); 
     return (['gameCode' => $gameCode]);
 }
 
@@ -274,19 +288,19 @@ function joinGame($gameCode, $teamName) {
         exit();
     }
     $gameCode = $mysqli->real_escape_string($gameCode);
-    if ($result = $mysqli->query("SELECT id FROM game WHERE gameCode = '$gameCode'")) {
+    if ($result = $mysqli->query("SELECT id FROM game WHERE gameCode = '$gameCode' and gameStarted = 0")) {
         $obj = $result->fetch_object();
         $result->close();
         if(gameStarted($obj->id)) {
             $mysqli->close();
             return ['success' => false];
-        }
-    } else {
-        $teamName = $mysqli->real_escape_string($teamName);
-        $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
-        $mysqli->close();
-        return ['gameId' => $gameId];
-    } 
+        } else {
+            $teamName = $mysqli->real_escape_string($teamName);
+            $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
+            $mysqli->close();
+            return ['gameId' => $gameId];
+        } 
+    }
 }
 
 function roundOver($game_id) {
