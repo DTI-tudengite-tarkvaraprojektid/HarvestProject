@@ -1,3 +1,37 @@
-<div>Oled edukalt mänguga liitunud</div>
-<div>Reeglid</div>
+<section id="joined-view">
+    <div>Oled edukalt mänguga liitunud. Oota kuni õppejõud mängu alustab</div>
+</section>
 
+<section id="fish-view" style="display: none;">
+    <div>
+        <div>
+            <span>Kalu: </span>
+            <span>0</span>
+        </div>
+        <div>
+            <span>Kalu saadud eelmises voorust: </span>
+            <span>0</span>
+        </div>
+        <div>
+            <span>Sisesta soovitud kalade arv: </span>
+            <input type="text" id="fishInput"  placeholder="(0-8)" />
+        </div>
+        <button type="button" id="fishButton" style="margin: 0 auto; display: block;"><h2>Kinnita</h2></button>
+    </div>
+</section>
+
+<section id="wait-view" style="display: none;">
+    <div>Oled merel</div>
+    <div>
+        <span>Tiime valmis </span>
+        <span></span>
+        <span>...</span>
+    </div>
+</section>
+
+<section id="over-view" style="display: none;">
+    <div id="statistics">
+        
+    </div>
+    <button type="button" id="newGame"><h2>Loo uus mäng</h2></button> 
+</section>

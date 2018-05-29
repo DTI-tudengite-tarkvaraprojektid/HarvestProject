@@ -11,14 +11,14 @@ session_start();
 
 switch($action) {
     case "gameStarted" : 
-        if(isset($_GET["game_id"])) {
-            echo json_encode(gameStarted($_GET["game_id"]));
+        if(isset($_POST["game_id"])) {
+            echo json_encode(gameStarted($_POST["game_id"]));
         }
         break;
 
     case "gameStats":
-        if(isset($_GET["game_id"])) {
-            echo json_encode(gamestats($_GET["game_id"]));
+        if(isset($_POST["game_id"])) {
+            echo json_encode(gamestats($_POST["game_id"]));
         }
         break;
 
@@ -43,18 +43,22 @@ switch($action) {
         break;
 
     case "startGame":
-        if (isset($_SESSION["loggedIn"])){
-            if(isset($_POST["submit"])) {
-                if(is_numeric($_GET["game_id"])){
-                    echo json_encode(startGame($_GET["game_id"]));
-                }
+        if (isset($_SESSION["loggedIn"])) {
+            if(isset($_POST["game_id"])) {
+                echo json_encode(startGame($_POST["game_id"]));
+            } else {
+                echo json_encode(["success" => false]);
             }
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
         
     case "createGame":
         if (isset($_SESSION["loggedIn"])){     
             echo json_encode(createGame());
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
         
@@ -74,6 +78,8 @@ switch($action) {
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
             echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
 
@@ -187,7 +193,7 @@ function generateGameCode(){
             $gameCode .= $characters[mt_rand(0, $charArrayLength)];
         }
     } while(in_array($gameCode, $codesArray)); 
-    return (['gameCode' => $gameCode]);
+    return $gameCode;
 }
 
 function startGame($game_id){
@@ -209,18 +215,19 @@ function startGame($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
+    return ["success" => true];
 }
 
 function getPlayers($game_id){
+    $names = [];
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT name FROM team WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($name);
     $stmt->execute();
     while ($stmt->fetch()){
-        $names .= $name;
+        $names[] = $name;
     }
-    
     $stmt->close();
     $mysqli->close();
     return (['names' => $names]);          
@@ -297,8 +304,9 @@ function joinGame($gameCode, $teamName) {
         } else {
             $teamName = $mysqli->real_escape_string($teamName);
             $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
+            $teamId = $stmt->insert_id;
             $mysqli->close();
-            return ['gameId' => $gameId];
+            return ['gameId' => $obj->id, 'teamId' => $teamId];
         } 
     }
 }
