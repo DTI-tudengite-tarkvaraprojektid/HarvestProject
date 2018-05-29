@@ -289,26 +289,28 @@ function gameStats($game_id){
 }
 
 function joinGame($gameCode, $teamName) {   
-    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-    if (mysqli_connect_errno()) {
-        printf("Connect failed: %s\n", mysqli_connect_error());
-        exit();
-    }
-    $gameCode = $mysqli->real_escape_string($gameCode);
-    if ($result = $mysqli->query("SELECT id FROM game WHERE gameCode = '$gameCode' and gameStarted = 0")) {
-        $obj = $result->fetch_object();
-        $result->close();
-        if(gameStarted($obj->id)) {
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("SELECT id FROM game WHERE gameCode = ? and gameStarted = 0"); 
+    $stmt->bind_param("i", $gameCode);
+    $stmt->bind_result($gameId);
+    $stmt->execute();
+    while ($stmt->fetch()){
+        if(gameStarted($gameId)) {
+            $stmt->close();
             $mysqli->close();
             return ['success' => false];
         } else {
-            $teamName = $mysqli->real_escape_string($teamName);
-            $mysqli->query("INSERT into team (game_id, name) VALUES ('$obj->id', '$teamName')");
-            $teamId = $stmt->insert_id;
+            $stmt2 = $mysqli->prepare("INSERT into team (game_id, name) VALUES (?, ?)"); 
+            $stmt2->bind_param("is", $gameId, $teamName);
+            $stmt2->execute();
+            $stmt2->close();
+            $stmt->close();
             $mysqli->close();
-            return ['gameId' => $obj->id, 'teamId' => $teamId];
+            return ['gameId' => $gameId, 'teamId' => $teamId];
         } 
     }
+    $stmt->close();
+    $mysqli->close();
 }
 
 function roundOver($game_id) {
