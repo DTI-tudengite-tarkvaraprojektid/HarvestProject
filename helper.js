@@ -88,26 +88,30 @@ function getParameters () { // https://stackoverflow.com/questions/901115/how-ca
   return urlParams
 }
 
-function insertParam (key, value) { // https://stackoverflow.com/questions/486896/adding-a-parameter-to-the-url-with-javascript
-  key = escape(key); value = escape(value)
+function UpdateQueryString (key, value) { // https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
+  let url = window.location.href
+  let re = new RegExp('([?&])' + key + '=.*?(&|#|$)(.*)', 'gi')
+  let hash
 
-  var kvp = document.location.search.substr(1).split('&')
-  if (kvp === '') {
-    document.location.search = '?' + key + '=' + value
-  } else {
-    var i = kvp.length; var x; while (i--) {
-      x = kvp[i].split('=')
-
-      if (x[0] === key) {
-        x[1] = value
-        kvp[i] = x.join('=')
-        break
-      }
+  if (re.test(url)) {
+    if (typeof value !== 'undefined' && value !== null) {
+      url = url.replace(re, '$1' + key + '=' + value + '$2$3')
+      window.history.pushState({path: url}, '', url)
+    } else {
+      hash = url.split('#')
+      url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '')
+      if (typeof hash[1] !== 'undefined' && hash[1] !== null) { url += '#' + hash[1] }
+      window.history.pushState({path: url}, '', url)
     }
-
-    if (i < 0) { kvp[kvp.length] = [key, value].join('=') }
-
-    // this will reload the page, it's likely better to store this until finished
-    document.location.search = kvp.join('&')
+  } else {
+    if (typeof value !== 'undefined' && value !== null) {
+      var separator = url.indexOf('?') !== -1 ? '&' : '?'
+      hash = url.split('#')
+      url = hash[0] + separator + key + '=' + value
+      if (typeof hash[1] !== 'undefined' && hash[1] !== null) { url += '#' + hash[1] }
+      window.history.pushState({path: url}, '', url)
+    } else {
+      window.history.pushState({path: url}, '', url)
+    }
   }
 }

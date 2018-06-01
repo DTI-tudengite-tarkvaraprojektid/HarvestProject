@@ -66,17 +66,19 @@ function createGame () {
 }
 
 function updatePlayerList () {
+  let listNode, textNode
   let data = new FormData()
   data.append('game_id', gameId)
   ajaxPost('getPlayers', data, function (response) {
-    if (response.names) {
+    if (response.none) {
+    } else if (response.names) {
       while (playersList.firstChild) {
         playersList.firstChild.remove()
       }
-      let listNode, textNode
-      for (let player in response.names) {
+      console.log(response.names)
+      for (let i = 0; i < response.names.length; i++) {
         listNode = document.createElement('ul')
-        textNode = document.createTextNode(player.name)
+        textNode = document.createTextNode(response.names[i])
         listNode.appendChild(textNode)
         playersList.appendChild(listNode)
       }

@@ -2,25 +2,28 @@ let gameId, teamId, maxPlayers
 let errorDiv = document.getElementById('errorDiv')
 
 window.onload = function () {
+  
   let params = getParameters()
-  if (params.game && params.team && location.hash) {
-    gameId = params.game
-    teamId = params.team
+  if (params.gameId && params.teamId && location.hash) {
+    gameId = params.gameId
+    teamId = params.teamId
     let data = new FormData()
     data.append('game_id', gameId)
     ajaxPost('gameStarted', data, function (response) {
-      if (response.gameStarted) {
+      if (response.gameStarted || response.gameStarted === 0) {
+        let 
         if (response.gameStarted === 2 || response.gameStarted === 3) {
           loadHTML('content', 'views/joinScreen.html', function () {
+            history.replaceState({}, document.title, ".");
             gameJoin()
           })
-        } else {
+        } else if(response.gameStarted === 1 ) {
           ajaxPost('gameStats', data, function (response) {
             if (response.maxPlayers) {
               loadHTML('content', 'views/joinedScreen.html', function () {
                 switch (location.hash) {
                   case '#joined':
-                    // code block
+
                     break
                   case '#fish':
                     // code block
@@ -35,10 +38,22 @@ window.onload = function () {
             }
           })
         }
+        else {
+          loadHTML('content', 'views/joinedScreen.html', function () {
+            location.hash = 'joined'
+            //gameStart(gameId)
+          })
+        }
+      } else {
+        loadHTML('content', 'views/joinScreen.html', function () {
+          history.replaceState({}, document.title, ".");
+          gameJoin()
+        })
       }
     })
   } else {
     loadHTML('content', 'views/joinScreen.html', function () {
+      history.replaceState({}, document.title, ".");
       gameJoin()
     })
   }
@@ -46,10 +61,13 @@ window.onload = function () {
 
 function gameJoin () {
   let button = document.getElementById('joinButton')
-  let gameCode = document.getElementById('gameCode').value
-  let teamName = document.getElementById('teamName').value
+
+  console.log(123)
   button.addEventListener('click', function (event) {
     // check inputs
+    let gameCode = document.getElementById('gameCode').value
+    let teamName = document.getElementById('teamName').value
+    console.log(gameCode, teamName)
     let data = new FormData()
     data.append('gameCode', gameCode)
     data.append('teamName', teamName)
@@ -57,38 +75,38 @@ function gameJoin () {
       if (response.gameId) {
         gameId = response.gameId
         teamId = response.teamId
-        insertParam(gameId, response.gameId)
-        insertParam(teamId, response.teamId)
+        UpdateQueryString('gameId', response.gameId)
+        UpdateQueryString('teamId', response.teamId)
         loadHTML('content', 'views/joinedScreen.html', function () {
           location.hash = 'joined'
-          gameStart(gameId)
+          //gameStart(gameId)
         })
       }
     })
   })
 }
 
-function gameStart (gameId) {
+function gameStart () {
+  
   let gameStartInterval = setInterval(function () {
-    let request = new XMLHttpRequest()
-    let url = '/controller.php?action=gameStarted'
     let data = new FormData()
     data.append('game_id', gameId)
-    request.open('GET', url, true)
-    // request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-    request.onreadystatechange = function () {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-          let response = JSON.parse(request.response)
-          if (response.result === 1) {
-            console.log('gameStarted')
-            clearInterval(gameStartInterval)
-          } else {
-            console.log('gameStartedError')
-          }
-        }
+    ajaxPost('gameStarted', data, function (response) {
+      if (response.gameStarted === 1) {
+        switchView('joined-view', 'fish-view')
+        clearInterval(gameStartInterval);        
+        gameStarted()
+      } else {
+        alert("viga!")
       }
-    }
-    request.send(data)
-  }, 1000)
+    })
+  })
+}
+
+function gameStarted () {
+
+}
+
+function submitFish () {
+
 }

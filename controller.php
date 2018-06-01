@@ -29,8 +29,8 @@ switch($action) {
         break;
 
     case "getPlayers":
-        if(isset($_GET["game_id"])) {
-            echo json_encode(gerPlayers($_GET["game_id"]));
+        if(isset($_POST["game_id"])) {
+            echo json_encode(getPlayers($_POST["game_id"]));
         }
         break;
 
@@ -78,6 +78,7 @@ switch($action) {
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
             echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
+            // echo json_encode(['gameId' => 13, 'teamId' => 1]);
         } else {
             echo json_encode(["success" => false]);
         }
@@ -230,6 +231,9 @@ function getPlayers($game_id){
     }
     $stmt->close();
     $mysqli->close();
+    if(empty($names)){
+        return (['none' => "true"]);
+    }
     return (['names' => $names]);          
 }
 
@@ -291,26 +295,25 @@ function gameStats($game_id){
 function joinGame($gameCode, $teamName) {   
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT id FROM game WHERE gameCode = ? and gameStarted = 0"); 
-    $stmt->bind_param("i", $gameCode);
+    $stmt->bind_param("s", $gameCode);
     $stmt->bind_result($gameId);
     $stmt->execute();
-    while ($stmt->fetch()){
-        if(gameStarted($gameId)) {
-            $stmt->close();
-            $mysqli->close();
-            return ['success' => false];
-        } else {
-            $stmt2 = $mysqli->prepare("INSERT into team (game_id, name) VALUES (?, ?)"); 
-            $stmt2->bind_param("is", $gameId, $teamName);
-            $stmt2->execute();
-            $stmt2->close();
-            $stmt->close();
-            $mysqli->close();
-            return ['gameId' => $gameId, 'teamId' => $teamId];
-        } 
-    }
+    $result = $stmt->fetch();
     $stmt->close();
-    $mysqli->close();
+    if(!$gameId) {
+        //var_dump($gameId ); die;
+        $mysqli->close();
+        return ['success' => false];
+    } else {
+        $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
+        //var_dump($gameId, $teamName); die;
+        $stmt->bind_param("is", $gameId, $teamName);
+        $stmt->execute();
+        $teamId = $stmt->insert_id;
+        $stmt->close();
+        $mysqli->close();
+        return ['gameId' => $gameId, 'teamId' => $teamId];
+    }
 }
 
 function roundOver($game_id) {
