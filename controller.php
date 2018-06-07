@@ -216,7 +216,7 @@ function startGame($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $stmt = $mysqli->prepare("INSERT INTO round (game_id, roundNr, fish_start) VALUES(?, 1, ?)"); 
-    $stmt->bind_param("sii", $gameCode,$fish_start);
+    $stmt->bind_param("si", $gameCode,$fish_start);
     $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
