@@ -1,30 +1,33 @@
 <section id="joined-view">
-    <div>Oled edukalt mänguga liitunud. Oota kuni õppejõud mängu alustab</div>
+    <div class = "textSmall" >Oled edukalt mänguga liitunud. Oota kuni õppejõud mängu alustab</div>
 </section>
 
 <section id="fish-view" style="display: none;">
     <div>
         <div>
-            <span>Kalu: </span>
-            <span id="currentFish">0</span>
+            <span class = "textSmall">Kalu: </span>
+            <span class = "textSmall" id="currentFish">0</span>
         </div>
         <div>
-            <span>Kalu saadud eelmises voorust: </span>
-            <span id="lastFish">0</span>
+            <span class = "textSmall">Kalu saadud eelmises voorust: </span>
+            <span class = "textSmall" id="lastFish">0</span>
+            <span class = "textSmall">0</span>
         </div>
         <div>
-            <span>Sisesta soovitud kalade arv: </span>
-            <input type="text" id="fishInput"  placeholder="(0-8)" />
+            <span class = "textSmall">Sisesta soovitud kalade arv: </span>
+            <input class = "inputBox" type="text" id="fishInput"  placeholder="(0-8)" />
         </div>
-        <button type="button" id="fishButton" style="margin: 0 auto; display: block;"><h2>Kinnita</h2></button>
+        <button type="button" class = "button" id="fishButton" style="margin: 0 auto; display: block;"><h2>Kinnita</h2></button>
     </div>
 </section>
 
 <section id="wait-view" style="display: none;">
-    <div>Oled merel</div>
+    <div class = "textSmall">Oled merel</div>
     <div>
-        <span>Tiime valmis </span>
-        <span id="waitSpan"></span>
-        <span>...</span>
+        <span class = "textSmall">Tiime valmis </span>
+        <span></span>
+        <span class = "textSmall">Tiime valmis </span>
+        <span class = "textSmall" id="waitSpan"></span>
+        <span class = "textSmall">...</span>
     </div>
 </section>

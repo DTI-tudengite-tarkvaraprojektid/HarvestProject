@@ -80,10 +80,13 @@ function gameJoin () {
           })
         } else {
           errorDiv.innerHTML = 'Vigane mängukood!'
+          document.getElementById('gameCode').style.borderColor = 'red'
         }
       })
     } else {
       errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
+      document.getElementById('gameCode').style.borderColor = 'red'
+      document.getElementById('teamName').style.borderColor = 'red'
     }
   })
 }
