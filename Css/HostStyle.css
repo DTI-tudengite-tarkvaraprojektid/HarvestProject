@@ -1,0 +1,111 @@
+#content{
+
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    width : 50%;
+}
+
+
+
+
+
+.main{
+    background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
+}
+
+
+
+
+
+
+.inputBox{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px #2a547e;
+    border-radius: 4px;
+    margin-left: auto;
+    margin-right: auto;
+   
+    
+    
+}
+
+
+
+
+
+.button{
+    font-family: "Goudy Old Style";
+    font-size: 15px;
+	font-style: normal;
+	font-variant: normal;
+   	background-color:white;
+    border: 2px solid #2a547e;
+    border-radius: 7px;
+    color: #2a547e;
+    
+    margin: 4px 2px;
+    width : 100%;
+    
+    
+}
+
+.button:hover {background-color: #98AFC7}
+
+.button:active {
+  background-color: #2B3856;
+  transform: translateY(1px);
+}
+    
+.break{
+    line-height:50px;
+}
+
+.gameCode{
+    font-family: "Goudy Old Style";
+    font-size: 50px;
+    font-style: normal;
+    font-variant: normal;
+    color: #994133;
+    font-weight: bold;
+    border: 3px solid #994133;
+    border-radius: 7px;
+    background-color: rgba(255, 255, 255, 0.81);
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+
+.text{
+    font-family: "Goudy Old Style";
+    font-size: 50px;
+	font-style: normal;
+    font-variant: normal;
+    color: #2B3856;
+}
+.textSmall{
+    
+        font-family: "Goudy Old Style";
+        font-size: 30px;
+        font-style: normal;
+        font-variant: normal;
+        color: #2B3856;
+    
+}
+.list{
+    
+    font-family: "Goudy Old Style";
+    font-size: 20px;
+    font-style: normal;
+    font-variant: normal;
+    color: #2B3856;
+    list-style-image: url('../images/fishIcon.png');
+
+}
+
