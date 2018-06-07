@@ -58,7 +58,7 @@ function createGame () {
       let gameCode = response.gameCode
       switchView('create-view', 'start-view')
       document.getElementById('gameCode').innerHTML = gameCode
-      updatePlayersInterval = setInterval(updatePlayerList, 3000)
+      updatePlayersInterval = setInterval(updatePlayerList, 1000)
     } else {
       alert('Viga mängu loomisel')
     }
@@ -77,7 +77,7 @@ function updatePlayerList () {
       }
       console.log(response.names)
       for (let i = 0; i < response.names.length; i++) {
-        listNode = document.createElement('ul')
+        listNode = document.createElement('li')
         textNode = document.createTextNode(response.names[i])
         listNode.appendChild(textNode)
         playersList.appendChild(listNode)

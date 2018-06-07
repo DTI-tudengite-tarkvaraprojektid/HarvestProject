@@ -11,25 +11,25 @@ session_start();
 
 switch($action) {
     case "gameStarted" : 
-        if(isset($_POST["game_id"])) {
+        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
             echo json_encode(gameStarted($_POST["game_id"]));
         }
         break;
 
     case "gameStats":
-        if(isset($_POST["game_id"])) {
+        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
             echo json_encode(gamestats($_POST["game_id"]));
         }
         break;
 
     case "playersReady":
-        if(isset($_GET["game_id"])) {
-            echo json_encode(playersReady($_GET["game_id"]));
+        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
+            echo json_encode(playersReady($_POST["game_id"]));
         }
         break;
 
     case "getPlayers":
-        if(isset($_POST["game_id"])) {
+        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
             echo json_encode(getPlayers($_POST["game_id"]));
         }
         break;
@@ -44,7 +44,7 @@ switch($action) {
 
     case "startGame":
         if (isset($_SESSION["loggedIn"])) {
-            if(isset($_POST["game_id"])) {
+            if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
                 echo json_encode(startGame($_POST["game_id"]));
             } else {
                 echo json_encode(["success" => false]);
@@ -63,14 +63,14 @@ switch($action) {
         break;
         
     case "submitFish":
-        if(isset($_POST["submit"]) && isset($_POST['game_id']) && isset($_POST['playerFish']) ) {
-            echo json_encode(gameStats($game_id));
+        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && is_int($_POST['game_id']) && is_int($_POST['playerFish'])) {
+            //echo json_encode(gameStats($game_id));
             echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish']));
         }
         break;
 
     case "roundOver":
-        if(isset($_POST['game_id'])) { 
+        if(isset($_POST['game_id']) && is_int($_POST['game_id'])) { 
             echo json_encode(roundOver($_POST['game_id'])); 
         }
         break;
@@ -98,7 +98,10 @@ switch($action) {
         session_unset();
         echo json_encode(["success" => true]);
         break;
-
+    case "playerFish":
+        if(isset($_POST["team_id"]) && is_int($_POST['team_id'])) {
+            echo json_encode(playerFish($_POST["team_id"]));
+        }
     default:
         echo  "Invalid action";
         break;
@@ -243,7 +246,7 @@ function gameStarted($game_id){
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($gameStarted);
     $stmt->execute();
-    $result = $stmt->fetch();
+    $stmt->fetch();
     $stmt->close();
     $mysqli->close();
     return (['gameStarted' => $gameStarted]);         
@@ -288,7 +291,7 @@ function gameStats($game_id){
         $result = $stmt->fetch();
         $stmt->close();
         $mysqli->close();
-        return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);     
+        return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);
     }
 }
 
@@ -365,5 +368,40 @@ function roundOver($game_id) {
     $stmt->close();
     $mysqli->close();
     return ['success' => true];
+}
+
+function playerFish($team_id) {
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("SELECT game_id FROM team WHERE id = ?"); 
+    $stmt->bind_param("i", $team_id);
+    $stmt->bind_result($gameId);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+    $gameStats = gameStats($gameId);
+    $totalFish = 0;
+    for ($i = 1; $i < $gameStats["currentRound"]; $i++) {
+       
+        if($i == ($gameStats["currentRound"]-1)) {
+            $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id = (SELECT id FROM round WHERE game_id = ? AND roundNr = ?)"); 
+            $stmt->bind_param("iii", $team_id, $game_id, $i);
+            $stmt->bind_result($fish);
+            $stmt->execute();
+            $stmt->fetch();
+            $lastFish = $fish;
+            $totalFish += $fish;
+            $stmt->close();
+        } else {
+            $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id = (SELECT id FROM round WHERE game_id = ? AND roundNr = ?)"); 
+            $stmt->bind_param("iii", $team_id, $game_id, $i);
+            $stmt->bind_result($fish);
+            $stmt->execute();
+            $stmt->fetch();
+            $totalFish += $fish;
+            $stmt->close();
+        }
+    }
+    $mysqli->close();
+    return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
 }
 ?>
