@@ -30,8 +30,6 @@ switch($action) {
 
     case "getPlayers":
         if(isset($_POST["game_id"])) {
-            echo $_POST["game_id"];
-            echo gettype($_POST["game_id"];)
             echo json_encode(getPlayers($_POST["game_id"]));
         } else {
             echo json_encode(["success" => false]);
