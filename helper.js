@@ -96,12 +96,12 @@ function UpdateQueryString (key, value) { // https://stackoverflow.com/questions
   if (re.test(url)) {
     if (typeof value !== 'undefined' && value !== null) {
       url = url.replace(re, '$1' + key + '=' + value + '$2$3')
-      window.history.pushState({path: url}, '', url)
+      window.history.replaceState({path: url}, '', url)
     } else {
       hash = url.split('#')
       url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '')
       if (typeof hash[1] !== 'undefined' && hash[1] !== null) { url += '#' + hash[1] }
-      window.history.pushState({path: url}, '', url)
+      window.history.replaceState({path: url}, '', url)
     }
   } else {
     if (typeof value !== 'undefined' && value !== null) {
@@ -109,9 +109,9 @@ function UpdateQueryString (key, value) { // https://stackoverflow.com/questions
       hash = url.split('#')
       url = hash[0] + separator + key + '=' + value
       if (typeof hash[1] !== 'undefined' && hash[1] !== null) { url += '#' + hash[1] }
-      window.history.pushState({path: url}, '', url)
+      window.history.replaceState({path: url}, '', url)
     } else {
-      window.history.pushState({path: url}, '', url)
+      window.history.replaceState({path: url}, '', url)
     }
   }
 }
