@@ -26,7 +26,7 @@
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 2px #2a547e;
+    border: 2px solid #2a547e;
     border-radius: 4px;
     margin-left: auto;
     margin-right: auto;
@@ -35,7 +35,13 @@
     
 }
 
-
+#errorDiv{
+    font-family: "Goudy Old Style";
+    font-size: 20px;
+	font-style: normal;
+	font-variant: normal;
+    color :red;
+}
 
 
 
