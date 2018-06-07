@@ -11,26 +11,30 @@ session_start();
 
 switch($action) {
     case "gameStarted" : 
-        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
+        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
             echo json_encode(gameStarted($_POST["game_id"]));
         }
         break;
 
     case "gameStats":
-        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
+        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
             echo json_encode(gamestats($_POST["game_id"]));
         }
         break;
 
     case "playersReady":
-        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
+        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
             echo json_encode(playersReady($_POST["game_id"]));
         }
         break;
 
     case "getPlayers":
-        if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
+        if(isset($_POST["game_id"])) {
+            echo $_POST["game_id"];
+            echo gettype($_POST["game_id"];)
             echo json_encode(getPlayers($_POST["game_id"]));
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
 
@@ -44,7 +48,7 @@ switch($action) {
 
     case "startGame":
         if (isset($_SESSION["loggedIn"])) {
-            if(isset($_POST["game_id"]) && is_int($_POST["game_id"])) {
+            if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
                 echo json_encode(startGame($_POST["game_id"]));
             } else {
                 echo json_encode(["success" => false]);
@@ -63,14 +67,14 @@ switch($action) {
         break;
         
     case "submitFish":
-        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && is_int($_POST['game_id']) && is_int($_POST['playerFish'])) {
+        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish'])) {
             //echo json_encode(gameStats($game_id));
             echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish']));
         }
         break;
 
     case "roundOver":
-        if(isset($_POST['game_id']) && is_int($_POST['game_id'])) { 
+        if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
             echo json_encode(roundOver($_POST['game_id'])); 
         }
         break;
@@ -99,7 +103,7 @@ switch($action) {
         echo json_encode(["success" => true]);
         break;
     case "playerFish":
-        if(isset($_POST["team_id"]) && is_int($_POST['team_id'])) {
+        if(isset($_POST["team_id"]) && is_numeric($_POST['team_id'])) {
             echo json_encode(playerFish($_POST["team_id"]));
         }
     default:

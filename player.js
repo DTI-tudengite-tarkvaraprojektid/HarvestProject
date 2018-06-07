@@ -1,7 +1,7 @@
 let gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton
-let errorDiv = document.getElementById('errorDiv')
 
 window.onload = function () {
+  let errorDiv = document.getElementById('errorDiv')
   let params = getParameters()
   if (params.gameId && params.teamId && location.hash) {
     gameId = params.gameId
@@ -175,9 +175,9 @@ function submitFish () {
             maxPlayers = response.maxPlayers
             if (fishInput && fishInput <= response.fishInSea && fishInput > 0) {
               let data3 = new FormData()
-              data2.append('game_id', gameId)
-              data2.append('playerFish', fishInput)
-              ajaxPost('submitFish', data2, function (response) {
+              data3.append('game_id', gameId)
+              data3.append('playerFish', fishInput)
+              ajaxPost('submitFish', data3, function (response) {
                 if (response.success !== false) {
                   switchView('fish-view', 'wait-view')
                   waitPlayers()
