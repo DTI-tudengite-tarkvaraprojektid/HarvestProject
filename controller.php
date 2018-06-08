@@ -221,7 +221,7 @@ function startGame($game_id){
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return ["success" => true];
+    return ["success" => true, "maxPlayers" => $maxPlayers];
 }
 
 function getPlayers($game_id){
@@ -405,5 +405,23 @@ function playerFish($team_id) {
     }
     $mysqli->close();
     return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
+}
+
+function endGame($game_id) {
+    /*
+        *tiimide edetabl*
+        *iga tiimi kalade arv*
+
+        *rounde mängitud
+        *kokku kalu püütud
+        *Keskmiselt roundis kalu püütud
+        *väikseim kogus kalu püütud
+        *röövpüükide arv
+        *suurim kogus kalu püütud
+
+        *iga roundi tabel (üks rida enne tabelit on voor: number )
+        columns: tiim, järjekord, soovitud kalu, saadud kalu, (kalu total)
+
+    */
 }
 ?>
