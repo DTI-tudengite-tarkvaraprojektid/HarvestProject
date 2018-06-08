@@ -63,7 +63,7 @@ function gameJoin () {
     let gameCode = document.getElementById('gameCode').value
     let teamName = document.getElementById('teamName').value
     // check inputs
-    if (gameCode.length !== 4 && teamName.length < 60) {
+    if (gameCode.length === 4 && teamName.length < 60) {
       let data = new FormData()
       data.append('gameCode', gameCode)
       data.append('teamName', teamName)
@@ -99,43 +99,15 @@ function gameStart () {
       if (response.gameStarted === 1) {
         switchView('joined-view', 'fish-view')
         clearInterval(gameStartInterval)
-        gameStarted()
+        fishSubmitButton = document.getElementById('fishButton')
+        fishSubmitButton.addEventListener('click', function (event) {
+          submitFish()
+        })
       } else {
         // alert('viga!')
       }
     })
   }, 1000)
-}
-
-function gameStarted () {
-  fishSubmitButton = document.getElementById('fishButton')
-  fishSubmitButton.addEventListener('click', function (event) {
-    let fishInput = document.getElementById('fishInput').value
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('gameStats', data, function (response) {
-      if (response.maxPlayers) {
-        maxPlayers = response.maxPlayers
-        if (fishInput && fishInput <= response.fishInSea && fishInput > 0) {
-          let data2 = new FormData()
-          data2.append('game_id', gameId)
-          data2.append('playerFish', fishInput)
-          ajaxPost('submitFish', data2, function (response) {
-            if (response.success !== false) {
-              switchView('fish-view', 'wait-view')
-              waitPlayers()
-            } else {
-            // error div
-            }
-          })
-        } else {
-          // error div
-        }
-      } else {
-        // error div
-      }
-    })
-  })
 }
 
 function waitPlayers () {
@@ -148,7 +120,7 @@ function waitPlayers () {
         if (response.playersReady === maxPlayers) {
           switchView('wait-view', 'fish-view')
           clearInterval(waitPlayersInterval)
-          submitFish()
+          round()
         } else {
           waitSpan.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
         }
@@ -159,43 +131,45 @@ function waitPlayers () {
   }, 1000)
 }
 
-function submitFish () {
+function round () {
   currentFishLabel = document.getElementById('currentFish')
   lastRoundFishLabel = document.getElementById('lastFish')
-  fishSubmitButton = document.getElementById('fishButton')
   let data = new FormData()
   data.append('team_id', teamId)
   ajaxPost('playerFish', data, function (response) {
     if (response.totalFish) {
       currentFishLabel.innerHTML = response.totalFish
       lastRoundFishLabel.innerHTML = response.lastFish
-      fishSubmitButton.addEventListener('click', function (event) {
-        let fishInput = document.getElementById('fishInput').value
+    }
+  })
+}
+
+function submitFish () {
+  console.log('click')
+  let fishInput = document.getElementById('fishInput').value
+  let data = new FormData()
+  data.append('game_id', gameId)
+  ajaxPost('gameStats', data, function (response) {
+    if (response.maxPlayers) {
+      maxPlayers = response.maxPlayers
+      if (fishInput && fishInput <= response.fishInSea && fishInput > 0) {
         let data2 = new FormData()
         data2.append('game_id', gameId)
-        ajaxPost('gameStats', data2, function (response) {
-          if (response.maxPlayers) {
-            maxPlayers = response.maxPlayers
-            if (fishInput && fishInput <= response.fishInSea && fishInput > 0) {
-              let data3 = new FormData()
-              data3.append('game_id', gameId)
-              data3.append('playerFish', fishInput)
-              ajaxPost('submitFish', data3, function (response) {
-                if (response.success !== false) {
-                  switchView('fish-view', 'wait-view')
-                  waitPlayers()
-                } else {
-                  // error div
-                }
-              })
-            } else {
-            // error div
-            }
+        data2.append('playerFish', fishInput)
+        data2.append('team_id', teamId)
+        ajaxPost('submitFish', data2, function (response) {
+          if (response.success !== false) {
+            switchView('fish-view', 'wait-view')
+            waitPlayers()
           } else {
-          // error div
+            // error div
           }
         })
-      })
+      } else {
+        // error div
+      }
+    } else {
+      // error div
     }
   })
 }
