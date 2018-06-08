@@ -1,6 +1,4 @@
-let gameId
-let playersList
-let updatePlayersInterval
+let gameId, playersList, updatePlayersInterval, fishTotalDiv, playersReadyDiv, currentRoundDiv, maxPlayers, endGameButton, waitPlayersInterval
 
 window.onload = function () {
   isLoggedIn()
@@ -41,12 +39,19 @@ function panel () {
   loadHTML('content', 'views/panel.html', function () {
     let createGameButton = document.getElementById('createGame')
     let startGameButton = document.getElementById('startGame')
+    playersReadyDiv = document.getElementById('playersReady')
+    fishTotalDiv = document.getElementById('fishTotal')
+    currentRoundDiv = document.getElementById('currentRound')
     playersList = document.getElementById('playersList')
+    endGameButton = document.getElementById('stopGame')
     createGameButton.addEventListener('click', function (event) {
       createGame()
     })
     startGameButton.addEventListener('click', function (event) {
       startGame()
+    })
+    endGameButton.addEventListener('click', function (event) {
+      endGame()
     })
   })
 }
@@ -91,10 +96,62 @@ function startGame () {
   data.append('game_id', gameId)
   ajaxPost('startGame', data, function (response) {
     if (response.success) {
+      maxPlayers = response.maxPlayers
       clearInterval(updatePlayersInterval)
       switchView('start-view', 'game-view')
+      round()
     } else {
       alert('Viga mängu alustamisel')
     }
   })
+}
+
+function round () {
+  playersReadyDiv.innerHTML = '(0/' + maxPlayers + ')'
+  let data = new FormData()
+  data.append('game_id', gameId)
+  ajaxPost('gameStats', data, function (response) {
+    if (response.maxPlayers) {
+      currentRoundDiv.innerHTML = response.currentRound
+      fishTotalDiv.innerHTML = response.fishInSea
+      waitPlayers()
+    }
+  })
+}
+
+function waitPlayers () {
+  waitPlayersInterval = setInterval(function () {
+    let data = new FormData()
+    data.append('game_id', gameId)
+    ajaxPost('playersReady', data, function (response) {
+      if (response.playersReady) {
+        if (response.playersReady === maxPlayers) {
+          clearInterval(waitPlayersInterval)
+          switchView('game-view', 'wait-view')
+          roundOver()
+        } else {
+          playersReadyDiv.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
+        }
+      } else {
+        // error div or redirect
+      }
+    })
+  }, 1000)
+}
+
+function roundOver () {
+  let data = new FormData()
+  data.append('game_id', gameId)
+  ajaxPost('playersReady', data, function (response) {
+    if (response.success) {
+      // waitscreen animation time wait
+      switchView('wait-view', 'game-view')
+      round()
+    }
+  })
+}
+
+function endGame () {
+  clearInterval(waitPlayersInterval)
+  alert('game over pressed') // debug
 }

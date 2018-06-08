@@ -1,7 +1,7 @@
-let gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton
+let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton
 
 window.onload = function () {
-  let errorDiv = document.getElementById('errorDiv')
+  errorDiv = document.getElementById('errorDiv')
   let params = getParameters()
   if (params.gameId && params.teamId && location.hash) {
     gameId = params.gameId
