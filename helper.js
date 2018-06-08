@@ -116,40 +116,32 @@ function UpdateQueryString (key, value) { // https://stackoverflow.com/questions
   }
 }
 
-let interval, pos, elem
 function errorDivMoveDown () {
-  elem = document.getElementById('errorDiv')
+  let elem = document.getElementById('errorDiv')
   // console.log(elem.offsetTop)
-  if (elem.offsetTop != -45) {
+  if (elem.offsetTop !== -45) {
     // console.log('error message doesnt move')
   } else {
     // console.log('error message moves')
-    pos = -45
-    interval = setInterval(frame, 40)
-  }
-}
-
-function frame () {
-  if (pos === 0) {
-    clearInterval(interval)
-    errorDivMoveUp()
-  } else {
-    pos++
-    elem.style.top = pos + 'px'
-  }
-}
-
-function errorDivMoveUp () {
-  let elem = document.getElementById('errorDiv')
-  let pos = 0
-  interval = setInterval(frame, 40)
-  function frame () {
-    if (pos === -45) {
-      clearInterval(interval)
-      elem.style.top = pos + 'px'
-    } else {
-      pos--
-      elem.style.top = pos + 'px'
-    }
+    let pos = -45
+    let intervalDown = setInterval(function () {
+      if (pos === 0) {
+        clearInterval(intervalDown)
+        window.setTimeout(function () {
+          let intervalUp = setInterval(function () {
+            if (pos === -45) {
+              clearInterval(intervalUp)
+              elem.style.top = pos + 'px'
+            } else {
+              pos -= 3
+              elem.style.top = pos + 'px'
+            }
+          }, 20)
+        }, 3000)
+      } else {
+        pos += 3
+        elem.style.top = pos + 'px'
+      }
+    }, 20)
   }
 }
