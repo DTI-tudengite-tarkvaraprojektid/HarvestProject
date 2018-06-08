@@ -172,10 +172,12 @@ function submitFish () {
           }
         })
       } else {
-        // error div
+        errorDiv.innerHTML = 'Kontrollige sisendit!'
+        errorDivMoveDown()
       }
     } else {
-      // error div
+      errorDiv.innerHTML = 'Ilmnes viga!'
+      errorDivMoveDown()
     }
   })
 }
