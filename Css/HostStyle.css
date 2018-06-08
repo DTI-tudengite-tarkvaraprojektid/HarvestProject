@@ -123,3 +123,27 @@
     padding:8px 10px;
     top: -45px;
 }
+
+
+
+
+
+
+  .fishie {
+    width: 382px;
+    height: 215px;
+    opacity:0;
+    right: 25%;
+    position: absolute;
+    animation: 2s fly infinite linear;
+    background-image: url("../images/pufferfishLoader.png");
+  }
+  /* Fish fly */
+  @keyframes fly {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

@@ -63,7 +63,7 @@ function gameJoin () {
     let gameCode = document.getElementById('gameCode').value
     let teamName = document.getElementById('teamName').value
     // check inputs
-    if (gameCode.length !== 4 && teamName.length < 60) {
+    if (gameCode.length === 4 && teamName.length < 60) {
       let data = new FormData()
       data.append('gameCode', gameCode)
       data.append('teamName', teamName)
