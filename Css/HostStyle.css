@@ -128,15 +128,28 @@
 
 
 
+.fishtank{
+    background : linear-gradient(to right, #2a547e, #4182c2, #2a547e);
+    position: absolute;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 100;
+    top:-100%;
+    left:0px;
 
+}
+.animation{
+    animation: 2s fly infinite linear;
+}
 
   .fishie {
     width: 382px;
     height: 215px;
-    opacity:0;
-    right: 25%;
+    right: 40%;
+    top:30%;
     position: absolute;
-    animation: 2s fly infinite linear;
     background-image: url("../images/pufferfishLoader.png");
   }
   /* Fish fly */
