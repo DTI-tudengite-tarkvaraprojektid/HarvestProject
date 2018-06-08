@@ -19,6 +19,8 @@ switch($action) {
     case "gameStats":
         if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
             echo json_encode(gamestats($_POST["game_id"]));
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
 
@@ -65,9 +67,11 @@ switch($action) {
         break;
         
     case "submitFish":
-        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish'])) {
+        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && isset($_POST['team_id']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish']) && is_numeric($_POST['team_id'])) {
             //echo json_encode(gameStats($game_id));
-            echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish']));
+            echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish'], $_POST['team_id']));
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
 
@@ -104,6 +108,7 @@ switch($action) {
         if(isset($_POST["team_id"]) && is_numeric($_POST['team_id'])) {
             echo json_encode(playerFish($_POST["team_id"]));
         }
+        break;
     default:
         echo  "Invalid action";
         break;
@@ -132,9 +137,9 @@ function login($username, $password){
         }
 }
 
-function submitFish($game_id, $playerFish){
-    $gameStats = gameStats();
-    if($gameStats['maxplayer']*10 >= $playerFish && $gameStats['fishInSea'] >= $playerFish){
+function submitFish($game_id, $playerFish, $team_id){
+    $gameStats = gameStats($game_id);
+    if($gameStats["maxPlayers"]*10 >= $playerFish && $gameStats['fishInSea'] >= $playerFish){
         $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
         $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND roundNr = ?"); 
         $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
@@ -147,6 +152,7 @@ function submitFish($game_id, $playerFish){
         $stmt->execute();   
         $stmt->close();
         $mysqli->close();
+        return ['success' => true];
     }else{
         return ['success' => false];
     }         
@@ -210,18 +216,19 @@ function startGame($game_id){
     $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
-    $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '1', players = ?  WHERE id = ?"); 
+    $stmt = $mysqli->prepare("UPDATE game SET currentRound = '1', gameStarted = '1', players = ?  WHERE id = ?"); 
     $stmt->bind_param("ii",$maxPlayers, $game_id);
     $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
+    $fish = $maxPlayers * 10;
     $stmt = $mysqli->prepare("INSERT INTO round (game_id, roundNr, fish_start) VALUES(?, 1, ?)"); 
-    $stmt->bind_param("si", $gameCode,$fish_start);
+    $stmt->bind_param("ii", $game_id, $fish);
     $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return ["success" => true, "maxPlayers" => $maxPlayers];
+    return (["success" => true, "maxPlayers" => $maxPlayers]);
 }
 
 function getPlayers($game_id){
@@ -255,7 +262,8 @@ function gameStarted($game_id){
 }
 
 function playersReady($game_id){
-    $stmt = $mysqli->prepare("SELECT currentRound FROM game WHERE game_id = ?"); 
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("SELECT currentRound FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($currentRound);
     $stmt->execute();
@@ -278,23 +286,21 @@ function playersReady($game_id){
 }
 
 function gameStats($game_id){
-    if(isset($_GET["game_id"])) {
-        $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-        $stmt = $mysqli->prepare("SELECT currentRound, players FROM game WHERE id = ?"); 
-        $stmt->bind_param("i", $game_id);
-        $stmt->bind_result($currentRound, $maxPlayers);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stmt->close();
-        $stmt = $mysqli->prepare("SELECT fish_start FROM round WHERE game_id = ? AND roundNr =?;");
-        $stmt->bind_param("ii", $game_id, $currentRound); 
-        $stmt->bind_result($fishInSea);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stmt->close();
-        $mysqli->close();
-        return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);
-    }
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("SELECT currentRound, players FROM game WHERE id = ?"); 
+    $stmt->bind_param("i", $game_id);
+    $stmt->bind_result($currentRound, $maxPlayers);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+    $stmt = $mysqli->prepare("SELECT fish_start FROM round WHERE game_id = ? AND roundNr =?;");
+    $stmt->bind_param("ii", $game_id, $currentRound); 
+    $stmt->bind_result($fishInSea);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stmt->close();
+    $mysqli->close();
+    return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);
 }
 
 function joinGame($gameCode, $teamName) {   
@@ -382,6 +388,7 @@ function playerFish($team_id) {
     $stmt->close();
     $gameStats = gameStats($gameId);
     $totalFish = 0;
+    $lastFish = 0;
     for ($i = 1; $i < $gameStats["currentRound"]; $i++) {
        
         if($i == ($gameStats["currentRound"]-1)) {

@@ -142,7 +142,7 @@ function waitPlayers () {
 function roundOver () {
   let data = new FormData()
   data.append('game_id', gameId)
-  ajaxPost('playersReady', data, function (response) {
+  ajaxPost('roundOver', data, function (response) {
     if (response.success) {
       // waitscreen animation time wait
       switchView('wait-view', 'game-view')
