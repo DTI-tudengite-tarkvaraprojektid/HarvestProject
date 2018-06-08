@@ -155,6 +155,3 @@ function endGame () {
   clearInterval(waitPlayersInterval)
   alert('game over pressed') // debug
 }
-
-
-}
