@@ -81,12 +81,14 @@ function gameJoin () {
         } else {
           errorDiv.innerHTML = 'Vigane mängukood!'
           document.getElementById('gameCode').style.borderColor = 'red'
+          errorDivMoveDown()
         }
       })
     } else {
       errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
       document.getElementById('gameCode').style.borderColor = 'red'
       document.getElementById('teamName').style.borderColor = 'red'
+      errorDivMoveDown()
     }
   })
 }
@@ -101,7 +103,7 @@ function gameStart () {
         clearInterval(gameStartInterval)
         gameStarted()
       } else {
-        // alert('viga!')
+        console.log('ilmnes viga')
       }
     })
   }, 1000)
@@ -125,14 +127,20 @@ function gameStarted () {
               switchView('fish-view', 'wait-view')
               waitPlayers()
             } else {
-            // error div
+              errorDiv.innerHTML = 'Ilmnes viga!'
+              errorDivMoveDown()
+            // error div ilmnes viga
             }
           })
         } else {
-          // error div
+          errorDiv.innerHTML = 'Kontrollige sisendit!'
+          errorDivMoveDown()
+          // error div kahtlane sisend
         }
       } else {
-        // error div
+        errorDiv.innerHTML = 'Ilmnes viga!'
+        errorDivMoveDown()
+        // error div ilmnes viga
       }
     })
   })
@@ -153,7 +161,9 @@ function waitPlayers () {
           waitSpan.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
         }
       } else {
-        // error div or redirect
+        errorDiv.innerHTML = 'Ilmnes viga!'
+        errorDivMoveDown()
+        // error div or redirect ilmnes viga
       }
     })
   }, 1000)
@@ -185,13 +195,19 @@ function submitFish () {
                   switchView('fish-view', 'wait-view')
                   waitPlayers()
                 } else {
+                  errorDiv.innerHTML = 'Ilmnes viga!'
+                  errorDivMoveDown()
                   // error div
                 }
               })
             } else {
+              errorDiv.innerHTML = 'Kontrollige sisendit!'
+              errorDivMoveDown()
             // error div
             }
           } else {
+            errorDiv.innerHTML = 'Ilmnes viga!'
+            errorDivMoveDown()
           // error div
           }
         })

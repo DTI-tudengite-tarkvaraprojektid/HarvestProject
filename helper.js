@@ -115,3 +115,39 @@ function UpdateQueryString (key, value) { // https://stackoverflow.com/questions
     }
   }
 }
+
+function errorDivMoveDown () {
+  var elem = document.getElementById('errorDiv')
+  // console.log(elem.offsetTop)
+  if (elem.offsetTop != -45) {
+    // console.log('error message doesnt move')
+  } else {
+    // console.log('error message moves')
+    var pos = -45
+    var id = setInterval(frame, 40)
+    function frame () {
+      if (pos == 0) {
+        clearInterval(id)
+        errorDivMoveUp()
+      } else {
+        pos++
+        elem.style.top = pos + 'px'
+      }
+    }
+  }
+}
+
+function errorDivMoveUp () {
+  var elem = document.getElementById('errorDiv')
+  var pos = 0
+  var id = setInterval(frame, 40)
+  function frame () {
+    if (pos == -45) {
+      clearInterval(id)
+      elem.style.top = pos + 'px'
+    } else {
+      pos--
+      elem.style.top = pos + 'px'
+    }
+  }
+}
