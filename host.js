@@ -128,7 +128,7 @@ function waitPlayers () {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
-          switchView('game-view', 'wait-view')
+
           roundOver()
         } else {
           playersReadyDiv.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
@@ -145,8 +145,8 @@ function roundOver () {
   data.append('game_id', gameId)
   ajaxPost('roundOver', data, function (response) {
     if (response.success) {
-      // waitscreen animation time wait
-      switchView('wait-view', 'game-view')
+      hypnofishMoveDown()
+
       round()
     }
   })
@@ -155,4 +155,42 @@ function roundOver () {
 function endGame () {
   clearInterval(waitPlayersInterval)
   alert('game over pressed') // debug
+}
+function hypnofishMoveDown () {
+  let h = parseInt(window.innerHeight)
+  let fish = document.getElementById('fishtank')
+  let fishie = document.getElementById('fishie')
+  let temp = parseInt(window.getComputedStyle(fish).getPropertyValue('top'))
+  let prc = Math.round(((temp / h) * 100))
+
+  // console.log(h)
+  // console.log(temp)
+  // console.log(prc)
+  if (prc !== -100) {
+
+  } else {
+    fishie.classList.add('animation')
+    let pos = -100
+    let intervalDown = setInterval(function () {
+      if (pos === 0) {
+        clearInterval(intervalDown)
+        fishie.classList.remove('animetion')
+        window.setTimeout(function () {
+          let intervalUp = setInterval(function () {
+            if (pos === -100) {
+              clearInterval(intervalUp)
+              fishie.classList.remove('animation')
+              fish.style.top = pos + '%'
+            } else {
+              pos -= 2
+              fish.style.top = pos + '%'
+            }
+          }, 20)
+        }, 1000)
+      } else {
+        pos += 2
+        fish.style.top = pos + '%'
+      }
+    }, 20)
+  }
 }
