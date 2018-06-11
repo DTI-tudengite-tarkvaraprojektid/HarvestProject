@@ -62,6 +62,7 @@ function createGame () {
       gameId = response.id
       let gameCode = response.gameCode
       switchView('create-view', 'start-view')
+      gameCode.toUpperCase()
       document.getElementById('gameCode').innerHTML = gameCode
       updatePlayersInterval = setInterval(updatePlayerList, 1000)
     } else {

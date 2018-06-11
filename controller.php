@@ -67,7 +67,7 @@ switch($action) {
         break;
         
     case "submitFish":
-        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && isset($_POST['team_id']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish']) && is_numeric($_POST['team_id'])) {
+        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && isset($_POST['team_id']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish']) && is_numeric($_POST['team_id']) && filter_var($_POST['playerFish'], FILTER_VALIDATE_INT)) {
             //echo json_encode(gameStats($game_id));
             echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish'], $_POST['team_id']));
         } else {
@@ -83,7 +83,7 @@ switch($action) {
 
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
-            echo json_encode(joinGame($_POST["gameCode"], $_POST["teamName"]));
+            echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
             // echo json_encode(['gameId' => 13, 'teamId' => 1]);
         } else {
             echo json_encode(["success" => false]);
@@ -415,20 +415,74 @@ function playerFish($team_id) {
 }
 
 function endGame($game_id) {
+    $overallStats = [];
+
+    $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("SELECT currentRound-1 FROM game WHERE id = ?"); 
+    $stmt->bind_param("i", $game_id);
+    $stmt->bind_result($overallStats['roundsPlayed']);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+
+    $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_caught), max(fish_caught) FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ?)"); 
+    $stmt->bind_param("i", $game_id);
+    $stmt->bind_result($overallStats['fishSum'], $overallStats['fishAvg'], $overallStats['fishMin'], $overallStats['fishMax']);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+    
+    $stmt = $mysqli->prepare("SELECT count(fish_caught) FROM turn WHERE fish_caught > 8 AND round_id IN (SELECT id FROM round where game_id = ?)"); 
+    $stmt->bind_param("i", $game_id);
+    $stmt->bind_result($overallStats['fishRobbery']);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+
+    $teams = [];
+    $rounds = [];
+    $totals = [];
+
+    for ($i = 1; $i <= $overallStats['roundsPlayed']; $i++) {
+        $stmt = $mysqli->prepare("SELECT te.name, t.queue, t.fish_wanted, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id = (SELECT id FROM round where game_id = ? AND roundNr = ?) ORDER BY te.name ASC"); 
+        $stmt->bind_param("ii", $game_id, $i);
+        $stmt->bind_result($name, $order, $wanted, $caught);
+        $stmt->execute();
+        $k = 0;
+        while($stmt->fetch()) {
+            $totals[$k] += $caught;
+            $k++;
+            $teams[$k] = ["name" => $name, "order" => $order,"wanted" => $wanted, "caught" => $caught, "total" => $totals[$k]];
+        }
+        $rounds[$i-1] = $teams[$k];
+        $stmt->close();
+    }
+    return (["overallStats" => $overallStats, "rounds" => $rounds]);
+
     /*
-        *tiimide edetabl*
-        *iga tiimi kalade arv*
+        tiimide edetabe:
+            *iga tiimi nimi ja kalade arv*
 
-        *rounde mängitud
-        *kokku kalu püütud
-        *Keskmiselt roundis kalu püütud
-        *väikseim kogus kalu püütud
-        *röövpüükide arv
-        *suurim kogus kalu püütud
+        Üldstatistika:
+            *rounde mängitud
+            *kokku kalu püütud
+            *Keskmiselt roundis kalu püütud
+            *väikseim kogus kalu püütud
+            *röövpüükide arv
+            *suurim kogus kalu püütud
 
-        *iga roundi tabel (üks rida enne tabelit on voor: number )
-        columns: tiim, järjekord, soovitud kalu, saadud kalu, (kalu total)
+            a = SELECT currentRound-1 FROM game WHERE id = ?
+            SELECT sum(fish_caught), avg(fish_caught), min(fish_caught), max(fish_caught)  FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ?)
+            SELECT count(fish_caught) FROM turn WHERE fish_caught > 8 AND round_id IN (SELECT id FROM round where game_id = ?)
 
+
+        iga roundi tabel (üks rida enne tabelit on voor: number )
+            columns: tiim, järjekord, soovitud kalu, saadud kalu, (kalu total)
+
+            SELECT team_id FROM turn WHERE round_id = (SELECT id FROM round where roundNr = 1 AND game_id = ?)
+            for a:
+                for each team_id:
+                    SELECT te.name, t.queue, t.fish_wanted, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id = (SELECT id FROM round where game_id = ? AND roundNr = a)
     */
 }
 ?>
