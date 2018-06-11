@@ -183,11 +183,12 @@
 
   .fishTotal{
     font-family: "Goudy Old Style";
-    font-size: 75px;
+    font-size: 150px;
 	font-style: normal;
     font-variant: normal;
     font-weight: bold;
-    color: white;  
+    color: white;
+    text-align: center;
   }
 
 
