@@ -24,6 +24,8 @@
 }
 
 .button{
+    position: relative;
+    top:75%;
     font-family: "Goudy Old Style";
     font-size: 15px;
 	font-style: normal;
@@ -147,6 +149,9 @@
   /* panel looks, temp */
 
   .currentRound{
+    position: relative;
+    left: 0%;
+    top:10%;
     font-family: "Goudy Old Style";
     font-size: 75px;
 	font-style: normal;
@@ -155,6 +160,9 @@
     color: #2B3856;
   }
   .playersReady{
+    position: absolute;
+    right: 0%;
+    top:10%;
     font-family: "Goudy Old Style";
     font-size: 75px;
 	font-style: normal;
@@ -163,6 +171,7 @@
     color: #2B3856;
   }
   .fishTotal{
+    position: relative;
     font-family: "Goudy Old Style";
     font-size: 150px;
 	font-style: normal;
@@ -170,6 +179,7 @@
     font-weight: bold;
     color: white;
     text-align: center;
+    top:50%;
   }
 
 
