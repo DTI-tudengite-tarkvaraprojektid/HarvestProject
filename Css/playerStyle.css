@@ -11,6 +11,12 @@
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
 
+@media (max-width: 960px){
+.inputBox {
+    width: 100%;
+    }
+}
+
 .inputBox{
     width: 100%;
     padding: 12px 20px;
