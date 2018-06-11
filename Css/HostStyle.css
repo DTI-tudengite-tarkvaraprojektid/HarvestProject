@@ -101,7 +101,7 @@
 .list{
     
     font-family: "Goudy Old Style";
-    font-size: 20px;
+    font-size: 28px;
     font-style: normal;
     font-variant: normal;
     color: #2B3856;
@@ -161,3 +161,33 @@
       transform: rotate(360deg);
     }
   }
+
+  /* panel looks, temp */
+
+  .currentRound{
+    font-family: "Goudy Old Style";
+    font-size: 75px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: #2B3856;
+  }
+  .playersReady{
+    font-family: "Goudy Old Style";
+    font-size: 75px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: #2B3856;
+  }
+
+  .fishTotal{
+    font-family: "Goudy Old Style";
+    font-size: 75px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: white;  
+  }
+
+

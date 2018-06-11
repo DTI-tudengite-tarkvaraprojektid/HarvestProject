@@ -140,3 +140,12 @@
     font-variant: normal;
     color: #2B3856;
 }
+
+.joinText{
+    font-family: "Goudy Old Style";
+    font-size: 20px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: #2B3856;
+}
