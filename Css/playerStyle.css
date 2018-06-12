@@ -1,4 +1,4 @@
-#content{
+#content {
     position: absolute;
     top: 40%;
     left: 50%;
@@ -7,18 +7,18 @@
     width : 60%;
 }
 
-.main{
+.main {
     height: 100% !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
 
-@media (max-width: 960px){
+@media (max-width: 960px) {
 .inputBox {
     width: 100%;
     }
 }
 
-.inputBox{
+.inputBox {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -86,7 +86,7 @@
     -moz-animation:    slideDown 2.5s 1.0s 1 ease forwards;
 }
 
-#errorDiv{
+#errorDiv {
     font-family: "Goudy Old Style";
     font-size: 20px;
 	font-style: normal;
@@ -102,7 +102,7 @@
     top: -45px;
 }
 
-.button{
+.button {
     font-family: "Goudy Old Style";
     font-size: 10px;
 	font-style: normal;
@@ -124,7 +124,7 @@
   transform: translateY(1px);
 }
 
-.text{
+.text {
     font-family: "Goudy Old Style";
     font-size: 30px;
 	font-style: normal;
@@ -133,7 +133,7 @@
     text-align: center;
 }
 
-.textSmall{
+.textSmall {
     font-family: "Goudy Old Style";
     font-size: 15px;
 	font-style: normal;
@@ -141,7 +141,7 @@
     color: #2B3856;
 }
 
-.joinText{
+.joinText {
     font-family: "Goudy Old Style";
     font-size: 20px;
 	font-style: normal;
