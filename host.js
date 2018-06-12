@@ -151,19 +151,23 @@ function roundOver () {
 }
 
 function endGame () {
+  clearInterval(waitPlayersInterval)
   let data = new FormData()
   data.append('game_id', gameId)
   ajaxPost('endGame', data, function (response) {
+    console.log(response)
     if (response.overallStats) {
+      switchView('game-view', 'statistics-view')
       clearInterval(waitPlayersInterval)
+      console.log(response.overallStats)
       let statsTable = document.getElementById('OverallStatsTabel')
-      let row = statsTable.insertRow(0)
-      let cellRounds = row.insertCell(1)
-      let cellSum = row.insertCell(2)
-      let cellAvg = row.insertCell(3)
-      let cellMin = row.insertCell(4)
-      let cellOver = row.insertCell(5)
-      let cellMax = row.insertCell(6)
+      let row = statsTable.insertRow(1)
+      let cellRounds = row.insertCell(0)
+      let cellSum = row.insertCell(1)
+      let cellAvg = row.insertCell(2)
+      let cellMin = row.insertCell(3)
+      let cellOver = row.insertCell(4)
+      let cellMax = row.insertCell(5)
       cellRounds.innerHTML = response.overallStats.roundsPlayed
       cellSum.innerHTML = response.overallStats.fishSum
       cellAvg.innerHTML = response.overallStats.fishAvg

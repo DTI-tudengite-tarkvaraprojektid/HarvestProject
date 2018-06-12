@@ -113,7 +113,7 @@ switch($action) {
         break;
     case "endGame":
         if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
-            echo json_encode(endGame($_POST['game_id'])); 
+            echo endGame($_POST['game_id']); 
         }
         break;
     default:
@@ -403,29 +403,33 @@ function playerFish($team_id) {
 }
 
 function endGame($game_id) {
-    $overallStats = [];
+    $overallStats = (object)[];
 
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT currentRound-1 FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
-    $stmt->bind_result($overallStats['roundsPlayed']);
-    $stmt->execute();
-    $stmt->fetch();
-    $stmt->close();
-
-    $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_caught), max(fish_caught) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
-    $stmt->bind_param("i", $game_id);
-    $stmt->bind_result($overallStats['fishSum'], $overallStats['fishAvg'], $overallStats['fishMin'], $overallStats['fishMax']);
+    $stmt->bind_result($overallStats->roundsPlayed);
     $stmt->execute();
     $stmt->fetch();
     $stmt->close();
     
-    $stmt = $mysqli->prepare("SELECT count(fish_caught) FROM turn WHERE fish_caught > 8 AND round_id IN (SELECT id FROM `round` where game_id = ?)"); 
+    $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_caught), max(fish_caught) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
     $stmt->bind_param("i", $game_id);
-    $stmt->bind_result($overallStats['fishRobbery']);
+    $stmt->bind_result($overallStats->fishSum, $overallStats->fishAvg, $overallStats->fishMin, $overallStats->fishMax);
     $stmt->execute();
     $stmt->fetch();
     $stmt->close();
+    $overallStats->fishAvg = round($overallStats->fishAvg,2);
+    $overallStats->fishSum = (int)$overallStats->fishSum;
+
+    $stmt = $mysqli->prepare("SELECT count(fish_caught) FROM turn WHERE fish_caught > 8 AND round_id IN (SELECT id FROM `round` where game_id = ?)"); 
+    $stmt->bind_param("i", $game_id);
+    $stmt->bind_result($overallStats->fishRobbery);
+    $stmt->execute();
+    $stmt->fetch();
+    $stmt->close();
+
+/*
 
     $teams = [];
     $rounds = [];
@@ -472,5 +476,6 @@ function endGame($game_id) {
                 for each team_id:
                     SELECT te.name, t.queue, t.fish_wanted, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id = (SELECT id FROM round where game_id = ? AND roundNr = a)
     */
+    return json_encode(['overallStats' => $overallStats, 'test' => false]);
 }
 ?>
