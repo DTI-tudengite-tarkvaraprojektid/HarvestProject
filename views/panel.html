@@ -1,6 +1,6 @@
 <section id="create-view" style="display: block;">
     <div class="view">
-        <button type="button" class = "button" id="createGame" ><h2>Loo Mäng</h2></button>
+        <button type="button" class = "button" id="createGame" ><h2>Loo mäng</h2></button>
     </div>
 </section>
 
@@ -17,23 +17,28 @@
             
             <ul class = "list" id="playersList"></ul>
         </div>
-        <button type="button"class = "button" id="startGame" ><h2>Alusta Mängu</h2></button>
+        <button type="button"class = "button" id="startGame" ><h2>Alusta mängu</h2></button>
     </div>
     
 </section>
 
 <section id="game-view" style="display: none;">
     <div class="gameview">
+        <div style="float:right;margin-right: 5%;">
+        <span class ="textGameView">Mängijaid valmis: </span>
         <div class="playersReadyGameView" id="playersReady"></div>
+    </div>
+    <div style="float:left; margin-left: 5%;">
+        <span class ="textGameView">Round: </span>
         <div class="currentRoundGameView" id="currentRound"></div>
-        
+    </div>    
         
 
     </div>
     <div id="sea">
         <div class="seaGameView">
                 <div class="fishTotalGameView" id="fishTotal"></div>
-                <button type="button" class = "buttonGameView" id="stopGame"><h2>Lõpeta Mäng</h2></button> 
+                <button type="button" class = "buttonGameView" id="stopGame"><h2>Lõpeta mäng</h2></button> 
         <svg class="fish" id="fish">
         <path
            id="fish2"
