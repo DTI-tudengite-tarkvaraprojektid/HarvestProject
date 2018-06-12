@@ -8,18 +8,9 @@
     width : 50%;
 }
 
-
-
-
-
 .main{
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
-
-
-
-
-
 
 .inputBox{
     width: 100%;
@@ -30,16 +21,11 @@
     border-radius: 4px;
     margin-left: auto;
     margin-right: auto;
-   
-    
-    
 }
 
-
-
-
-
 .button{
+    position: absolute;
+    top:100%;
     font-family: "Goudy Old Style";
     font-size: 15px;
 	font-style: normal;
@@ -51,7 +37,6 @@
     
     margin: 4px 2px;
     width : 100%;
-    
     
 }
 
@@ -81,7 +66,6 @@
     text-align: center;
 }
 
-
 .text{
     font-family: "Goudy Old Style";
     font-size: 50px;
@@ -89,6 +73,7 @@
     font-variant: normal;
     color: #2B3856;
 }
+
 .textSmall{
     
         font-family: "Goudy Old Style";
@@ -98,10 +83,11 @@
         color: #2B3856;
     
 }
+
 .list{
     
     font-family: "Goudy Old Style";
-    font-size: 20px;
+    font-size: 28px;
     font-style: normal;
     font-variant: normal;
     color: #2B3856;
@@ -125,9 +111,6 @@
     top: -45px;
 }
 
-
-
-
 .fishtank{
     background : linear-gradient(to right, #2a547e, #4182c2, #2a547e);
     position: absolute;
@@ -140,6 +123,7 @@
     left:0px;
 
 }
+
 .animation{
     animation: 2s fly infinite linear;
 }
@@ -161,3 +145,36 @@
       transform: rotate(360deg);
     }
   }
+
+  /* panel looks, temp */
+
+  .currentRound{
+    float: left;
+    font-family: "Goudy Old Style";
+    font-size: 75px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: #2B3856;
+  }
+  .playersReady{
+    float: right;
+    font-family: "Goudy Old Style";
+    font-size: 75px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: #2B3856;
+  }
+  .fishTotal{
+    float: none;
+    font-family: "Goudy Old Style";
+    font-size: 150px;
+	font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+  }
+
+

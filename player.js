@@ -148,6 +148,10 @@ function round () {
   })
 }
 
+function isInteger (x) {
+  return (typeof x === 'number') && (x % 1 === 0)
+}
+
 function submitFish () {
   console.log('click')
   let fishInput = document.getElementById('fishInput').value
@@ -156,7 +160,7 @@ function submitFish () {
   ajaxPost('gameStats', data, function (response) {
     if (response.maxPlayers) {
       maxPlayers = response.maxPlayers
-      if (fishInput && fishInput <= response.fishInSea && fishInput > 0) {
+      if (fishInput && fishInput <= response.fishInSea && fishInput > 0 && isInteger(+fishInput)) {
         let data2 = new FormData()
         data2.append('game_id', gameId)
         data2.append('playerFish', fishInput)
