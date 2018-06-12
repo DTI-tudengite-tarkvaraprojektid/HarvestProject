@@ -1,31 +1,34 @@
 .seaGameView {
-    background-color: blue;
-    height: 1000px;
+    /*background-color: #2a547e;*/
+    height: 110%;
     width: 100%;
-    top: 80%;
+    top: 20%;
     position: absolute;
-    }
+    display: block;
+    background-image: url(../images/TEST.jpg);
+    box-shadow: 5px 10px 220px black inset;    }
     
-  svg#fish {
+svg#fish {
       top: 20em;
     }
+
     /* Fish Animation */
-  svg.fish {
+svg.fish {
       overflow:hidden;
     }
     
-  @-webkit-keyframes swim
+@-webkit-keyframes swim
     {
-        0% {margin-left: -100%}
-        90% {margin-left: 50%;}
-        100% {margin-left: 100%;}
+    0% {margin-left: -100%}
+    90% {margin-left: 50%;}
+    100% {margin-left: 100%;}
     }
     
-  @keyframes swim
+@keyframes swim
     {
-        0% {margin-left: -100%}
-        70% {margin-left: 50%;}
-        100% {margin-left: 100%;}
+    0% {margin-left: -100%}
+    70% {margin-left: 50%;}
+    100% {margin-left: 100%;}
     }
 
     
@@ -70,27 +73,27 @@
       animation: bounce 2s infinite;
     }
     
-  svg #fish2 {
+svg #fish2 {
         animation-delay: 0.5s;
         -webkit-animation-delay: 0.5s;
     }
     
-  svg #fish3 {
+svg #fish3 {
         animation-delay: 0.2s;
         -webkit-animation-delay: 0.2s;
     }
     
-  svg #fish4 {
+svg #fish4 {
         animation-delay: 0.4s;
         -webkit-animation-delay: 0.4s;
     }
     
-  svg #fish5 {
+svg #fish5 {
         animation-delay: 0.1s;
         -webkit-animation-delay: 0.1s;
     }
     
-  svg #fish6 {
+svg #fish6 {
         animation-delay: 0.3s;
         -webkit-animation-delay: 0.3s;
     }
@@ -99,8 +102,8 @@
       -webkit-animation-delay: 0.3s;
   }
     
-    /**/
-  @-moz-keyframes bounce {
+  /**/
+@-moz-keyframes bounce {
       0%, 50%, 100% {
         -moz-transform: translateY(0);
         transform: translateY(0);
@@ -115,7 +118,7 @@
       }
     }
   
-  @-webkit-keyframes bounce {
+@-webkit-keyframes bounce {
       0%, 50%, 100% {
         -webkit-transform: translateY(0);
         transform: translateY(0);
@@ -130,7 +133,7 @@
       }
     }
   
-  @keyframes bounce {
+@keyframes bounce {
       0%, 50%, 100% {
         -moz-transform: translateY(0);
         -ms-transform: translateY(0);
@@ -151,22 +154,22 @@
       }
     }
 
-    .textGameView {
-        font-family: "Goudy Old Style";
-        font-size: 50px;
-          font-style: normal;
-        font-variant: normal;
-        color: #2B3856;
+.textGameView {
+      font-family: "Goudy Old Style";
+      font-size: 50px;
+      font-style: normal;
+      font-variant: normal;
+      color: #2B3856;
     }
-    .currentRoundGameView {
-        font-family: "Goudy Old Style";
-        font-size: 75px;
-          font-style: normal;
-        font-variant: normal;
-        font-weight: bold;
-        color: #2B3856;
-        display: flex;
-      }
+.currentRoundGameView {
+      font-family: "Goudy Old Style";
+      font-size: 75px;
+      font-style: normal;
+      font-variant: normal;
+      font-weight: bold;
+      color: #2B3856;
+      display: flex;
+    }
     
     .playersReadyGameView {
         float: right;
@@ -188,25 +191,34 @@
         text-align: center;
         top:50%;
       }
-      .button {
-        top:100%;
+      .buttonGameView {
         font-family: "Goudy Old Style";
         font-size: 15px;
-          font-style: normal;
-          font-variant: normal;
-           background-color:white;
+        font-style: normal;
+        font-variant: normal;
+        background-color: white;
         border: 2px solid #2a547e;
         border-radius: 7px;
         color: #2a547e;
-        left: 0px;
-        margin-top: 5%;
-        width : 100%;
+        right: 0px;
+        
+        margin-right: 5%;
+        position: absolute;
+        top: 10%;
         
     }
     
-    .button:hover {background-color: #98AFC7}
+    .buttonGameView:hover {background-color: #98AFC7}
     
-    .button:active {
+    .buttonGameView:active {
         background-color: #2B3856;
         transform: translateY(1px);
+    }
+    .gameview{
+        position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    width : 100%;
     }

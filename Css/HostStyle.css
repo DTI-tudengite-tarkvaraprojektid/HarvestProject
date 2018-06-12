@@ -27,8 +27,8 @@
     top:100%;
     font-family: "Goudy Old Style";
     font-size: 15px;
-	  font-style: normal;
-	  font-variant: normal;
+	font-style: normal;
+	font-variant: normal;
    	background-color:white;
     border: 2px solid #2a547e;
     border-radius: 7px;
@@ -64,10 +64,12 @@
     display: block;
     text-align: center;
 }
+
 .listElement{
   border: 2px solid #2B3856;
     border-radius: 10px;
 }
+
 .text {
     font-family: "Goudy Old Style";
     font-size: 50px;
@@ -76,14 +78,12 @@
     color: #2B3856;
 }
 
-.textSmall {
-    
+.textSmall {  
     font-family: "Goudy Old Style";
     font-size: 30px;
     font-style: normal;
     font-variant: normal;
     color: #2B3856;
-    
 }
 .listElement{
   border: 2px solid #2B3856;
@@ -92,6 +92,7 @@
     float:left;
     width: 200px;
 }
+
 .list {
     
     font-family: "Goudy Old Style";
@@ -106,8 +107,8 @@
 #errorDiv {
     font-family: "Goudy Old Style";
     font-size: 20px;
-	  font-style: normal;
-	  font-variant: normal;
+	font-style: normal;
+	font-variant: normal;
     color :#ffdbbd;
     font-weight: bold;
     background-color:red;
@@ -163,7 +164,7 @@
 .currentRound {
     font-family: "Goudy Old Style";
     font-size: 75px;
-	  font-style: normal;
+	font-style: normal;
     font-variant: normal;
     font-weight: bold;
     color: #2B3856;
@@ -174,7 +175,7 @@
     float: right;
     font-family: "Goudy Old Style";
     font-size: 75px;
-	  font-style: normal;
+	font-style: normal;
     font-variant: normal;
     font-weight: bold;
     color: #2B3856;
@@ -184,7 +185,7 @@
 .fishTotal {
     font-family: "Goudy Old Style";
     font-size: 150px;
-	  font-style: normal;
+	font-style: normal;
     font-variant: normal;
     font-weight: bold;
     color: white;
@@ -192,8 +193,6 @@
     top:50%;
   }
   
-
-
 .view{
   position: absolute;
     top: 40%;
