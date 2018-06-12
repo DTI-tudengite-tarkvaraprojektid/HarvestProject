@@ -155,6 +155,11 @@
   }
 
   /* panel looks, temp */
+#game-view {
+    height: 75vh;
+    width: 100vh;
+}
+
 .currentRound {
     font-family: "Goudy Old Style";
     font-size: 75px;
