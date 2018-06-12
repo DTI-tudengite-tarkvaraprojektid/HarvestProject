@@ -1,11 +1,12 @@
 .seaGameView {
-    background-color: #2a547e;
+    /*background-color: #2a547e;*/
     height: 110%;
     width: 100%;
     top: 20%;
     position: absolute;
     display: block;
-    }
+    background-image: url(../images/TEST.jpg);
+    box-shadow: 5px 10px 220px black inset;    }
     
 svg#fish {
       top: 20em;
