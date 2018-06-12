@@ -186,13 +186,13 @@ svg #fish6 {
       }
       .fishTotalGameView {
         font-family: "Goudy Old Style";
-        font-size: 150px;
+        font-size: 250px;
           font-style: normal;
         font-variant: normal;
         font-weight: bold;
         color: white;
         text-align: center;
-        top:50%;
+        margin-top:15%;
       }
       .buttonGameView {
         font-family: "Goudy Old Style";
