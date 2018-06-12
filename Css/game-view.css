@@ -1,4 +1,4 @@
-.sea {
+.seaGameView {
     background-color: blue;
     height: 1000px;
     width: 100%;
@@ -131,14 +131,14 @@
       }
     }
 
-    .text {
+    .textGameView {
         font-family: "Goudy Old Style";
         font-size: 50px;
           font-style: normal;
         font-variant: normal;
         color: #2B3856;
     }
-    .currentRound {
+    .currentRoundGameView {
         font-family: "Goudy Old Style";
         font-size: 75px;
           font-style: normal;
@@ -148,7 +148,7 @@
         display: flex;
       }
     
-    .playersReady {
+    .playersReadyGameView {
         float: right;
         font-family: "Goudy Old Style";
         font-size: 75px;
@@ -158,7 +158,7 @@
         color: #2B3856;
         display: flex;
       }
-      .fishTotal {
+      .fishTotalGameView {
         font-family: "Goudy Old Style";
         font-size: 150px;
           font-style: normal;
@@ -168,3 +168,25 @@
         text-align: center;
         top:50%;
       }
+      .button {
+        top:100%;
+        font-family: "Goudy Old Style";
+        font-size: 15px;
+          font-style: normal;
+          font-variant: normal;
+           background-color:white;
+        border: 2px solid #2a547e;
+        border-radius: 7px;
+        color: #2a547e;
+        left: 0px;
+        margin-top: 5%;
+        width : 100%;
+        
+    }
+    
+    .button:hover {background-color: #98AFC7}
+    
+    .button:active {
+        background-color: #2B3856;
+        transform: translateY(1px);
+    }
