@@ -38,10 +38,10 @@ function ajaxPost (action, data, cFunction) {
       if (request.status === 200) {
         try {
           console.log(request) // debug
-          let response = JSON.parse(this.response)
+          let response = JSON.parse('' + this.response)
           cFunction(response)
         } catch (e) {
-          alert(action, data, this.response, e)
+          alert(e)
         }
       }
     }
