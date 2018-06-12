@@ -86,6 +86,7 @@ function updatePlayerList () {
         listNode = document.createElement('li')
         textNode = document.createTextNode(response.names[i])
         listNode.appendChild(textNode)
+        listNode.classList.add('listElement')
         playersList.appendChild(listNode)
       }
     }
