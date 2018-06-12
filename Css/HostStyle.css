@@ -24,7 +24,6 @@
 }
 
 .button {
-    position: absolute;
     top:100%;
     font-family: "Goudy Old Style";
     font-size: 15px;
@@ -157,13 +156,13 @@
 
   /* panel looks, temp */
 .currentRound {
-    float: left;
     font-family: "Goudy Old Style";
     font-size: 75px;
 	  font-style: normal;
     font-variant: normal;
     font-weight: bold;
     color: #2B3856;
+    display: flex;
   }
 
 .playersReady {
@@ -174,10 +173,10 @@
     font-variant: normal;
     font-weight: bold;
     color: #2B3856;
+    display: flex;
   }
 
 .fishTotal {
-    float: none;
     font-family: "Goudy Old Style";
     font-size: 150px;
 	  font-style: normal;
@@ -185,6 +184,7 @@
     font-weight: bold;
     color: white;
     text-align: center;
+    top:50%;
   }
   
 .sea {
@@ -195,7 +195,7 @@
   position: absolute;
   }
   
-  svg#fish {
+svg#fish {
     top: 20em;
   }
   /* Fish Animation */
@@ -217,7 +217,7 @@ svg.fish {
       100% {margin-left: 100%;}
   }
   
-  .fish{
+.fish{
       width: 100%;
       height: 104px;
       margin-left: 0px;
@@ -230,12 +230,12 @@ svg.fish {
       -webkit-animation-timing-function: linear;
   }
   
-  svg #fish1,
-  svg #fish2,
-  svg #fish3,
-  svg #fish4,
-  svg #fish5,
-  svg #fish6 {
+svg #fish1,
+svg #fish2,
+svg #fish3,
+svg #fish4,
+svg #fish5,
+svg #fish6 {
   fill:#528484;
     
     -moz-animation: bounce 2s infinite;
@@ -243,27 +243,27 @@ svg.fish {
     animation: bounce 2s infinite;
   }
   
-  svg #fish2 {
+svg #fish2 {
       animation-delay: 0.5s;
       -webkit-animation-delay: 0.5s;
   }
   
-  svg #fish3 {
+svg #fish3 {
       animation-delay: 0.2s;
       -webkit-animation-delay: 0.2s;
   }
   
-  svg #fish4 {
+svg #fish4 {
       animation-delay: 0.4s;
       -webkit-animation-delay: 0.4s;
   }
   
-  svg #fish5 {
+svg #fish5 {
       animation-delay: 0.1s;
       -webkit-animation-delay: 0.1s;
   }
   
-  svg #fish6 {
+svg #fish6 {
       animation-delay: 0.3s;
       -webkit-animation-delay: 0.3s;
   }
