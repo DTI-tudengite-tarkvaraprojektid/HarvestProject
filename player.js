@@ -1,4 +1,4 @@
-let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton
+let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound
 
 window.onload = function () {
   errorDiv = document.getElementById('errorDiv')
@@ -105,9 +105,10 @@ function gameStart () {
         fishSubmitButton.addEventListener('click', function (event) {
           submitFish()
         })
-      } else {
+        fishInput = document.getElementById('fishInput')
+      } /* else {
         console.log('ilmnes viga')
-      }
+      } */
     })
   }, 1000)
 }
@@ -120,22 +121,32 @@ function waitPlayers () {
     ajaxPost('playersReady', data, function (response) {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
-          switchView('wait-view', 'fish-view')
           clearInterval(waitPlayersInterval)
-          round()
+          waitPlayersInterval = setInterval(function () {
+            ajaxPost('gameStats', data, function (response) {
+              if (response.currentRound) {
+                if (response.currentRound != currentRound) {
+                  clearInterval(waitPlayersInterval)
+                  switchView('wait-view', 'fish-view')
+                  round()
+                }
+              }
+            })
+          }, 500)
         } else {
           waitSpan.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
         }
-      } else {
+      } /* else {
         errorDiv.innerHTML = 'Ilmnes viga!'
         errorDivMoveDown()
         // error div or redirect ilmnes viga
-      }
+      } */
     })
   }, 1000)
 }
 
 function round () {
+  fishInput.value = ''
   currentFishLabel = document.getElementById('currentFish')
   lastRoundFishLabel = document.getElementById('lastFish')
   let data = new FormData()
@@ -143,7 +154,7 @@ function round () {
   ajaxPost('playerFish', data, function (response) {
     if (response.totalFish) {
       currentFishLabel.innerHTML = response.totalFish
-      lastRoundFishLabel.innerHTML = response.lastFish
+      lastRoundFishLabel.innerHTML = parseInt(response.lastFish)
     }
   })
 }
@@ -154,27 +165,33 @@ function isInteger (x) {
 
 function submitFish () {
   console.log('click')
-  let fishInput = document.getElementById('fishInput').value
+  let fishInputValue = fishInput.value
   let data = new FormData()
   data.append('game_id', gameId)
   ajaxPost('gameStats', data, function (response) {
     if (response.maxPlayers) {
       maxPlayers = response.maxPlayers
-      if (fishInput && fishInput <= response.fishInSea && fishInput > 0 && isInteger(+fishInput)) {
-        let data2 = new FormData()
-        data2.append('game_id', gameId)
-        data2.append('playerFish', fishInput)
-        data2.append('team_id', teamId)
-        ajaxPost('submitFish', data2, function (response) {
-          if (response.success !== false) {
-            switchView('fish-view', 'wait-view')
-            waitPlayers()
-          } else {
-            errorDiv.innerHTML = 'Ilmnes viga!'
-            errorDivMoveDown()
-          // error div
-          }
-        })
+      currentRound = response.currentRound
+      if (fishInputValue && fishInputValue >= 0 && isInteger(+fishInputValue)) {
+        if (fishInputValue <= response.fishInSea) {
+          let data2 = new FormData()
+          data2.append('game_id', gameId)
+          data2.append('playerFish', fishInputValue)
+          data2.append('team_id', teamId)
+          ajaxPost('submitFish', data2, function (response) {
+            if (response.success) {
+              switchView('fish-view', 'wait-view')
+              waitPlayers()
+            } else if (response.success === false) {
+              errorDiv.innerHTML = 'Ilmnes viga!'
+              errorDivMoveDown()
+              // error div
+            }
+          })
+        } else {
+          errorDiv.innerHTML = 'Meres pole nii palju kalu!'
+          errorDivMoveDown()
+        }
       } else {
         errorDiv.innerHTML = 'Kontrollige sisendit!'
         errorDivMoveDown()
