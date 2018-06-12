@@ -1,4 +1,4 @@
-#content{
+#content {
 
     position: absolute;
     top: 40%;
@@ -8,11 +8,11 @@
     width : 50%;
 }
 
-.main{
+.main {
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
 
-.inputBox{
+.inputBox {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -23,7 +23,7 @@
     margin-right: auto;
 }
 
-.button{
+.button {
     position: absolute;
     top:100%;
     font-family: "Goudy Old Style";
@@ -47,11 +47,11 @@
     transform: translateY(1px);
 }
     
-.break{
+.break {
     line-height:50px;
 }
 
-.gameCode{
+.gameCode {
     font-family: "Goudy Old Style";
     font-size: 50px;
     font-style: normal;
@@ -66,7 +66,7 @@
     text-align: center;
 }
 
-.text{
+.text {
     font-family: "Goudy Old Style";
     font-size: 50px;
 	  font-style: normal;
@@ -74,7 +74,7 @@
     color: #2B3856;
 }
 
-.textSmall{
+.textSmall {
     
     font-family: "Goudy Old Style";
     font-size: 30px;
@@ -84,7 +84,7 @@
     
 }
 
-.list{
+.list {
     
     font-family: "Goudy Old Style";
     font-size: 28px;
@@ -95,7 +95,7 @@
 
 }
 
-#errorDiv{
+#errorDiv {
     font-family: "Goudy Old Style";
     font-size: 20px;
 	  font-style: normal;
@@ -111,7 +111,7 @@
     top: -45px;
 }
 
-.fishtank{
+.fishtank {
     background : linear-gradient(to right, #2a547e, #4182c2, #2a547e);
     position: absolute;
     align-items: center;
@@ -124,7 +124,7 @@
 
 }
 
-.animation{
+.animation {
     animation: 2s fly infinite linear;
 }
 
@@ -147,7 +147,7 @@
   }
 
   /* panel looks, temp */
-.currentRound{
+.currentRound {
     float: left;
     font-family: "Goudy Old Style";
     font-size: 75px;
@@ -157,7 +157,7 @@
     color: #2B3856;
   }
 
-.playersReady{
+.playersReady {
     float: right;
     font-family: "Goudy Old Style";
     font-size: 75px;
@@ -167,7 +167,7 @@
     color: #2B3856;
   }
 
-.fishTotal{
+.fishTotal {
     float: none;
     font-family: "Goudy Old Style";
     font-size: 150px;
@@ -187,7 +187,7 @@ svg#fish {
     top: 5em;
   }
   /* Fish Animation */
-svg.fish{
+svg.fish {
     overflow:hidden;
   }
   
@@ -205,7 +205,7 @@ svg.fish{
       100% {margin-left: 100%;}
   }
   
-.fish{
+.fish {
     width: 235px;
     height: 104px;
     margin-left: 0px;
@@ -231,27 +231,27 @@ svg.fish{
     animation: bounce 2s infinite;
   }
   
-  svg #fish2{
+  svg #fish2 {
       animation-delay: 0.5s;
       -webkit-animation-delay: 0.5s;
   }
   
-  svg #fish3{
+  svg #fish3 {
       animation-delay: 0.2s;
       -webkit-animation-delay: 0.2s;
   }
   
-  svg #fish4{
+  svg #fish4 {
       animation-delay: 0.4s;
       -webkit-animation-delay: 0.4s;
   }
   
-  svg #fish5{
+  svg #fish5 {
       animation-delay: 0.1s;
       -webkit-animation-delay: 0.1s;
   }
   
-  svg #fish6{
+  svg #fish6 {
       animation-delay: 0.3s;
       -webkit-animation-delay: 0.3s;
   }
