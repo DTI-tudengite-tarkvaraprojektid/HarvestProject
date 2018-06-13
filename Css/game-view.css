@@ -43,7 +43,7 @@ svg .fish {
 .fishReverse {
   z-index: 1;
   width: 100%;
-  height: 110px;
+  height: 100%;
   margin-left: 0px;
   position: absolute;	
   animation: swim 10s;
@@ -56,10 +56,22 @@ svg .fish {
 }
 
 .fish > path {
-  fill:#528484;
+  fill:#74f8f8;
   -moz-animation: bounce 2s infinite;
   -webkit-animation: bounce 2s infinite;
   animation: bounce 2s infinite;
+}
+
+.fishReverse > path {
+  fill:#528484;
+  -moz-animation: bounce 4s infinite;
+  -webkit-animation: bounce 4s infinite;
+  animation: bounce 4s infinite;
+}
+
+.bounce > path {
+  animation-delay: 0s;
+  -webkit-animation-delay: 0s;
 }
 
 .bounce2 > path {
