@@ -65,10 +65,7 @@
     text-align: center;
 }
 
-.listElement{
-  border: 2px solid #2B3856;
-    border-radius: 10px;
-}
+
 
 .text {
     font-family: "Goudy Old Style";
@@ -91,6 +88,7 @@
     margin: 5px;
     float:left;
     width: 200px;
+    padding-left: 3%;
 }
 
 .list {
@@ -158,7 +156,7 @@
   /* panel looks, temp */
 #game-view {
     height: 75vh;
-    width: 100vh;
+    width: 100%;
 }
 
 .currentRound {
@@ -201,3 +199,26 @@
     transform: translate(-50%, -50%);
     width : 50%;
 }
+
+.table {
+    border-radius: 5px;
+    border: 1px solid #2B3856;
+     
+}
+th{
+    font-weight:bold;
+}
+    
+td, th {
+    border: 1px solid #2B3856;
+    font-family: "Goudy Old Style";
+    font-size: 15px;
+    font-style: normal;
+    font-variant: normal;
+    padding: 15px;
+    text-align: left;
+    color:#2B3856;
+    
+}
+tr:nth-child(even) {background: #a89772}
+tr:nth-child(odd) {background: #e5e4c4}
