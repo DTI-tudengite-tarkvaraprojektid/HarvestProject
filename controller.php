@@ -37,7 +37,16 @@ switch($action) {
             echo json_encode(["success" => false]);
         }
         break;
-
+    /*case "register":
+        $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+        $username = 'Pisimudilake';
+        $password = hash("sha512", 'p66rinootKala');
+        $stmt = $mysqli->prepare("INSERT INTO users (username, password) VALUES(?, ?)");
+        $stmt->bind_param("ss",$username,$password);
+        $stmt->execute();   
+        $stmt->close();
+        $mysqli->close();
+        break;*/
     case "login":
         if(isset($_POST["username"]) && isset($_POST['password'])) {
             echo json_encode(login($_POST['username'], $_POST['password']));
@@ -135,8 +144,8 @@ function login($username, $password){
 	}
     $stmt->close();
     $mysqli->close();
-    $_SESSION["loggedIn"] = true; //kuna kasutajat pole veel debug reasons
-    return ["success" => true];	//kuna kasutajat pole veel debug reasons
+   // $_SESSION["loggedIn"] = true; //kuna kasutajat pole veel debug reasons
+   // return ["success" => true];	//kuna kasutajat pole veel debug reasons
     if(isset ($_SESSION["loggedIn"])){
             return ['success' => true];			
         } else {
