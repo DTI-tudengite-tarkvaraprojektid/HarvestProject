@@ -109,6 +109,10 @@ svg #fish6 {
       animation-delay: 0.2s;
       -webkit-animation-delay: 0.2s;
   }
+  svg #fish8 {
+    animation-delay: 0.2s;
+    -webkit-animation-delay: 0.2s;
+}
     
   /**/
 @-moz-keyframes bounce {
