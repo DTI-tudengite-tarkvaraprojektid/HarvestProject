@@ -60,7 +60,7 @@ window.onload = function () {
 function gameJoin () {
   let button = document.getElementById('joinButton')
   button.addEventListener('click', function (event) {
-    button.disable = true
+    button.disabled = true
     let gameCode = document.getElementById('gameCode').value
     let teamName = document.getElementById('teamName').value
     // check inputs
@@ -82,7 +82,7 @@ function gameJoin () {
         } else {
           errorDiv.innerHTML = 'Vigane mängukood!'
           document.getElementById('gameCode').style.borderColor = 'red'
-          button.disable = false
+          button.disabled = false
           errorDivMoveDown()
         }
       })
@@ -90,7 +90,7 @@ function gameJoin () {
       errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
       document.getElementById('gameCode').style.borderColor = 'red'
       document.getElementById('teamName').style.borderColor = 'red'
-      button.disable = false
+      button.disabled = false
       errorDivMoveDown()
     }
   })
@@ -106,9 +106,9 @@ function gameStart () {
         clearInterval(gameStartInterval)
         fishSubmitButton = document.getElementById('fishButton')
         fishSubmitButton.addEventListener('click', function (event) {
-          fishSubmitButton.disable = false
+          fishSubmitButton.disabled = true
           submitFish()
-          fishSubmitButton.disable = false
+          fishSubmitButton.disabled = false
         })
         fishInput = document.getElementById('fishInput')
       } /* else {
