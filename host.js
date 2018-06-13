@@ -1,4 +1,4 @@
-let gameId, playersList, updatePlayersInterval, fishTotalDiv, playersReadyDiv, currentRoundDiv, maxPlayers, endGameButton, waitPlayersInterval
+let gameId, playersList, updatePlayersInterval, fishTotalDiv, playersReadyDiv, currentRoundDiv, maxPlayers, endGameButton, waitPlayersInterval, newGameButton
 
 window.onload = function () {
   isLoggedIn()
@@ -44,6 +44,7 @@ function panel () {
     currentRoundDiv = document.getElementById('currentRound')
     playersList = document.getElementById('playersList')
     endGameButton = document.getElementById('stopGame')
+    newGameButton = document.getElementById('newGame')
     createGameButton.addEventListener('click', function (event) {
       createGame()
     })
@@ -52,6 +53,9 @@ function panel () {
     })
     endGameButton.addEventListener('click', function (event) {
       endGame()
+    })
+    newGameButton.addEventListener('click', function (event) {
+      location.reload()
     })
   })
 }
@@ -177,7 +181,6 @@ function endGame () {
       cellMax.innerHTML = response.overallStats.fishMax
     }
   })
-
   alert('game over pressed') // debug
 }
 
