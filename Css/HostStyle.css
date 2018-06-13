@@ -1,9 +1,7 @@
 #content {
-   
     top: 40%;
     left: 50%;
     margin-right: -50%;
-    
     width : 100%;
 }
 
@@ -80,7 +78,7 @@
     font-variant: normal;
     color: #2B3856;
 }
-.listElement{
+.listElement {
     border: 2px solid #2B3856;
     border-radius: 10px;
     margin:2%;
@@ -127,7 +125,6 @@
     z-index: 100;
     top:-100%;
     left:0px;
-
 }
 
 .animation {
@@ -142,6 +139,7 @@
     position: absolute;
     background-image: url("../images/pufferfishLoader.png");
 }
+
 /* Fish fly */
 @keyframes fly {
     from {
@@ -190,7 +188,7 @@
     top:50%;
   }
   
-.view{
+.view {
     
     top: 40%;
     left: 50%;
@@ -215,7 +213,7 @@ table {
     width : 100%;
     }
 
-th{
+th {
     font-weight:bold;
 }
 
