@@ -175,10 +175,12 @@ function createGame(){
     while ($stmt->fetch()){
         $dateDB = new DateTime($created);
         if($dateNow > $dateDB) {
-            $stmt2 = $mysqli->prepare("UPDATE game SET gameStarted = 3 WHERE id = ?");
+            $mysqli2 = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+            $stmt2 = $mysqli2->prepare("UPDATE game SET gameStarted = 3 WHERE id = ?");
             $stmt2->bind_param("i", $id);
             $stmt2->execute();
             $stmt2->close();
+            $mysqli2->close();
         }
     }    
     $stmt->close();
