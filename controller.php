@@ -196,7 +196,7 @@ function createGame(){
 
 function generateGameCode(){
     $codeLenght = 4;
-    $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    $characters = 'abdefghjklmpqrsvwxyz23456789';
     $charArrayLength = strlen($characters)-1;
     $codesArray = [];
 
