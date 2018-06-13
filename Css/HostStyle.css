@@ -65,10 +65,7 @@
     text-align: center;
 }
 
-.listElement{
-  border: 2px solid #2B3856;
-    border-radius: 10px;
-}
+
 
 .text {
     font-family: "Goudy Old Style";
@@ -91,6 +88,7 @@
     margin: 5px;
     float:left;
     width: 200px;
+    padding-left: 3%;
 }
 
 .list {
@@ -203,10 +201,14 @@
 }
 
 .table {
+    border-radius: 5px;
     border: 1px solid #2B3856;
      
 }
- 
+th{
+    font-weight:bold;
+}
+    
 td, th {
     border: 1px solid #2B3856;
     font-family: "Goudy Old Style";
@@ -216,6 +218,7 @@ td, th {
     padding: 15px;
     text-align: left;
     color:#2B3856;
+    
 }
 tr:nth-child(even) {background: #a89772}
-tr:nth-child(odd) {background: #e5e4c4}#e5e4c4
+tr:nth-child(odd) {background: #e5e4c4}
