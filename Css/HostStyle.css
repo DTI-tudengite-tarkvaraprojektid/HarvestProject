@@ -1,5 +1,4 @@
 #content {
-
     position: absolute;
     top: 40%;
     left: 50%;
@@ -65,12 +64,10 @@
     text-align: center;
 }
 
-
-
 .text {
     font-family: "Goudy Old Style";
     font-size: 50px;
-	  font-style: normal;
+    font-style: normal;
     font-variant: normal;
     color: #2B3856;
 }
@@ -83,7 +80,7 @@
     color: #2B3856;
 }
 .listElement{
-  border: 2px solid #2B3856;
+    border: 2px solid #2B3856;
     border-radius: 10px;
     margin: 5px;
     float:left;
@@ -92,7 +89,6 @@
 }
 
 .list {
-    
     font-family: "Goudy Old Style";
     font-size: 28px;
     font-style: normal;
@@ -113,7 +109,6 @@
     position:absolute;
     left : 0px;
     width: 100%;
-    
     text-align: center;
     top: -45px;
 }
@@ -142,16 +137,16 @@
     top:30%;
     position: absolute;
     background-image: url("../images/pufferfishLoader.png");
-  }
-  /* Fish fly */
-  @keyframes fly {
+}
+/* Fish fly */
+@keyframes fly {
     from {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}
 
   /* panel looks, temp */
 #game-view {
@@ -167,7 +162,7 @@
     font-weight: bold;
     color: #2B3856;
     display: flex;
-  }
+}
 
 .playersReady {
     float: right;
@@ -178,7 +173,7 @@
     font-weight: bold;
     color: #2B3856;
     display: flex;
-  }
+}
 
 .fishTotal {
     font-family: "Goudy Old Style";
@@ -192,7 +187,7 @@
   }
   
 .view{
-  position: absolute;
+    position: absolute;
     top: 40%;
     left: 50%;
     margin-right: -50%;
@@ -200,17 +195,22 @@
     width : 50%;
 }
 
-.table {
+table {
+    font-family: "Goudy Old Style";
+    font-size: 15px;
+    font-style: normal;
+    font-variant: normal;
     border-radius: 5px;
-    border: 1px solid #2B3856;
-     
-}
+    border: 2px solid #2B3856;
+    border-collapse: collapse;
+    }
+
 th{
     font-weight:bold;
 }
     
-td, th {
-    border: 1px solid #2B3856;
+table,td, th {
+    border: 2px solid #2B3856;
     font-family: "Goudy Old Style";
     font-size: 15px;
     font-style: normal;
@@ -218,7 +218,6 @@ td, th {
     padding: 15px;
     text-align: left;
     color:#2B3856;
-    
 }
 tr:nth-child(even) {background: #a89772}
 tr:nth-child(odd) {background: #e5e4c4}

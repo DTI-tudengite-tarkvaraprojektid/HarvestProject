@@ -1,4 +1,5 @@
 let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound
+let locked = false
 
 window.onload = function () {
   errorDiv = document.getElementById('errorDiv')
@@ -60,35 +61,43 @@ window.onload = function () {
 function gameJoin () {
   let button = document.getElementById('joinButton')
   button.addEventListener('click', function (event) {
-    let gameCode = document.getElementById('gameCode').value
-    let teamName = document.getElementById('teamName').value
-    // check inputs
-    if (gameCode.length === 4 && teamName.length < 60) {
-      let data = new FormData()
-      data.append('gameCode', gameCode)
-      data.append('teamName', teamName)
-      ajaxPost('joinGame', data, function (response) {
-        if (response.gameId) {
-          errorDiv.innerHTML = ''
-          gameId = response.gameId
-          teamId = response.teamId
-          UpdateQueryString('gameId', response.gameId)
-          UpdateQueryString('teamId', response.teamId)
-          loadHTML('content', 'views/joinedScreen.html', function () {
-            location.hash = 'joined'
-            gameStart(gameId)
-          })
-        } else {
-          errorDiv.innerHTML = 'Vigane mängukood!'
-          document.getElementById('gameCode').style.borderColor = 'red'
-          errorDivMoveDown()
-        }
-      })
-    } else {
-      errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
-      document.getElementById('gameCode').style.borderColor = 'red'
-      document.getElementById('teamName').style.borderColor = 'red'
-      errorDivMoveDown()
+    if (!locked) {
+      locked = true
+      button.disabled = true
+      let gameCode = document.getElementById('gameCode').value
+      let teamName = document.getElementById('teamName').value
+      // check inputs
+      if (gameCode.length === 4 && teamName.length < 60) {
+        let data = new FormData()
+        data.append('gameCode', gameCode)
+        data.append('teamName', teamName)
+        ajaxPost('joinGame', data, function (response) {
+          if (response.gameId) {
+            errorDiv.innerHTML = ''
+            gameId = response.gameId
+            teamId = response.teamId
+            UpdateQueryString('gameId', response.gameId)
+            UpdateQueryString('teamId', response.teamId)
+            loadHTML('content', 'views/joinedScreen.html', function () {
+              location.hash = 'joined'
+              gameStart(gameId)
+            })
+          } else {
+            errorDiv.innerHTML = 'Vigane mängukood!'
+            document.getElementById('gameCode').style.borderColor = 'red'
+            button.disabled = false
+            errorDivMoveDown()
+            locked = false
+          }
+        })
+      } else {
+        errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
+        document.getElementById('gameCode').style.borderColor = 'red'
+        document.getElementById('teamName').style.borderColor = 'red'
+        button.disabled = false
+        errorDivMoveDown()
+        locked = false
+      }
     }
   })
 }
@@ -102,6 +111,7 @@ function gameStart () {
         switchView('joined-view', 'fish-view')
         clearInterval(gameStartInterval)
         fishSubmitButton = document.getElementById('fishButton')
+        locked = false
         fishSubmitButton.addEventListener('click', function (event) {
           submitFish()
         })
@@ -146,6 +156,7 @@ function waitPlayers () {
 }
 
 function round () {
+  locked = false
   fishInput.value = ''
   currentFishLabel = document.getElementById('currentFish')
   lastRoundFishLabel = document.getElementById('lastFish')
@@ -164,41 +175,49 @@ function isInteger (x) {
 }
 
 function submitFish () {
-  console.log('click')
-  let fishInputValue = fishInput.value
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('gameStats', data, function (response) {
-    if (response.maxPlayers) {
-      maxPlayers = response.maxPlayers
-      currentRound = response.currentRound
-      if (fishInputValue && fishInputValue >= 0 && isInteger(+fishInputValue)) {
-        if (fishInputValue <= response.fishInSea) {
-          let data2 = new FormData()
-          data2.append('game_id', gameId)
-          data2.append('playerFish', fishInputValue)
-          data2.append('team_id', teamId)
-          ajaxPost('submitFish', data2, function (response) {
-            if (response.success) {
-              switchView('fish-view', 'wait-view')
-              waitPlayers()
-            } else if (response.success === false) {
-              errorDiv.innerHTML = 'Ilmnes viga!'
-              errorDivMoveDown()
+  if (!locked) {
+    locked = true
+    console.log('click')
+    let fishInputValue = fishInput.value
+    let data = new FormData()
+    data.append('game_id', gameId)
+    ajaxPost('gameStats', data, function (response) {
+      if (response.maxPlayers) {
+        maxPlayers = response.maxPlayers
+        currentRound = response.currentRound
+        if (fishInputValue && fishInputValue >= 0 && isInteger(+fishInputValue)) {
+          if (fishInputValue <= response.fishInSea) {
+            let data2 = new FormData()
+            data2.append('game_id', gameId)
+            data2.append('playerFish', fishInputValue)
+            data2.append('team_id', teamId)
+            ajaxPost('submitFish', data2, function (response) {
+              if (response.success) {
+                switchView('fish-view', 'wait-view')
+
+                waitPlayers()
+              } else if (response.success === false) {
+                errorDiv.innerHTML = 'Ilmnes viga!'
+                errorDivMoveDown()
+                locked = false
               // error div
-            }
-          })
+              }
+            })
+          } else {
+            errorDiv.innerHTML = 'Meres pole nii palju kalu!'
+            errorDivMoveDown()
+            locked = false
+          }
         } else {
-          errorDiv.innerHTML = 'Meres pole nii palju kalu!'
+          errorDiv.innerHTML = 'Kontrollige sisendit!'
           errorDivMoveDown()
+          locked = false
         }
       } else {
-        errorDiv.innerHTML = 'Kontrollige sisendit!'
+        errorDiv.innerHTML = 'Ilmnes viga!'
         errorDivMoveDown()
+        locked = false
       }
-    } else {
-      errorDiv.innerHTML = 'Ilmnes viga!'
-      errorDivMoveDown()
-    }
-  })
+    })
+  }
 }
