@@ -1,11 +1,14 @@
 .seaGameView {
-    background-color: #2a547e;
+    /*background-color: #2a547e;*/
     height: 110%;
     width: 100%;
     top: 20%;
     position: absolute;
     display: block;
-    }
+    background-image: url(../images/TEST.jpg);
+    box-shadow: 5px 10px 220px black inset;
+    overflow: hidden;    
+  }
     
 svg#fish {
       top: 20em;
@@ -13,7 +16,7 @@ svg#fish {
 
     /* Fish Animation */
 svg.fish {
-      overflow:hidden;
+      overflow: hidden;
     }
     
 @-webkit-keyframes swim
@@ -29,27 +32,50 @@ svg.fish {
     70% {margin-left: 50%;}
     100% {margin-left: 100%;}
     }
+
     
-.fish{
-  width: 100%;
-  height: 104px;
-  margin-left: 0px;
-  position: absolute;	
-  animation: swim 5s;
-  -webkit-animation: swim 5s;
-  animation-iteration-count: infinite;
-  -webkit-animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  -webkit-animation-timing-function: linear;
+.fish1,
+.fish2
+.fish3
+.fish4
+.fish5
+.fish6{
+        width: 100%;
+        height: 110px;
+        margin-left: 0px;
+        position: absolute;	
+        animation: swim 5s;
+        -webkit-animation: swim 5s;
+        animation-iteration-count: infinite;
+        -webkit-animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        -webkit-animation-timing-function: linear;
     }
+ 
+  .fish7,
+  .fish8{
+      width: 100%;
+      height: 104px;
+      margin-left: 0px;
+      position: absolute;	
+      animation: swim 5s;
+      -webkit-animation: swim 5s;
+      animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      -webkit-animation-timing-function: linear;
+      animation-direction: reverse;
+  }
     
-svg #fish1,
-svg #fish2,
-svg #fish3,
-svg #fish4,
-svg #fish5,
-svg #fish6 {
-  fill:#528484;
+  svg #fish1,
+  svg #fish2,
+  svg #fish3,
+  svg #fish4,
+  svg #fish5,
+  svg #fish6,
+  svg #fish7 {
+    fill:#528484;
+      
       -moz-animation: bounce 2s infinite;
       -webkit-animation: bounce 2s infinite;
       animation: bounce 2s infinite;
@@ -79,6 +105,10 @@ svg #fish6 {
         animation-delay: 0.3s;
         -webkit-animation-delay: 0.3s;
     }
+  svg #fish7 {
+      animation-delay: 0.2s;
+      -webkit-animation-delay: 0.2s;
+  }
     
   /**/
 @-moz-keyframes bounce {
@@ -138,21 +168,24 @@ svg #fish6 {
       font-style: normal;
       font-variant: normal;
       color: #2B3856;
+      padding-right: 10px;
+      padding-left: 10px;
     }
 .currentRoundGameView {
       font-family: "Goudy Old Style";
-      font-size: 75px;
+      font-size: 50px;
       font-style: normal;
       font-variant: normal;
       font-weight: bold;
       color: #2B3856;
       display: flex;
+      float: right;
     }
     
     .playersReadyGameView {
         float: right;
         font-family: "Goudy Old Style";
-        font-size: 75px;
+        font-size: 50px;
           font-style: normal;
         font-variant: normal;
         font-weight: bold;
@@ -161,13 +194,13 @@ svg #fish6 {
       }
       .fishTotalGameView {
         font-family: "Goudy Old Style";
-        font-size: 150px;
+        font-size: 250px;
           font-style: normal;
         font-variant: normal;
         font-weight: bold;
         color: white;
         text-align: center;
-        top:50%;
+        margin-top:15%;
       }
       .buttonGameView {
         font-family: "Goudy Old Style";
