@@ -179,18 +179,24 @@ function endGame () {
       console.log(response.overallStats)
       let statsTable = document.getElementById('OverallStatsTabel')
       let row = statsTable.insertRow(1)
-      let cellRounds = row.insertCell(0)
-      let cellSum = row.insertCell(1)
-      let cellAvg = row.insertCell(2)
-      let cellMin = row.insertCell(3)
-      let cellOver = row.insertCell(4)
-      let cellMax = row.insertCell(5)
-      cellRounds.innerHTML = response.overallStats.roundsPlayed
-      cellSum.innerHTML = response.overallStats.fishSum
-      cellAvg.innerHTML = response.overallStats.fishAvg
-      cellMin.innerHTML = response.overallStats.fishMin
-      cellOver.innerHTML = response.overallStats.fishRobbery
-      cellMax.innerHTML = response.overallStats.fishMax
+      let cell = row.insertCell(0)
+      cell.innerHTML = response.overallStats.roundsPlayed
+      cell = row.insertCell(1)
+      cell.innerHTML = response.overallStats.fishSum
+      cell = row.insertCell(2)
+      cell.innerHTML = response.overallStats.fishAvg
+      cell = row.insertCell(3)
+      cell.innerHTML = response.overallStats.fishMin
+      cell = row.insertCell(4)
+      cell.innerHTML = response.overallStats.fishRobbery
+      cell = row.insertCell(5)
+      cell.innerHTML = response.overallStats.fishMax
+
+      let scoreTabel = document.getElementById('scoreTabel')
+      let header = scoreTabel.createTHead()
+      row = header.insertRow(0)
+      cell = row.insertCell(0)
+      cell.innerHTML = '<b>This is a table header</b>'
     }
   })
 }

@@ -1,4 +1,4 @@
-let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound
+let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound, endInterval
 let locked = false
 
 window.onload = function () {
@@ -128,6 +128,12 @@ function gameStart () {
           submitFish()
         })
         fishInput = document.getElementById('fishInput')
+        let backButton = document.getElementById('backButton')
+        backButton.addEventListener('click', function (event) {
+          history.replaceState({}, document.title, '.')
+          location.reload()
+        })
+        endInterval = setInterval(isGameOver(), 3000)
       } /* else {
         console.log('ilmnes viga')
       } */
@@ -232,4 +238,16 @@ function submitFish () {
       }
     })
   }
+}
+
+function isGameOver () {
+  let data = new FormData()
+  data.append('game_id', gameId)
+  ajaxPost('gameStarted', data, function (response) {
+    if (response.gameStarted === 2) {
+      clearInterval(endInterval)
+      switchView('fish-view', 'end-view')
+      switchView('wait-view', 'end-view')
+    }
+  })
 }

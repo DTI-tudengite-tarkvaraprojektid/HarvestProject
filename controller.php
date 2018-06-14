@@ -430,13 +430,13 @@ function playerFish($team_id) {
 function endGame($game_id) {
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '2' WHERE id = ?"); 
-    $stmt->bind_param("ii",$maxPlayers, $game_id);
+    $stmt->bind_param("i", $game_id);
     $stmt->execute();
-    $result = $stmt->fetch();
+    $stmt->fetch();
     $stmt->close();
-
+    
     $overallStats = (object)[];
-   
+    
     $stmt = $mysqli->prepare("SELECT currentRound-1 FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->roundsPlayed);
@@ -452,7 +452,7 @@ function endGame($game_id) {
     $stmt->close();
     $overallStats->fishAvg = round($overallStats->fishAvg,2);
     $overallStats->fishSum = (int)$overallStats->fishSum;
-
+    
     $stmt = $mysqli->prepare("SELECT count(fish_caught) FROM turn WHERE fish_caught > 8 AND round_id IN (SELECT id FROM `round` where game_id = ?)"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->fishRobbery);
@@ -462,17 +462,16 @@ function endGame($game_id) {
 
     $teams = [];
     $rounds = [];
-
+    
     $stmt = $mysqli->prepare("SELECT id, name FROM team WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($teamId, $teamName);
     $stmt->execute();
     while($stmt->fetch()) {
-        $teams[] = ['id' => $teamId, 'name' => $teamName, 'rounds' => $rounds];
+         $teams[] = ['id' => $teamId, 'name' => $teamName, 'rounds' => $rounds];
     }
     $stmt->close();
-
-    for ($i = 0; $i <= sizeof($teams); $i++) {
+    for ($i = 0; $i <= sizeof($teams)-1; $i++) {
         $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ? ORDER BY roundNr ASC) AND team_id = ?"); 
         $stmt->bind_param("ii", $game_id, $teams[$i]['id']);
         $stmt->bind_result($caught);
@@ -481,11 +480,10 @@ function endGame($game_id) {
         while($stmt->fetch()) {
             $sum += $caught;
             $teams[$i]['rounds'][] = $caught;
-        }
+        }  
         $teams[$i]['total'] = $sum;
         $stmt->close();
-    }
-
+    }  
     usort($teams, function($a, $b) {
         if($a['total']==$b['total']) return 0;
         return $a['total'] < $b['total']?1:-1;
