@@ -197,7 +197,7 @@ function endGame () {
       let header = scoreTabel.createTHead()
       row = header.insertRow(0)
       cell = row.insertCell(0)
-      cell.innerHTML = '<b>Tiim</b>'
+      cell.innerHTML = '<b>Tiimi nimi</b>'
       for (let i = 1; i <= response.overallStats.roundsPlayed; i++) {
         cell = row.insertCell(i)
         cell.innerHTML = '<b>' + i + '</b>'
