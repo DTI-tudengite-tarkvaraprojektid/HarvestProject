@@ -167,7 +167,7 @@ function submitFish($game_id, $playerFish, $team_id){
 
 function createGame(){
     $dateNow = new DateTime();
-    $dateNow->modify('-2 week');
+    $dateNow->modify('-1 day');
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT id, created FROM game"); 
     $stmt->bind_result($id, $created);
@@ -176,7 +176,11 @@ function createGame(){
         $dateDB = new DateTime($created);
         if($dateNow > $dateDB) {
             $mysqli2 = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-            $stmt2 = $mysqli2->prepare("UPDATE game SET gameStarted = 3 WHERE id = ?");
+            $stmt2 = $mysqli2->prepare("DELETE FROM turn WHERE round_id IN (SELECT id FROM round WHERE game_id = ?)");
+            $stmt2->bind_param("i", $id);
+            $stmt2->execute();
+            $stmt2->close();
+            $stmt2 = $mysqli2->prepare("DELETE FROM round, team, game WHERE game_id = ?");
             $stmt2->bind_param("i", $id);
             $stmt2->execute();
             $stmt2->close();
@@ -196,7 +200,7 @@ function createGame(){
 
 function generateGameCode(){
     $codeLenght = 4;
-    $characters = 'abdefghjklmpqrsvwxyz23456789';
+    $characters = 'abdefghjklmpqrsvwxyz2345678923456789';
     $charArrayLength = strlen($characters)-1;
     $codesArray = [];
 
@@ -415,7 +419,7 @@ function endGame($game_id) {
     $stmt->fetch();
     $stmt->close();
     
-    $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_caught), max(fish_caught) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
+    $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_wanted), max(fish_wanted) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->fishSum, $overallStats->fishAvg, $overallStats->fishMin, $overallStats->fishMax);
     $stmt->execute();
@@ -431,14 +435,11 @@ function endGame($game_id) {
     $stmt->fetch();
     $stmt->close();
 
-/*
-
-    $teams = [];
-    $rounds = [];
-    $totals = [];
+    /*
+    $teams = (object)[];
 
     for ($i = 1; $i <= $overallStats['roundsPlayed']; $i++) {
-        $stmt = $mysqli->prepare("SELECT te.name, t.queue, t.fish_wanted, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id = (SELECT id FROM round where game_id = ? AND roundNr = ?) ORDER BY te.name ASC"); 
+        $stmt = $mysqli->prepare("SELECT te.name, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id IN (SELECT id FROM round where game_id = ?) ORDER BY te.name ASC"); 
         $stmt->bind_param("ii", $game_id, $i);
         $stmt->bind_result($name, $order, $wanted, $caught);
         $stmt->execute();
