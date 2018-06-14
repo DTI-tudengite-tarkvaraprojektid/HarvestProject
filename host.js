@@ -204,10 +204,10 @@ function endGame () {
       for (let i = 1; i <= response.overallStats.roundsPlayed; i++) {
         row = scoreTabel.insertRow(i)
         cell = row.insertCell(0)
-        cell.innerHTML = response.teams[i]['name']
+        cell.innerHTML = response.teams[i - 1]['name']
         for (let j = 0; j < response.overallStats.roundsPlayed; j++) {
           cell = row.insertCell(j + 1)
-          cell.innerHTML = response.teams[i]['rounds'][j]
+          cell.innerHTML = response.teams[i - 1]['rounds'][j]
         }
       }
     }
