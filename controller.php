@@ -350,7 +350,7 @@ function joinGame($gameCode, $teamName) {
         $mysqli->close();
         return ['success' => false];
     } else {
-        if(strlen($teamName) <= 15){
+        if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
             $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
             //var_dump($gameId, $teamName); die;
             $stmt->bind_param("is", $gameId, $teamName);
