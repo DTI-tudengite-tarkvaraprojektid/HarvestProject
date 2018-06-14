@@ -27,8 +27,11 @@ function login () {
         if (response.success) {
           panel()
         } else {
+          errorDivMoveDown()
           let loginError = document.getElementById('errorDiv')
           loginError.innerHTML = 'Vale kasutajanimi või parool!'
+          document.getElementById('username').style.borderColor = 'red'
+          document.getElementById('password').style.borderColor = 'red'
         }
       })
     })
@@ -210,7 +213,7 @@ function hypnofishMoveDown () {
     let intervalDown = setInterval(function () {
       if (pos === 0) {
         clearInterval(intervalDown)
-        fishie.classList.remove('animetion')
+        fishie.classList.remove('animation')
         window.setTimeout(function () {
           let intervalUp = setInterval(function () {
             if (pos === -100) {

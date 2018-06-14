@@ -1,6 +1,4 @@
 .seaGameView {
-  /*background-color: #2a547e;*/
-  /*background: linear-gradient(to top, rgb(23, 29, 44), #3C4D76, #54aaff);*/
   height: 110%;
   width: 100%;
   top: 20%;
@@ -203,7 +201,7 @@ svg .fish {
   background-color: #2B3856;
   transform: translateY(1px);
 }
-.gameview{
+.gameview {
   position: absolute;
   top: 10%;
   left: 50%;
