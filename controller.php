@@ -189,7 +189,15 @@ function createGame(){
             $stmt2->bind_param("i", $id);
             $stmt2->execute();
             $stmt2->close();
-            $stmt2 = $mysqli2->prepare("DELETE FROM round, team, game WHERE game_id = ?");
+            $stmt2 = $mysqli2->prepare("DELETE FROM round WHERE game_id = ?");
+            $stmt2->bind_param("i", $id);
+            $stmt2->execute();
+            $stmt2->close();
+            $stmt2 = $mysqli2->prepare("DELETE FROM team WHERE game_id = ?");
+            $stmt2->bind_param("i", $id);
+            $stmt2->execute();
+            $stmt2->close();
+            $stmt2 = $mysqli2->prepare("DELETE FROM game WHERE id = ?");
             $stmt2->bind_param("i", $id);
             $stmt2->execute();
             $stmt2->close();
