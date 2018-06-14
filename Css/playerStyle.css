@@ -19,12 +19,10 @@
     margin-bottom: 50%; 
 }
 
-
 .main {
     height: 100% !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
-
 
 .inputBox {
     width: 100%;
@@ -56,6 +54,7 @@
     0%, 100% { -webkit-transform: translateY(-50px); }
     10%, 90% { -webkit-transform: translateY(0px); }
 }
+
 @-moz-keyframes slideDown {
     0%, 100% { -moz-transform: translateY(-50px); }
     10%, 90% { -moz-transform: translateY(0px); }
@@ -75,6 +74,7 @@
 	from { }
 	to { -webkit-transform: translateY(-100%); }
 }
+
 @keyframes moveToTop {
 	from { }
 	to { -webkit-transform: translateY(-100%); transform: translateY(-100%); }
@@ -83,6 +83,7 @@
 @-webkit-keyframes moveFromTop {
 	from { -webkit-transform: translateY(-100%); }
 }
+
 @keyframes moveFromTop {
 	from { -webkit-transform: translateY(-100%); transform: translateY(-100%); }
 }
