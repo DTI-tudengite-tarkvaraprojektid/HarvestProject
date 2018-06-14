@@ -482,7 +482,7 @@ function endGame($game_id) {
     }
     $stmt->close();
     for ($i = 0; $i <= sizeof($teams)-1; $i++) {
-        $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ? ORDER BY roundNr ASC) AND team_id = ?"); 
+        $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ? ORDER BY roundNr DESC) AND team_id = ?"); 
         $stmt->bind_param("ii", $game_id, $teams[$i]['id']);
         $stmt->bind_result($caught);
         $stmt->execute();
