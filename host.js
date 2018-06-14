@@ -27,8 +27,11 @@ function login () {
         if (response.success) {
           panel()
         } else {
+          errorDivMoveDown()
           let loginError = document.getElementById('errorDiv')
           loginError.innerHTML = 'Vale kasutajanimi või parool!'
+          document.getElementById('username').style.borderColor = 'red'
+          document.getElementById('password').style.borderColor = 'red'
         }
       })
     })
@@ -144,6 +147,7 @@ function waitPlayers () {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
+          document.getElementById('fishtank').style.display = 'block'
           hypnofishMoveDown()
 
           setTimeout(roundOver, 2000)
@@ -180,18 +184,40 @@ function endGame () {
       console.log(response.overallStats)
       let statsTable = document.getElementById('OverallStatsTabel')
       let row = statsTable.insertRow(1)
-      let cellRounds = row.insertCell(0)
-      let cellSum = row.insertCell(1)
-      let cellAvg = row.insertCell(2)
-      let cellMin = row.insertCell(3)
-      let cellOver = row.insertCell(4)
-      let cellMax = row.insertCell(5)
-      cellRounds.innerHTML = response.overallStats.roundsPlayed
-      cellSum.innerHTML = response.overallStats.fishSum
-      cellAvg.innerHTML = response.overallStats.fishAvg
-      cellMin.innerHTML = response.overallStats.fishMin
-      cellOver.innerHTML = response.overallStats.fishRobbery
-      cellMax.innerHTML = response.overallStats.fishMax
+      let cell = row.insertCell(0)
+      cell.innerHTML = response.overallStats.roundsPlayed
+      cell = row.insertCell(1)
+      cell.innerHTML = response.overallStats.fishSum
+      cell = row.insertCell(2)
+      cell.innerHTML = response.overallStats.fishAvg
+      cell = row.insertCell(3)
+      cell.innerHTML = response.overallStats.fishMin
+      cell = row.insertCell(4)
+      cell.innerHTML = response.overallStats.fishRobbery
+      cell = row.insertCell(5)
+      cell.innerHTML = response.overallStats.fishMax
+
+      let scoreTabel = document.getElementById('scoreTabel')
+      let header = scoreTabel.createTHead()
+      row = header.insertRow(0)
+      cell = row.insertCell(0)
+      cell.innerHTML = '<b>Tiimi nimi</b>'
+      for (let i = 1; i <= response.overallStats.roundsPlayed; i++) {
+        cell = row.insertCell(i)
+        cell.innerHTML = '<b>' + i + '</b>'
+      }
+      for (let i = 0; i < response.teams.length; i++) {
+        row = scoreTabel.insertRow(i + 1)
+        cell = row.insertCell(0)
+        cell.innerHTML = response.teams[i]['name']
+        for (let j = 0; j < response.overallStats.roundsPlayed; j++) {
+          cell = row.insertCell(j + 1)
+          cell.innerHTML = response.teams[i]['rounds'][j]
+          if ((response.teams[i]['rounds'][j]) > 8) {
+            cell.setAttribute('class','fishRobbery')
+          }
+        }
+      }
     }
   })
 }
@@ -214,12 +240,12 @@ function hypnofishMoveDown () {
     let intervalDown = setInterval(function () {
       if (pos === 0) {
         clearInterval(intervalDown)
-        fishie.classList.remove('animetion')
         window.setTimeout(function () {
           let intervalUp = setInterval(function () {
             if (pos === -100) {
               clearInterval(intervalUp)
               fishie.classList.remove('animation')
+              fish.style.display = 'none'
               fish.style.top = pos + '%'
             } else {
               pos -= 2

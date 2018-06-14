@@ -1,4 +1,4 @@
-let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound
+let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound, endInterval
 let locked = false
 
 window.onload = function () {
@@ -67,36 +67,48 @@ function gameJoin () {
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
       // check inputs
-      if (gameCode.length === 4 && teamName.length < 60) {
-        let data = new FormData()
-        data.append('gameCode', gameCode)
-        data.append('teamName', teamName)
-        ajaxPost('joinGame', data, function (response) {
-          if (response.gameId) {
-            errorDiv.innerHTML = ''
-            gameId = response.gameId
-            teamId = response.teamId
-            UpdateQueryString('gameId', response.gameId)
-            UpdateQueryString('teamId', response.teamId)
-            loadHTML('content', 'views/joinedScreen.html', function () {
-              location.hash = 'joined'
-              gameStart(gameId)
-            })
-          } else {
-            errorDiv.innerHTML = 'Vigane mängukood!'
-            document.getElementById('gameCode').style.borderColor = 'red'
-            button.disabled = false
-            errorDivMoveDown()
-            locked = false
-          }
-        })
-      } else {
-        errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
-        document.getElementById('gameCode').style.borderColor = 'red'
+      if (teamName.match(/[^A-z0-9À-ž]+/g) && gameCode.match(/[^A-z0-9À-ž]+/g)) {
+        console.log('tiimi nimi not OK')
+        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
         document.getElementById('teamName').style.borderColor = 'red'
         button.disabled = false
         errorDivMoveDown()
+
         locked = false
+      } else {
+        if (gameCode.length === 4 && teamName.length < 15) {
+          console.log('tiimi nimi OK')
+          let data = new FormData()
+          data.append('gameCode', gameCode)
+          data.append('teamName', teamName)
+          ajaxPost('joinGame', data, function (response) {
+            if (response.gameId) {
+              errorDiv.innerHTML = ''
+              gameId = response.gameId
+              teamId = response.teamId
+              UpdateQueryString('gameId', response.gameId)
+              UpdateQueryString('teamId', response.teamId)
+              loadHTML('content', 'views/joinedScreen.html', function () {
+                location.hash = 'joined'
+                gameStart(gameId)
+              })
+            } else {
+              errorDiv.innerHTML = 'Vigane mängukood!'
+              document.getElementById('gameCode').style.borderColor = 'red'
+              button.disabled = false
+              errorDivMoveDown()
+              locked = false
+            }
+          })
+        } else {
+          console.log('errorDiv tuleb')
+          errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
+          document.getElementById('gameCode').style.borderColor = 'red'
+          document.getElementById('teamName').style.borderColor = 'red'
+          button.disabled = false
+          errorDivMoveDown()
+          locked = false
+        }
       }
     }
   })
@@ -116,6 +128,12 @@ function gameStart () {
           submitFish()
         })
         fishInput = document.getElementById('fishInput')
+        let backButton = document.getElementById('backButton')
+        backButton.addEventListener('click', function (event) {
+          history.replaceState({}, document.title, '.')
+          location.reload()
+        })
+        endInterval = setInterval(isGameOver(), 3000)
       } /* else {
         console.log('ilmnes viga')
       } */
@@ -220,4 +238,16 @@ function submitFish () {
       }
     })
   }
+}
+
+function isGameOver () {
+  let data = new FormData()
+  data.append('game_id', gameId)
+  ajaxPost('gameStarted', data, function (response) {
+    if (response.gameStarted === 2) {
+      clearInterval(endInterval)
+      switchView('fish-view', 'end-view')
+      switchView('wait-view', 'end-view')
+    }
+  })
 }

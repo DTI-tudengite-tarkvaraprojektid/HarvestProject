@@ -1,10 +1,23 @@
+*{
+    font-family: "Goudy Old Style";
+    font-style: normal;
+    font-variant: normal;
+    color: #2B3856;
+  }
+
 #content {
     position: absolute;
-    top: 40%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
     width : 60%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.705);
+    border-radius: 15px;
+    box-shadow: 0px 6px 40px 23px rgba(112,112,112,0.31);
+    padding: 5%;
+    margin-top: 25%;
+    margin-bottom: 50%; 
 }
 
 .main {
@@ -12,16 +25,10 @@
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
 
-@media (max-width: 960px) {
-.inputBox {
-    width: 100%;
-    }
-}
-
 .inputBox {
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin: 10px 0;
     box-sizing: border-box;
     border: 2px solid #2a547e;
     border-radius: 4px;
@@ -48,6 +55,7 @@
     0%, 100% { -webkit-transform: translateY(-50px); }
     10%, 90% { -webkit-transform: translateY(0px); }
 }
+
 @-moz-keyframes slideDown {
     0%, 100% { -moz-transform: translateY(-50px); }
     10%, 90% { -moz-transform: translateY(0px); }
@@ -67,6 +75,7 @@
 	from { }
 	to { -webkit-transform: translateY(-100%); }
 }
+
 @keyframes moveToTop {
 	from { }
 	to { -webkit-transform: translateY(-100%); transform: translateY(-100%); }
@@ -75,6 +84,7 @@
 @-webkit-keyframes moveFromTop {
 	from { -webkit-transform: translateY(-100%); }
 }
+
 @keyframes moveFromTop {
 	from { -webkit-transform: translateY(-100%); transform: translateY(-100%); }
 }
@@ -87,31 +97,24 @@
 }
 
 #errorDiv {
-    font-family: "Goudy Old Style";
     font-size: 20px;
-	font-style: normal;
-	font-variant: normal;
     color :#ffdbbd;
     font-weight: bold;
     background-color:red;
     position:absolute;
     left : 0px;
     width: 100%;
- 
     text-align: center;
     top: -45px;
 }
 
 .button {
-    font-family: "Goudy Old Style";
+    margin-top:5%;
     font-size: 10px;
-	font-style: normal;
-	font-variant: normal;
    	background-color:white;
     border: 2px solid #2a547e;
     border-radius: 7px;
     color: #2a547e;
-    margin: 4px 2px;
     width : 100%;    
 }
 
@@ -120,32 +123,35 @@
 }
 
 .button:active {
-  background-color: #2B3856;
-  transform: translateY(1px);
+    background-color: #2B3856;
+    transform: translateY(1px);
 }
 
 .text {
-    font-family: "Goudy Old Style";
     font-size: 30px;
-	font-style: normal;
-    font-variant: normal;
-    color: #2B3856;
     text-align: center;
 }
 
 .textSmall {
-    font-family: "Goudy Old Style";
     font-size: 15px;
-	font-style: normal;
-    font-variant: normal;
-    color: #2B3856;
 }
 
 .joinText {
-    font-family: "Goudy Old Style";
     font-size: 20px;
-	font-style: normal;
-    font-variant: normal;
     font-weight: bold;
-    color: #2B3856;
+}
+
+@media (max-width: 960px) {
+    .inputBox {
+            width: 100%;
+    }
+
+    #content{
+        box-shadow: 0px 6px 32px 15px rgba(112,112,112,0.31);
+        top: 50%;
+        padding-bottom: 6%;
+        padding-top: 6%;
+        margin-top: unset;
+        margin-bottom: unset;
+    }
 }

@@ -1,14 +1,21 @@
+*{
+    font-family: "Goudy Old Style";
+    font-style: normal;
+    font-variant: normal;
+    color: #2B3856;
+  }
+
 #content {
-    position: absolute;
     top: 40%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%);
     width : 100%;
 }
 
 .main {
+    overflow: hidden !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
+    margin:0px;
 }
 
 .inputBox {
@@ -24,16 +31,13 @@
 
 .button {
     top:100%;
-    font-family: "Goudy Old Style";
     font-size: 15px;
-	font-style: normal;
-	font-variant: normal;
    	background-color:white;
     border: 2px solid #2a547e;
     border-radius: 7px;
     color: #2a547e;
     left: 0px;
-    margin-top: 5%;
+    /*margin: 12px;*/
     width : 100%;
     
 }
@@ -50,10 +54,7 @@
 }
 
 .gameCode {
-    font-family: "Goudy Old Style";
     font-size: 50px;
-    font-style: normal;
-    font-variant: normal;
     color: #994133;
     font-weight: bold;
     border: 3px solid #994133;
@@ -65,44 +66,32 @@
 }
 
 .text {
-    font-family: "Goudy Old Style";
     font-size: 50px;
-    font-style: normal;
-    font-variant: normal;
-    color: #2B3856;
 }
 
 .textSmall {  
-    font-family: "Goudy Old Style";
     font-size: 30px;
-    font-style: normal;
-    font-variant: normal;
-    color: #2B3856;
 }
-.listElement{
+.listElement {
     border: 2px solid #2B3856;
     border-radius: 10px;
-    margin: 5px;
+    margin:2%;
     float:left;
-    width: 200px;
+    width: 250px;
     padding-left: 3%;
 }
 
 .list {
-    font-family: "Goudy Old Style";
     font-size: 28px;
-    font-style: normal;
-    font-variant: normal;
-    color: #2B3856;
     list-style-image: url('../images/fishIcon.png');
     list-style-position: inside;
+    width:102%;
+    margin-left: -5%;
+    
 }
 
 #errorDiv {
-    font-family: "Goudy Old Style";
     font-size: 20px;
-	font-style: normal;
-	font-variant: normal;
     color :#ffdbbd;
     font-weight: bold;
     background-color:red;
@@ -114,16 +103,15 @@
 }
 
 .fishtank {
-    background : linear-gradient(to right, #2a547e, #4182c2, #2a547e);
+    background : linear-gradient(to bottom left, #4CA1AF,#415E7B, #18222D);
     position: absolute;
     align-items: center;
     height: 100%;
     width: 100%;
-    display: block;
+    display: none;
     z-index: 100;
     top:-100%;
     left:0px;
-
 }
 
 .animation {
@@ -138,6 +126,7 @@
     position: absolute;
     background-image: url("../images/pufferfishLoader.png");
 }
+
 /* Fish fly */
 @keyframes fly {
     from {
@@ -155,10 +144,7 @@
 }
 
 .currentRound {
-    font-family: "Goudy Old Style";
     font-size: 75px;
-	font-style: normal;
-    font-variant: normal;
     font-weight: bold;
     color: #2B3856;
     display: flex;
@@ -166,58 +152,57 @@
 
 .playersReady {
     float: right;
-    font-family: "Goudy Old Style";
     font-size: 75px;
-	font-style: normal;
-    font-variant: normal;
     font-weight: bold;
-    color: #2B3856;
     display: flex;
 }
 
 .fishTotal {
-    font-family: "Goudy Old Style";
     font-size: 150px;
-	font-style: normal;
-    font-variant: normal;
     font-weight: bold;
     color: white;
     text-align: center;
     top:50%;
   }
   
-.view{
-    position: absolute;
+.view {
+    
     top: 40%;
     left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
+    margin-left: 20%;
+    margin-top:5%;
     width : 50%;
+    background-color:rgba(255, 255, 255, 0.705);
+    border-radius: 15px;
+    box-shadow: 0px 6px 85px 23px rgba(112,112,112,0.31);
+    padding:5%;
+    margin-bottom: 5%;
 }
 
 table {
-    font-family: "Goudy Old Style";
-    font-size: 15px;
-    font-style: normal;
-    font-variant: normal;
-    border-radius: 5px;
+    border-collapse:separate;
     border: 2px solid #2B3856;
-    border-collapse: collapse;
-    }
-
-th{
-    font-weight:bold;
-}
-    
-table,td, th {
-    border: 2px solid #2B3856;
-    font-family: "Goudy Old Style";
-    font-size: 15px;
-    font-style: normal;
-    font-variant: normal;
-    padding: 15px;
+    border-radius:6px;
+    -moz-border-radius:8px;
     text-align: left;
-    color:#2B3856;
+    margin-bottom: 12px;
+    font-size: 30px;
+    width: 100%;
+    border-spacing: 1px;
 }
+
+th {
+    font-weight: bold;
+}
+
+td,th{
+    border:none;
+}
+
 tr:nth-child(even) {background: #a89772}
 tr:nth-child(odd) {background: #e5e4c4}
+
+.fishRobbery{
+    color:#2B3856;
+    background-color: rgb(201, 94, 85);
+}
