@@ -340,15 +340,16 @@ function joinGame($gameCode, $teamName) {
         $mysqli->close();
         return ['success' => false];
     } else {
-        // if(name on õigetest char-idest ja 15 märki pikk)
-        $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
-        //var_dump($gameId, $teamName); die;
-        $stmt->bind_param("is", $gameId, $teamName);
-        $stmt->execute();
-        $teamId = $stmt->insert_id;
-        $stmt->close();
-        $mysqli->close();
-        return ['gameId' => $gameId, 'teamId' => $teamId];
+        if(strlen($teamName) <= 15){
+            $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
+            //var_dump($gameId, $teamName); die;
+            $stmt->bind_param("is", $gameId, $teamName);
+            $stmt->execute();
+            $teamId = $stmt->insert_id;
+            $stmt->close();
+            $mysqli->close();
+            return ['gameId' => $gameId, 'teamId' => $teamId];
+        }
     }
 }
 
