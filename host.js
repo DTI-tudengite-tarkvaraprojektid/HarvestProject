@@ -197,8 +197,18 @@ function endGame () {
       row = header.insertRow(0)
       cell = row.insertCell(0)
       cell.innerHTML = '<b>Tiim</b>'
-      for (let i = 0; i < array.length; i++) {
-        const element = array[i]
+      for (let i = 1; i < response.overallStats.roundsPlayed; i++) {
+        cell = row.insertCell(i)
+        cell.innerHTML = '<b>' + i + '</b>'
+      }
+      for (let i = 1; i <= response.overallStats.roundsPlayed; i++) {
+        row = scoreTabel.insertRow(i)
+        cell = row.insertCell(0)
+        cell.innerHTML = response.teams[i]['name']
+        for (let j = 0; j < response.overallStats.roundsPlayed; j++) {
+          cell = row.insertCell(j + 1)
+          cell.innerHTML = response.teams[i]['rounds'][j]
+        }
       }
     }
   })
