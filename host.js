@@ -209,6 +209,9 @@ function endGame () {
         for (let j = 0; j < response.overallStats.roundsPlayed; j++) {
           cell = row.insertCell(j + 1)
           cell.innerHTML = response.teams[i]['rounds'][j]
+          if ((response.teams[i]['rounds'][j]) > 8) {
+            cell.setAttribute('class','fishRobbery')
+          }
         }
       }
     }

@@ -221,3 +221,8 @@ th {
 
 tr:nth-child(even) {background: #a89772}
 tr:nth-child(odd) {background: #e5e4c4}
+
+.fishRobbery{
+    color:#2B3856;
+    background-color: rgba(153, 65, 51, 0.55);
+}
