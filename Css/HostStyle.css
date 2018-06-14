@@ -1,7 +1,8 @@
 *{
     font-family: "Goudy Old Style";
     font-style: normal;
-	font-variant: normal;
+    font-variant: normal;
+    color: #2B3856;
   }
 
 #content {
@@ -66,12 +67,10 @@
 
 .text {
     font-size: 50px;
-    color: #2B3856;
 }
 
 .textSmall {  
     font-size: 30px;
-    color: #2B3856;
 }
 .listElement {
     border: 2px solid #2B3856;
@@ -84,7 +83,6 @@
 
 .list {
     font-size: 28px;
-    color: #2B3856;
     list-style-image: url('../images/fishIcon.png');
     list-style-position: inside;
     width:102%;
@@ -156,7 +154,6 @@
     float: right;
     font-size: 75px;
     font-weight: bold;
-    color: #2B3856;
     display: flex;
 }
 
@@ -200,7 +197,6 @@ table,td, th {
     font-size: 20px;
     padding: 15px;
     text-align: left;
-    color:#2B3856;
     font-weight: bold;
 }
 tr:nth-child(even) {background: #a89772}
