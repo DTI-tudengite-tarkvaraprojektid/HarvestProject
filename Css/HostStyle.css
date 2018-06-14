@@ -106,7 +106,7 @@
 }
 
 .fishtank {
-    background : linear-gradient(to right, #2a547e, #4182c2, #2a547e);
+    background : linear-gradient(to bottom left, #4CA1AF,#415E7B, #18222D);
     position: absolute;
     align-items: center;
     height: 100%;

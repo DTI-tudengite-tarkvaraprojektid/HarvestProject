@@ -213,7 +213,6 @@ function hypnofishMoveDown () {
     let intervalDown = setInterval(function () {
       if (pos === 0) {
         clearInterval(intervalDown)
-        fishie.classList.remove('animation')
         window.setTimeout(function () {
           let intervalUp = setInterval(function () {
             if (pos === -100) {
