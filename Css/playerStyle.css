@@ -17,6 +17,7 @@
 .main {
     height: 100% !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
+    overflow: hidden;
 }
 
 @media (max-width: 960px) {
