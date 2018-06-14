@@ -149,16 +149,7 @@
         }
     #content{
         box-shadow: 0px 6px 32px 15px rgba(112,112,112,0.31);
-        position: absolute;
         top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-        width : 60%;
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.705);
-        border-radius: 15px;
-        padding: 5%;
         padding-bottom: 6%;
         padding-top: 6%;
         margin-top: unset;
