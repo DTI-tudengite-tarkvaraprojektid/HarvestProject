@@ -6,8 +6,10 @@
 }
 
 .main {
+    overflow: hidden !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
     margin:0px;
+    
 }
 
 .inputBox {
