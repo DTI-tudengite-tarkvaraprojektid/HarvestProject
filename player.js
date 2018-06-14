@@ -67,7 +67,7 @@ function gameJoin () {
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
       // check inputs
-      if (!teamName.match(/[^\s][A-z0-9À-ž\s]+/)) {
+      if (teamName.match(/[^A-z0-9À-ž]+/g)) {
         console.log('tiimi nimi not OK')
         errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
         document.getElementById('teamName').style.borderColor = 'red'

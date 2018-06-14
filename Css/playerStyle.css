@@ -1,3 +1,9 @@
+*{
+    font-family: "Goudy Old Style";
+    font-style: normal;
+	font-variant: normal;
+  }
+
 #content {
     position: absolute;
     top: 50%;
@@ -17,7 +23,6 @@
 .main {
     height: 100% !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
-    overflow: hidden;
 }
 
 @media (max-width: 960px) {
@@ -96,10 +101,7 @@
 }
 
 #errorDiv {
-    font-family: "Goudy Old Style";
     font-size: 20px;
-	font-style: normal;
-	font-variant: normal;
     color :#ffdbbd;
     font-weight: bold;
     background-color:red;
@@ -112,10 +114,7 @@
 
 .button {
     margin-top:5%;
-    font-family: "Goudy Old Style";
     font-size: 10px;
-	font-style: normal;
-	font-variant: normal;
    	background-color:white;
     border: 2px solid #2a547e;
     border-radius: 7px;
@@ -133,27 +132,18 @@
 }
 
 .text {
-    font-family: "Goudy Old Style";
     font-size: 30px;
-	font-style: normal;
-    font-variant: normal;
     color: #2B3856;
     text-align: center;
 }
 
 .textSmall {
-    font-family: "Goudy Old Style";
     font-size: 15px;
-	font-style: normal;
-    font-variant: normal;
     color: #2B3856;
 }
 
 .joinText {
-    font-family: "Goudy Old Style";
     font-size: 20px;
-	font-style: normal;
-    font-variant: normal;
     font-weight: bold;
     color: #2B3856;
 }
