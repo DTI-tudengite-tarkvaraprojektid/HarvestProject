@@ -427,9 +427,15 @@ function playerFish($team_id) {
 }
 
 function endGame($game_id) {
-    $overallStats = (object)[];
-
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+    $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '2' WHERE id = ?"); 
+    $stmt->bind_param("ii",$maxPlayers, $game_id);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    $stmt->close();
+
+    $overallStats = (object)[];
+   
     $stmt = $mysqli->prepare("SELECT currentRound-1 FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->roundsPlayed);
@@ -453,24 +459,36 @@ function endGame($game_id) {
     $stmt->fetch();
     $stmt->close();
 
-    /*
-    $teams = (object)[];
+    $teams = [];
+    $rounds = [];
 
-    for ($i = 1; $i <= $overallStats['roundsPlayed']; $i++) {
-        $stmt = $mysqli->prepare("SELECT te.name, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id IN (SELECT id FROM round where game_id = ?) ORDER BY te.name ASC"); 
-        $stmt->bind_param("ii", $game_id, $i);
-        $stmt->bind_result($name, $order, $wanted, $caught);
+    $stmt = $mysqli->prepare("SELECT id, name FROM team WHERE game_id = ?"); 
+    $stmt->bind_param("i", $game_id);
+    $stmt->bind_result($teamId, $teamName);
+    $stmt->execute();
+    while($stmt->fetch()) {
+        $teams[] = ['id' => $teamId, 'name' => $teamName, 'rounds' => $rounds];
+    }
+    $stmt->close();
+
+    for ($i = 0; $i <= sizeof($teams); $i++) {
+        $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ? ORDER BY roundNr ASC) AND team_id = ?"); 
+        $stmt->bind_param("ii", $game_id, $teams[$i]['id']);
+        $stmt->bind_result($caught);
         $stmt->execute();
-        $k = 0;
+        $sum = 0;
         while($stmt->fetch()) {
-            $totals[$k] += $caught;
-            $k++;
-            $teams[$k] = ["name" => $name, "order" => $order,"wanted" => $wanted, "caught" => $caught, "total" => $totals[$k]];
+            $sum += $caught;
+            $teams[$i]['rounds'][] = $caught;
         }
-        $rounds[$i-1] = $teams[$k];
+        $teams[$i]['total'] = $sum;
         $stmt->close();
     }
-    return (["overallStats" => $overallStats, "rounds" => $rounds]);
+
+    usort($teams, function($a, $b) {
+        if($a['total']==$b['total']) return 0;
+        return $a['total'] < $b['total']?1:-1;
+    });
 
     /*
         tiimide edetabe:
@@ -497,6 +515,6 @@ function endGame($game_id) {
                 for each team_id:
                     SELECT te.name, t.queue, t.fish_wanted, t.fish_caught FROM team te INNER JOIN turn t ON te.id = t.team_id WHERE t.round_id = (SELECT id FROM round where game_id = ? AND roundNr = a)
     */
-    return json_encode(['overallStats' => $overallStats, 'test' => false]);
+    return json_encode(['overallStats' => $overallStats, 'teams' => $teams]);
 }
 ?>
