@@ -85,16 +85,16 @@ switch($action) {
         break;
 
     case "roundOver":
-    if (isset($_SESSION["loggedIn"])){     
-        
-        if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
-            echo json_encode(roundOver($_POST['game_id'])); 
+        if (isset($_SESSION["loggedIn"])){     
+            
+            if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
+                echo json_encode(roundOver($_POST['game_id'])); 
+            } else {
+                echo json_encode(["success" => false]);
+            }
         } else {
             echo json_encode(["success" => false]);
         }
-    } else {
-        echo json_encode(["success" => false]);
-    }
         break;
 
     case "joinGame":
@@ -132,8 +132,9 @@ switch($action) {
             }
         } else {
             echo json_encode(["success" => false]);
-            break;
+            
         }
+        break;
     default:
         echo  "Invalid action";
         break;

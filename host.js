@@ -196,7 +196,10 @@ function endGame () {
       let header = scoreTabel.createTHead()
       row = header.insertRow(0)
       cell = row.insertCell(0)
-      cell.innerHTML = '<b>This is a table header</b>'
+      cell.innerHTML = '<b>Tiim</b>'
+      for (let i = 0; i < array.length; i++) {
+        const element = array[i]
+      }
     }
   })
 }
