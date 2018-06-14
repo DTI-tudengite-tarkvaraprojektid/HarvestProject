@@ -144,6 +144,7 @@ function waitPlayers () {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
+          document.getElementById('fishtank').style.display = 'block'
           hypnofishMoveDown()
 
           setTimeout(roundOver, 2000)
@@ -237,6 +238,7 @@ function hypnofishMoveDown () {
             if (pos === -100) {
               clearInterval(intervalUp)
               fishie.classList.remove('animation')
+              fish.style.display = 'none'
               fish.style.top = pos + '%'
             } else {
               pos -= 2

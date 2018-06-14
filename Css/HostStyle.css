@@ -108,7 +108,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    display: block;
+    display: none;
     z-index: 100;
     top:-100%;
     left:0px;
@@ -190,6 +190,7 @@ table,td, th {
 
 table {
     width : 100%;
+    margin:12px;
     }
 
 th {
