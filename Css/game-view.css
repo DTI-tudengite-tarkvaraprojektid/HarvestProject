@@ -140,6 +140,7 @@ svg .fish {
   padding-right: 10px;
   padding-left: 10px;
 }
+
 .currentRoundGameView {
   font-size: 50px;
   font-weight: bold;
@@ -187,6 +188,7 @@ svg .fish {
   background-color: #2B3856;
   transform: translateY(1px);
 }
+
 .gameview {
   position: absolute;
   top: 10%;

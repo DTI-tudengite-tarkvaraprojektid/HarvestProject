@@ -6,25 +6,23 @@
 
 #content {
     position: absolute;
-    top: 50%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
     width : 60%;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.705);
-    border-radius: 60px /15px;
+    border-radius: 15px;
     box-shadow: 0px 6px 40px 23px rgba(112,112,112,0.31);
     padding: 5%;
-    padding-bottom: 20%;
-    padding-top: 15%;
+    margin-top: 30%;
+    margin-bottom: 50%; 
 }
 
 .main {
     height: 100% !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
 }
-
 
 .inputBox {
     width: 100%;
@@ -56,6 +54,7 @@
     0%, 100% { -webkit-transform: translateY(-50px); }
     10%, 90% { -webkit-transform: translateY(0px); }
 }
+
 @-moz-keyframes slideDown {
     0%, 100% { -moz-transform: translateY(-50px); }
     10%, 90% { -moz-transform: translateY(0px); }
@@ -75,6 +74,7 @@
 	from { }
 	to { -webkit-transform: translateY(-100%); }
 }
+
 @keyframes moveToTop {
 	from { }
 	to { -webkit-transform: translateY(-100%); transform: translateY(-100%); }
@@ -83,6 +83,7 @@
 @-webkit-keyframes moveFromTop {
 	from { -webkit-transform: translateY(-100%); }
 }
+
 @keyframes moveFromTop {
 	from { -webkit-transform: translateY(-100%); transform: translateY(-100%); }
 }
@@ -144,10 +145,23 @@
 
 @media (max-width: 960px) {
     .inputBox {
-        
             width: 100%;
         }
     #content{
         box-shadow: 0px 6px 32px 15px rgba(112,112,112,0.31);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        width : 60%;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.705);
+        border-radius: 15px;
+        padding: 5%;
+        padding-bottom: 6%;
+        padding-top: 6%;
+        margin-top: unset;
+        margin-bottom: unset;
     }
 }
