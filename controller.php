@@ -98,13 +98,12 @@ switch($action) {
 
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
-            if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
-                if(preg_match('/[A-z0-9À-ž]/', $teamName) && preg_match('/[A-z0-9]/', $teamName)){
+            if(strlen($_POST["teamName"]) <= 15 && strlen($_POST["gameCode"]) == 4){
+                if(preg_match('/[A-z0-9À-ž]/', $_POST["teamName"]) && preg_match('/[A-z0-9]/', $_POST['gameCode'])){
                     echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
                     // echo json_encode(['gameId' => 13, 'teamId' => 1]);
                 }else{
-                    $mysqli->close();
-                    return ['success' => false];
+                    echo json_encode(['success' => false]);
                 }
             }   
         } else {
@@ -232,7 +231,7 @@ function createGame(){ // checks if came id is already used, if not creates new 
     $game_id = $stmt->insert_id;
     $stmt->close();
     $mysqli->close(); 
-    $_SESSION['gameId'] = $gameId;
+    $_SESSION['gameId'] = $game_id;
     return(['gameCode' => $gameCode]); 
 }
 
@@ -361,7 +360,6 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
         $mysqli->close();
         return ['success' => false];
     } else {
-        
         $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
         //var_dump($gameId, $teamName); die;
         $stmt->bind_param("is", $gameId, $teamName);
@@ -371,10 +369,8 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
         $mysqli->close();
         $_SESSION['gameId'] = $gameId;
         $_SESSION['teamId'] = $teamId;   
-        return ['success' => false];
-        // return ['gameId' => $gameId, 'teamId' => $teamId];
-    
-        
+        return ['success' => true];
+        // return ['gameId' => $gameId, 'teamId' => $teamId];  
     }
 }
 

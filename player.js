@@ -67,20 +67,20 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
       if (gameCode.length === 4 && teamName.length < 15 && teamName.match(/[A-z0-9À-ž]+/g) && gameCode.match(/[A-z0-9]+/g)) {
-        console.log('tiimi nimi OK')
+        console.log('tiimi nimi OK') // debug
         let data = new FormData()
         data.append('gameCode', gameCode)
         data.append('teamName', teamName)
         ajaxPost('joinGame', data, function (response) {
-          if (response.gameId) {
+          if (response.success === true) {
             errorDiv.innerHTML = ''
-            gameId = response.gameId
-            teamId = response.teamId
-            UpdateQueryString('gameId', response.gameId)
-            UpdateQueryString('teamId', response.teamId)
+            // gameId = response.gameId
+            // teamId = response.teamId
+            // UpdateQueryString('gameId', response.gameId)
+            // UpdateQueryString('teamId', response.teamId)
             loadHTML('content', 'views/joinedScreen.html', function () {
               location.hash = 'joined'
-              gameStart(gameId)
+              gameStart()
             })
           } else {
             errorDiv.innerHTML = 'Vigane mängukood!'
