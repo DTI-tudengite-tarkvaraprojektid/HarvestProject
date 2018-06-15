@@ -173,12 +173,14 @@ function submitFish($game_id, $playerFish, $team_id){
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->close();
-        $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
-        $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
-        $stmt->execute();   
-        $stmt->close();
-        $mysqli->close();
-        return ['success' => true];
+        if(is_numeric($playerFish)){
+            $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
+            $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
+            $stmt->execute();   
+            $stmt->close();
+            $mysqli->close();
+            return ['success' => true];
+        }
     }else{
         return ['success' => false];
     }         
