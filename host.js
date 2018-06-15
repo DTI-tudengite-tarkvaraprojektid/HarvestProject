@@ -331,7 +331,7 @@ function updateFish (currentFish) { // creates fish animation on game view
 function deleteFish () { // deletes fish animation
   let fishElements = document.getElementsByClassName('fish')
   let fishElementsReverse = document.getElementsByClassName('fishReverse')
-  while (fishElements.length > 0 & fishElementsReverse.length > 0) {
+  while (fishElements.length > 0 && fishElementsReverse.length > 0) {
     fishElements[0].parentNode.removeChild(fishElements[0])
     fishElementsReverse[0].parentNode.removeChild(fishElementsReverse[0])
   }

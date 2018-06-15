@@ -49,19 +49,13 @@
 }
 
 .fish > path {
-  /*fill:#528484;*/
   fill-opacity:1;
-  /*stop-color:rgb(255,0,0);
-  stop-opacity:1;*/
-  /*box-shadow: 0px -6px 4px rgb(246, 248, 248) inset;*/
-  /*filter: drop-shadow(inset 0px -6px 4px  white);*/
   -moz-animation: bounce 2s infinite;
   -webkit-animation: bounce 2s infinite;
   animation: bounce 2s infinite;
 }
 
 .fishReverse > path {
-  /*fill:#528484;*/
   fill-opacity:1;
   -moz-animation: bounce 4s infinite;
   -webkit-animation: bounce 4s infinite;
