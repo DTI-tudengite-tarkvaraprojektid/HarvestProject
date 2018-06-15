@@ -98,8 +98,15 @@ switch($action) {
 
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
-            echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
-            // echo json_encode(['gameId' => 13, 'teamId' => 1]);
+            if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
+                if(preg_match('/[A-z0-9À-ž]/', $teamName) && preg_match('/[A-z0-9]/', $teamName)){
+                    echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
+                    // echo json_encode(['gameId' => 13, 'teamId' => 1]);
+                }else{
+                    $mysqli->close();
+                    return ['success' => false];
+                }
+            }   
         } else {
             echo json_encode(["success" => false]);
         }
@@ -354,24 +361,20 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
         $mysqli->close();
         return ['success' => false];
     } else {
-        if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
-            if(preg_match('/[A-z0-9À-ž]/', $teamName) && preg_match('/[A-z0-9]/', $teamName)){
-                $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
-                //var_dump($gameId, $teamName); die;
-                $stmt->bind_param("is", $gameId, $teamName);
-                $stmt->execute();
-                $teamId = $stmt->insert_id;
-                $stmt->close();
-                $mysqli->close();
-                $_SESSION['gameId'] = $gameId;
-                $_SESSION['teamId'] = $teamId;   
-                return ['success' => false];
-                // return ['gameId' => $gameId, 'teamId' => $teamId];
-            }else{
-                $mysqli->close();
-                return ['success' => false];
-            }
-        }
+        
+        $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
+        //var_dump($gameId, $teamName); die;
+        $stmt->bind_param("is", $gameId, $teamName);
+        $stmt->execute();
+        $teamId = $stmt->insert_id;
+        $stmt->close();
+        $mysqli->close();
+        $_SESSION['gameId'] = $gameId;
+        $_SESSION['teamId'] = $teamId;   
+        return ['success' => false];
+        // return ['gameId' => $gameId, 'teamId' => $teamId];
+    
+        
     }
 }
 
