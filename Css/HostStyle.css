@@ -195,13 +195,9 @@ table {
 
 td,th {
     border: 1px solid #909090;
-}
-
-th {
     font-weight: bold;
     padding: 10px;
 }
-
 
 tr:nth-child(even) {background: #d8caac}
 tr:nth-child(odd) {background: #e5e4c4}
