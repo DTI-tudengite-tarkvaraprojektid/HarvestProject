@@ -238,7 +238,7 @@ function createGame(){ // checks if came id is already used, if not creates new 
 function generateGameCode(){ // generates random gameCode from charakters, length is 4 chars
     $codeLenght = 4;
     $characters = 'abdefghjklmpqrsvwxyz2345678923456789';
-    $charArrayLength = strlen($characters);
+    $charArrayLength = strlen($characters)-1;
     $codesArray = [];
 
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -251,7 +251,7 @@ function generateGameCode(){ // generates random gameCode from charakters, lengt
     $stmt->close();
     do {
         $gameCode = ""; 
-        for ($i = 0; $i < $codeLenght; $i++) {
+        for ($i = 0; $i =< $codeLenght; $i++) {
             $gameCode .= $characters[mt_rand(0, $charArrayLength)];
         }
     } while(in_array($gameCode, $codesArray)); 
