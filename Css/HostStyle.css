@@ -181,11 +181,10 @@
 }
 
 table {
-    border-collapse:separate;
-    border: 2px solid #2B3856;
+    border-collapse: collapse;
+    box-shadow: 0 0 0 2px #909090;
+    border: 2px solid #909090;
     border-radius:6px;
-    -moz-border-radius:8px;
-    /*text-align: left;*/
     margin-bottom: 12px;
     font-size: 30px;
     width: 100%;
@@ -193,13 +192,15 @@ table {
     text-align: center;
 }
 
-th {
-    font-weight: bold;
+td,th {
+    border: 1px solid #909090;
 }
 
-td{
-    border:none;
+th {
+    font-weight: bold;
+    padding: 10px;
 }
+
 
 tr:nth-child(even) {background: #d8caac}
 tr:nth-child(odd) {background: #e5e4c4}
