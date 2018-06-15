@@ -142,13 +142,13 @@ switch($action) {
 
 function login($username, $password){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-    $stmt= $mysqli->prepare("SELECT id, username, password FROM users WHERE username = ?");
+    $stmt= $mysqli->prepare("SELECT username, password FROM users WHERE username = ?");
 	$stmt->bind_param("s", $username);
-	$stmt->bind_result($id, $username, $passwordDB);
+	$stmt->bind_result($usernameDB, $passwordDB);
 	$stmt->execute();
 
     if($stmt->fetch()){
-        if(hash("sha512", $password) == $passwordDB){	
+        if(hash("sha512", $password) == $passwordDB && $username == $usernameDB){	
             $_SESSION["loggedIn"] = true;
         }
 	}
