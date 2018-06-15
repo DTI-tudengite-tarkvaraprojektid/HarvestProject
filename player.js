@@ -106,9 +106,7 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
 
 function gameStart () { // checks if game has started yet, if yes directs to other view, if not then stays
   let gameStartInterval = setInterval(function () {
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('gameStarted', data, function (response) {
+    ajaxGet('gameStarted', function (response) {
       if (response.gameStarted === 1) {
         switchView('joined-view', 'fish-view')
         clearInterval(gameStartInterval)
@@ -134,14 +132,12 @@ function gameStart () { // checks if game has started yet, if yes directs to oth
 function waitPlayers () { // checks how many players are ready and shows it to player who has submitted fihWanted
   let waitSpan = document.getElementById('waitSpan')
   let waitPlayersInterval = setInterval(function () {
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('playersReady', data, function (response) {
+    ajaxGet('playersReady', function (response) {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
           waitPlayersInterval = setInterval(function () {
-            ajaxPost('gameStats', data, function (response) {
+            ajaxGet('gameStats', function (response) {
               if (response.currentRound) {
                 if (response.currentRound != currentRound) {
                   clearInterval(waitPlayersInterval)
@@ -168,9 +164,7 @@ function round () { // shows player how many fishes was caught last round and ho
   fishInput.value = ''
   currentFishLabel = document.getElementById('currentFish')
   lastRoundFishLabel = document.getElementById('lastFish')
-  let data = new FormData()
-  data.append('team_id', teamId)
-  ajaxPost('playerFish', data, function (response) {
+  ajaxGet('playerFish', function (response) {
     if (response.totalFish) {
       currentFishLabel.innerHTML = response.totalFish
       lastRoundFishLabel.innerHTML = parseInt(response.lastFish)
@@ -187,22 +181,17 @@ function submitFish () { // checks if fish input is integrer and is there that m
     locked = true
     console.log('click')
     let fishInputValue = fishInput.value
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('gameStats', data, function (response) {
+    ajaxGet('gameStats', function (response) {
       if (response.maxPlayers) {
         maxPlayers = response.maxPlayers
         currentRound = response.currentRound
         if (fishInputValue && fishInputValue >= 0 && isInteger(+fishInputValue)) {
           if (fishInputValue <= response.fishInSea) {
-            let data2 = new FormData()
-            data2.append('game_id', gameId)
-            data2.append('playerFish', fishInputValue)
-            data2.append('team_id', teamId)
-            ajaxPost('submitFish', data2, function (response) {
+            let data = new FormData()
+            data.append('playerFish', fishInputValue)
+            ajaxPost('submitFish', data, function (response) {
               if (response.success) {
                 switchView('fish-view', 'wait-view')
-
                 waitPlayers()
               } else if (response.success === false) {
                 errorDiv.innerHTML = 'Ilmnes viga!'
@@ -231,9 +220,7 @@ function submitFish () { // checks if fish input is integrer and is there that m
 }
 
 function isGameOver () { // if game is over directs to other view
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('gameStarted', data, function (response) {
+  ajaxGet('gameStarted', function (response) {
     if (response.gameStarted === 2) {
       clearInterval(endInterval)
       switchView('fish-view', 'end-view')

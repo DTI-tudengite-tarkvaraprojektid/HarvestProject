@@ -72,8 +72,8 @@ function panel () { // loads in host views
 
 function createGame () { // creates game and directs to other view or shows error, crates interval for updatePlayerList
   ajaxGet('createGame', function (response) {
-    if (response.id && response.gameCode) {
-      gameId = response.id
+    if (response.gameCode) {
+      // gameId = response.id
       let gameCode = response.gameCode
       switchView('create-view', 'start-view')
       gameCode = gameCode.toUpperCase()
@@ -87,9 +87,7 @@ function createGame () { // creates game and directs to other view or shows erro
 
 function updatePlayerList () { // shows joined players on screen
   let listNode, textNode
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('getPlayers', data, function (response) {
+  ajaxGet('getPlayers', function (response) {
     if (response.none) {
     } else if (response.names) {
       while (playersList.firstChild) {
@@ -108,9 +106,7 @@ function updatePlayerList () { // shows joined players on screen
 }
 
 function startGame () { // starts game, runs function round() or shows error
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('startGame', data, function (response) {
+  ajaxGet('startGame', function (response) {
     if (response.success) {
       maxPlayers = response.maxPlayers
       clearInterval(updatePlayersInterval)
@@ -125,9 +121,7 @@ function startGame () { // starts game, runs function round() or shows error
 
 function round () { // shows round info on host screen(players ready, amount of fish in the sea, round nr) and deletes fishes when round starts, calls function waitPlayers(), creates interval for function waitplayers
   playersReadyDiv.innerHTML = '(0/' + maxPlayers + ')'
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('gameStats', data, function (response) {
+  ajaxGet('gameStats', function (response) {
     if (response.maxPlayers) {
       currentRoundDiv.innerHTML = response.currentRound
       fishTotalDiv.innerHTML = response.fishInSea
@@ -141,15 +135,12 @@ function round () { // shows round info on host screen(players ready, amount of 
 
 function waitPlayers () { // shows players that join game
   waitPlayersInterval = setInterval(function () {
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('playersReady', data, function (response) {
+    ajaxGet('playersReady', function (response) {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
           document.getElementById('fishtank').style.display = 'block'
           hypnofishMoveDown()
-
           setTimeout(roundOver, 2000)
         } else {
           playersReadyDiv.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
@@ -162,9 +153,7 @@ function waitPlayers () { // shows players that join game
 }
 
 function roundOver () { // ends current round and runs function round that starts new round
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('roundOver', data, function (response) {
+  ajaxGet('roundOver', function (response) {
     if (response.success) {
       round()
     }
@@ -172,15 +161,12 @@ function roundOver () { // ends current round and runs function round that start
 }
 
 function endGame () { // ends the gameand directs to statistics view and creates tables
-  clearInterval(waitPlayersInterval)
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('endGame', data, function (response) {
-    console.log(response)
+  ajaxGet('endGame', function (response) {
+    console.log(response) // debug
     if (response.overallStats) {
       switchView('game-view', 'statistics-view')
       clearInterval(waitPlayersInterval)
-      console.log(response.overallStats)
+      console.log(response.overallStats) // debug
       let statsTable = document.getElementById('OverallStatsTabel')
       let row = statsTable.insertRow(1)
       let cell = row.insertCell(0)
@@ -263,9 +249,8 @@ function hypnofishMoveDown () { // moves wait screen pufferfish
 function updateFish (currentFish) { // creates fish animation on game view
   let clientHeight = document.getElementById('sea').clientHeight
   let seaDiv = document.getElementById('sea')
-  let fishCounter
   let intervalSpeed
-  newHeight = clientHeight - 200
+  let newHeight = clientHeight - 200
   let randomFishPlace
   let fishSwitch = 1
 
