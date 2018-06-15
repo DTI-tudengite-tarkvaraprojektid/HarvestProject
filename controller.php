@@ -11,28 +11,28 @@ session_start();
 
 switch($action) {
     case "gameStarted" : 
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(gameStarted($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(gameStarted($_SESSION["gameId"]));
         }
         break;
 
     case "gameStats":
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(gamestats($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(gamestats($_SESSION["gameId"]));
         } else {
             echo json_encode(["success" => false]);
         }
         break;
 
     case "playersReady":
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(playersReady($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(playersReady($_SESSION["gameId"]));
         }
         break;
 
     case "getPlayers":
-        if(isset($_POST["game_id"])) {
-            echo json_encode(getPlayers($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(getPlayers($_SESSION["gameId"]));
         } else {
             echo json_encode(["success" => false]);
         }
@@ -57,8 +57,8 @@ switch($action) {
 
     case "startGame":
         if (isset($_SESSION["loggedIn"])) {
-            if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-                echo json_encode(startGame($_POST["game_id"]));
+            if(isset($_SESSION["gameId"])) {
+                echo json_encode(startGame($_SESSION["gameId"]));
             } else {
                 echo json_encode(["success" => false]);
             }
@@ -232,7 +232,7 @@ function createGame(){ // checks if came id is already used, if not creates new 
 function generateGameCode(){ // generates random gameCode from charakters, length is 4 chars
     $codeLenght = 4;
     $characters = 'abdefghjklmpqrsvwxyz2345678923456789';
-    $charArrayLength = strlen($characters)-1;
+    $charArrayLength = strlen($characters);
     $codesArray = [];
 
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -350,7 +350,7 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
     $result = $stmt->fetch();
     $stmt->close();
     if(!$gameId) {
-        //var_dump($gameId ); die;
+        // var_dump($gameId ); die;
         $mysqli->close();
         return ['success' => false];
     } else {
