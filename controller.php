@@ -251,7 +251,7 @@ function generateGameCode(){ // generates random gameCode from charakters, lengt
     $stmt->close();
     do {
         $gameCode = ""; 
-        for ($i = 0; $i =< $codeLenght; $i++) {
+        for ($i = 0; $i <= $codeLenght; $i++) {
             $gameCode .= $characters[mt_rand(0, $charArrayLength)];
         }
     } while(in_array($gameCode, $codesArray)); 
