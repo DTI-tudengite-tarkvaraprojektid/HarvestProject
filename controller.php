@@ -99,12 +99,10 @@ switch($action) {
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
             if(strlen($_POST["teamName"]) <= 15 && strlen($_POST["gameCode"]) == 4){
-                if(preg_match('/[A-z0-9À-ž]/', $_POST["teamName"]) && preg_match('/[A-z0-9]/', $_POST['gameCode'])){
+               
                     echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
                     // echo json_encode(['gameId' => 13, 'teamId' => 1]);
-                }else{
-                    echo json_encode(['success' => false]);
-                }
+                
             }   
         } else {
             echo json_encode(["success" => false]);

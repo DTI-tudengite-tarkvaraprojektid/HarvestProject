@@ -67,17 +67,12 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
       // check inputs
-      let regex = /[^A-z0-9À-ž]+/g
-      if (regex.test(teamName) && regex.test(gameCode)) {
-        console.log('tiimi nimi not OK')
-        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
-        document.getElementById('teamName').style.borderColor = 'red'
-        button.disabled = false
-        errorDivMoveDown()
-
-        locked = false
-      } else {
-        if (gameCode.length === 4 && teamName.length < 15) {
+      let regex = /^(?=.*[A-Za-z0-9À-ž])[A-Za-z0-9À-ž _\-]*$/g
+      if (regex.test(teamName) && teamName.length < 15) {
+      // if (!teamName.match(regex) && !gameCode.match(regex)) {
+        let regex2 = /^[a-zA-Z0-9]*$/g
+        if (regex2.test(gameCode) && gameCode.length == 4) {
+          console.log('testin gameCode')
           console.log('tiimi nimi OK')
           let data = new FormData()
           data.append('gameCode', gameCode)
@@ -101,6 +96,17 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
               locked = false
             }
           })
+        }
+      } else {
+        console.log('tiimi nimi not OK')
+        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
+        document.getElementById('teamName').style.borderColor = 'red'
+        button.disabled = false
+        errorDivMoveDown()
+
+        locked = false
+        if (gameCode.length === 4 && teamName.length < 15) {
+
         } else {
           console.log('errorDiv tuleb')
           errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
