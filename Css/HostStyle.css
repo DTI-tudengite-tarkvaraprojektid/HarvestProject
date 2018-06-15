@@ -39,7 +39,7 @@
     left: 0px;
     /*margin: 12px;*/
     width : 100%;
-    
+    cursor: pointer;
 }
 
 .button:hover {background-color: #98AFC7}

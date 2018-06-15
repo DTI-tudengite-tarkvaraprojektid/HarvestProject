@@ -115,7 +115,8 @@
     border: 2px solid #2a547e;
     border-radius: 7px;
     color: #2a547e;
-    width : 100%;    
+    width : 100%;
+    cursor: pointer;
 }
 
 .button:hover {

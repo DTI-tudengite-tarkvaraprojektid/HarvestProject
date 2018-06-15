@@ -66,7 +66,8 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
       button.disabled = true
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
-      if (gameCode.length === 4 && teamName.length < 15 && teamName.match(/[A-z0-9À-ž]+/g) && gameCode.match(/[A-z0-9]+/g)) {
+      if (teamName.match(/[^A-z0-9À-ž]+/g) && gameCode.match(/[^A-z0-9]+/g)) {
+        if (gameCode.length === 4 && teamName.length < 15) {
         console.log('tiimi nimi OK') // debug
         let data = new FormData()
         data.append('gameCode', gameCode)
@@ -75,8 +76,8 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
           if (response.success === true) {
             errorDiv.innerHTML = ''
             // gameId = response.gameId
-            // teamId = response.teamId
             // UpdateQueryString('gameId', response.gameId)
+            // teamId = response.teamId
             // UpdateQueryString('teamId', response.teamId)
             loadHTML('content', 'views/joinedScreen.html', function () {
               location.hash = 'joined'
@@ -98,8 +99,8 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
         button.disabled = false
         errorDivMoveDown()
         locked = false
+        }
       }
-      // }
     }
   })
 }
