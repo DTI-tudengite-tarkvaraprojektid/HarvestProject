@@ -353,14 +353,19 @@ function joinGame($gameCode, $teamName) {
         return ['success' => false];
     } else {
         if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
-            $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
-            //var_dump($gameId, $teamName); die;
-            $stmt->bind_param("is", $gameId, $teamName);
-            $stmt->execute();
-            $teamId = $stmt->insert_id;
-            $stmt->close();
-            $mysqli->close();
-            return ['gameId' => $gameId, 'teamId' => $teamId];
+            if(preg_match('/[A-z0-9À-ž]/', $teamName) && preg_match('/[A-z0-9]/', $teamName)){
+                $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
+                //var_dump($gameId, $teamName); die;
+                $stmt->bind_param("is", $gameId, $teamName);
+                $stmt->execute();
+                $teamId = $stmt->insert_id;
+                $stmt->close();
+                $mysqli->close();
+                return ['gameId' => $gameId, 'teamId' => $teamId];
+            }else{
+                $mysqli->close();
+                return ['success' => false];
+            }
         }
     }
 }
