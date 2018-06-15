@@ -66,48 +66,50 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
       button.disabled = true
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
-      if (teamName.match(/[^A-z0-9À-ž]+/g) && gameCode.match(/[^A-z0-9]+/g)) {
-        if (gameCode.length === 4 && teamName.length < 15) {
-        console.log('tiimi nimi OK') // debug
-        let data = new FormData()
-        data.append('gameCode', gameCode)
-        data.append('teamName', teamName)
-        ajaxPost('joinGame', data, function (response) {
-          if (response.success === true) {
-            errorDiv.innerHTML = ''
-            // gameId = response.gameId
-            // UpdateQueryString('gameId', response.gameId)
-            // teamId = response.teamId
-            // UpdateQueryString('teamId', response.teamId)
-            loadHTML('content', 'views/joinedScreen.html', function () {
-              location.hash = 'joined'
-              gameStart()
-            })
-          } else {
-            errorDiv.innerHTML = 'Vigane mängukood!'
-            document.getElementById('gameCode').style.borderColor = 'red'
-            button.disabled = false
-            errorDivMoveDown()
-            locked = false
-          }
-        })
+      // check inputs
+      let regex = /[^A-z0-9À-ž]+/g
+      if (regex.test(teamName) && regex.test(gameCode)) {
+        console.log('tiimi nimi not OK')
+        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
+        document.getElementById('teamName').style.borderColor = 'red'
+        button.disabled = false
+        errorDivMoveDown()
+
+        locked = false
       } else {
-        console.log('errorDiv tuleb')
-        errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
-        document.getElementById('gameCode').style.borderColor = 'red'
-        document.getElementById('teamName').style.borderColor = 'red'
-        button.disabled = false
-        errorDivMoveDown()
-        locked = false
+        if (gameCode.length === 4 && teamName.length < 15) {
+          console.log('tiimi nimi OK')
+          let data = new FormData()
+          data.append('gameCode', gameCode)
+          data.append('teamName', teamName)
+          ajaxPost('joinGame', data, function (response) {
+            if (response.success === true) {
+              errorDiv.innerHTML = ''
+              // gameId = response.gameId
+              // teamId = response.teamId
+              // UpdateQueryString('gameId', response.gameId)
+              // UpdateQueryString('teamId', response.teamId)
+              loadHTML('content', 'views/joinedScreen.html', function () {
+                location.hash = 'joined'
+                gameStart(gameId)
+              })
+            } else {
+              errorDiv.innerHTML = 'Vigane mängukood!'
+              document.getElementById('gameCode').style.borderColor = 'red'
+              button.disabled = false
+              errorDivMoveDown()
+              locked = false
+            }
+          })
+        } else {
+          console.log('errorDiv tuleb')
+          errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
+          document.getElementById('gameCode').style.borderColor = 'red'
+          document.getElementById('teamName').style.borderColor = 'red'
+          button.disabled = false
+          errorDivMoveDown()
+          locked = false
         }
-      }else {
-        console.log('errorDiv tuleb')
-        errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
-        document.getElementById('gameCode').style.borderColor = 'red'
-        document.getElementById('teamName').style.borderColor = 'red'
-        button.disabled = false
-        errorDivMoveDown()
-        locked = false
       }
     }
   })
