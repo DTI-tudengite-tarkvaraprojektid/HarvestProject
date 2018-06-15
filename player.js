@@ -58,7 +58,7 @@ window.onload = function () {
   }
 }
 
-function gameJoin () {
+function gameJoin () { // lets player join game and checks inputs(is alphanumeric? is right length?), if joined directs to other view, starts interval for function gameStart
   let button = document.getElementById('joinButton')
   button.addEventListener('click', function (event) {
     if (!locked) {
@@ -66,31 +66,22 @@ function gameJoin () {
       button.disabled = true
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
-      // check inputs
-      /* if (teamName.match(/[^A-z0-9À-ž]+/g) && gameCode.match(/[^A-z0-9À-ž]+/g)) {
-        console.log('tiimi nimi not OK')
-        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
-        document.getElementById('teamName').style.borderColor = 'red'
-        button.disabled = false
-        errorDivMoveDown()
-
-        locked = false
-      } else { */
-      if (gameCode.length === 4 && teamName.length < 15 && teamName.match(/[A-z0-9À-ž]+/g) && gameCode.match(/[A-z0-9]+/g)) {
-        console.log('tiimi nimi OK')
+      if (teamName.match(/[^A-z0-9À-ž]+/g) && gameCode.match(/[^A-z0-9]+/g)) {
+        if (gameCode.length === 4 && teamName.length < 15) {
+        console.log('tiimi nimi OK') // debug
         let data = new FormData()
         data.append('gameCode', gameCode)
         data.append('teamName', teamName)
         ajaxPost('joinGame', data, function (response) {
-          if (response.gameId) {
+          if (response.success === true) {
             errorDiv.innerHTML = ''
-            gameId = response.gameId
-            teamId = response.teamId
-            UpdateQueryString('gameId', response.gameId)
-            UpdateQueryString('teamId', response.teamId)
+            // gameId = response.gameId
+            // UpdateQueryString('gameId', response.gameId)
+            // teamId = response.teamId
+            // UpdateQueryString('teamId', response.teamId)
             loadHTML('content', 'views/joinedScreen.html', function () {
               location.hash = 'joined'
-              gameStart(gameId)
+              gameStart()
             })
           } else {
             errorDiv.innerHTML = 'Vigane mängukood!'
@@ -108,17 +99,23 @@ function gameJoin () {
         button.disabled = false
         errorDivMoveDown()
         locked = false
+        }
+      }else {
+        console.log('errorDiv tuleb')
+        errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
+        document.getElementById('gameCode').style.borderColor = 'red'
+        document.getElementById('teamName').style.borderColor = 'red'
+        button.disabled = false
+        errorDivMoveDown()
+        locked = false
       }
-      // }
     }
   })
 }
 
-function gameStart () {
+function gameStart () { // checks if game has started yet, if yes directs to other view, if not then stays
   let gameStartInterval = setInterval(function () {
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('gameStarted', data, function (response) {
+    ajaxGet('gameStarted', function (response) {
       if (response.gameStarted === 1) {
         switchView('joined-view', 'fish-view')
         clearInterval(gameStartInterval)
@@ -141,17 +138,15 @@ function gameStart () {
   }, 1000)
 }
 
-function waitPlayers () {
+function waitPlayers () { // checks how many players are ready and shows it to player who has submitted fihWanted
   let waitSpan = document.getElementById('waitSpan')
   let waitPlayersInterval = setInterval(function () {
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('playersReady', data, function (response) {
+    ajaxGet('playersReady', function (response) {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
           waitPlayersInterval = setInterval(function () {
-            ajaxPost('gameStats', data, function (response) {
+            ajaxGet('gameStats', function (response) {
               if (response.currentRound) {
                 if (response.currentRound != currentRound) {
                   clearInterval(waitPlayersInterval)
@@ -173,14 +168,12 @@ function waitPlayers () {
   }, 1000)
 }
 
-function round () {
+function round () { // shows player how many fishes was caught last round and how many have been caught by him/her this game
   locked = false
   fishInput.value = ''
   currentFishLabel = document.getElementById('currentFish')
   lastRoundFishLabel = document.getElementById('lastFish')
-  let data = new FormData()
-  data.append('team_id', teamId)
-  ajaxPost('playerFish', data, function (response) {
+  ajaxGet('playerFish', function (response) {
     if (response.totalFish) {
       currentFishLabel.innerHTML = response.totalFish
       lastRoundFishLabel.innerHTML = parseInt(response.lastFish)
@@ -188,31 +181,26 @@ function round () {
   })
 }
 
-function isInteger (x) {
+function isInteger (x) { // checks if is integrer
   return (typeof x === 'number') && (x % 1 === 0)
 }
 
-function submitFish () {
+function submitFish () { // checks if fish input is integrer and is there that much fish in sea, if yes, submits fishWanted
   if (!locked) {
     locked = true
     console.log('click')
     let fishInputValue = fishInput.value
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('gameStats', data, function (response) {
+    ajaxGet('gameStats', function (response) {
       if (response.maxPlayers) {
         maxPlayers = response.maxPlayers
         currentRound = response.currentRound
         if (fishInputValue && fishInputValue >= 0 && isInteger(+fishInputValue)) {
           if (fishInputValue <= response.fishInSea) {
-            let data2 = new FormData()
-            data2.append('game_id', gameId)
-            data2.append('playerFish', fishInputValue)
-            data2.append('team_id', teamId)
-            ajaxPost('submitFish', data2, function (response) {
+            let data = new FormData()
+            data.append('playerFish', fishInputValue)
+            ajaxPost('submitFish', data, function (response) {
               if (response.success) {
                 switchView('fish-view', 'wait-view')
-
                 waitPlayers()
               } else if (response.success === false) {
                 errorDiv.innerHTML = 'Ilmnes viga!'
@@ -240,10 +228,8 @@ function submitFish () {
   }
 }
 
-function isGameOver () {
-  let data = new FormData()
-  data.append('game_id', gameId)
-  ajaxPost('gameStarted', data, function (response) {
+function isGameOver () { // if game is over directs to other view
+  ajaxGet('gameStarted', function (response) {
     if (response.gameStarted === 2) {
       clearInterval(endInterval)
       switchView('fish-view', 'end-view')

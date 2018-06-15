@@ -39,7 +39,7 @@
     left: 0px;
     /*margin: 12px;*/
     width : 100%;
-    
+    cursor: pointer;
 }
 
 .button:hover {background-color: #98AFC7}
@@ -79,6 +79,7 @@
     float:left;
     width: 250px;
     padding-left: 3%;
+    background-color: 
 }
 
 .list {

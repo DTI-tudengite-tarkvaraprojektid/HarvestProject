@@ -11,28 +11,28 @@ session_start();
 
 switch($action) {
     case "gameStarted" : 
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(gameStarted($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(gameStarted($_SESSION["gameId"]));
         }
         break;
 
     case "gameStats":
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(gamestats($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(gamestats($_SESSION["gameId"]));
         } else {
             echo json_encode(["success" => false]);
         }
         break;
 
     case "playersReady":
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(playersReady($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(playersReady($_SESSION["gameId"]));
         }
         break;
 
     case "getPlayers":
-        if(isset($_POST["game_id"])) {
-            echo json_encode(getPlayers($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(getPlayers($_SESSION["gameId"]));
         } else {
             echo json_encode(["success" => false]);
         }
@@ -57,8 +57,8 @@ switch($action) {
 
     case "startGame":
         if (isset($_SESSION["loggedIn"])) {
-            if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-                echo json_encode(startGame($_POST["game_id"]));
+            if(isset($_SESSION["gameId"])) {
+                echo json_encode(startGame($_SESSION["gameId"]));
             } else {
                 echo json_encode(["success" => false]);
             }
@@ -76,9 +76,9 @@ switch($action) {
         break;
         
     case "submitFish":
-        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && isset($_POST['team_id']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish']) && is_numeric($_POST['team_id']) && (filter_var($_POST['playerFish'], FILTER_VALIDATE_INT) || $_POST['playerFish'] === '0')) {
-            //echo json_encode(gameStats($game_id));
-            echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish'], $_POST['team_id']));
+        if(isset($_SESSION['gameId']) && isset($_POST['playerFish']) && isset($_SESSION['teamId']) && (filter_var($_POST['playerFish'], FILTER_VALIDATE_INT) || $_POST['playerFish'] === '0')) {
+            // echo json_encode(gameStats($game_id));
+            echo json_encode(submitFish($_SESSION["gameId"], $_POST['playerFish'], $_SESSION['teamId']));
         } else {
             echo json_encode(["success" => false]);
         }
@@ -86,9 +86,8 @@ switch($action) {
 
     case "roundOver":
         if (isset($_SESSION["loggedIn"])){     
-            
-            if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
-                echo json_encode(roundOver($_POST['game_id'])); 
+            if(isset($_SESSION['gameId'])) { 
+                echo json_encode(roundOver($_SESSION['gameId'])); 
             } else {
                 echo json_encode(["success" => false]);
             }
@@ -99,8 +98,14 @@ switch($action) {
 
     case "joinGame":
         if(isset($_POST["gameCode"]) && isset($_POST["teamName"])) {
-            echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
-            // echo json_encode(['gameId' => 13, 'teamId' => 1]);
+            if(strlen($_POST["teamName"]) <= 15 && strlen($_POST["gameCode"]) == 4){
+                if(preg_match('/[A-z0-9À-ž]/', $_POST["teamName"]) && preg_match('/[A-z0-9]/', $_POST['gameCode'])){
+                    echo json_encode(joinGame(strtolower($_POST["gameCode"]), $_POST["teamName"]));
+                    // echo json_encode(['gameId' => 13, 'teamId' => 1]);
+                }else{
+                    echo json_encode(['success' => false]);
+                }
+            }   
         } else {
             echo json_encode(["success" => false]);
         }
@@ -120,35 +125,37 @@ switch($action) {
         session_unset();
         echo json_encode(["success" => true]);
         break;
+
     case "playerFish":
-        if(isset($_POST["team_id"]) && is_numeric($_POST['team_id'])) {
-            echo json_encode(playerFish($_POST["team_id"]));
+        if(isset($_SESSION["teamId"])) {
+            echo json_encode(playerFish($_SESSION["teamId"]));
         }
         break;
+
     case "endGame":
         if (isset($_SESSION["loggedIn"])){     
-            if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
-                echo endGame($_POST['game_id']); 
+            if(isset($_SESSION['gameId'])) { 
+                echo endGame($_SESSION['gameId']); 
             }
         } else {
             echo json_encode(["success" => false]);
-            
         }
         break;
+
     default:
-        echo  "Invalid action";
+        echo "Invalid action";
         break;
     }
 
-function login($username, $password){
+function login($username, $password){ // checks if user name and password matches with data in database
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-    $stmt= $mysqli->prepare("SELECT username, password FROM users WHERE username = ?");
+    $stmt= $mysqli->prepare("SELECT id, username, password FROM users WHERE username = ?");
 	$stmt->bind_param("s", $username);
-	$stmt->bind_result($usernameDB, $passwordDB);
+	$stmt->bind_result($id, $username, $passwordDB);
 	$stmt->execute();
 
     if($stmt->fetch()){
-        if(hash("sha512", $password) == $passwordDB && $username == $usernameDB){	
+        if(hash("sha512", $password) == $passwordDB){	
             $_SESSION["loggedIn"] = true;
         }
 	}
@@ -163,7 +170,7 @@ function login($username, $password){
         }
 }
 
-function submitFish($game_id, $playerFish, $team_id){
+function submitFish($game_id, $playerFish, $team_id){ // adds players fishWanted to database
     $gameStats = gameStats($game_id);
     if($gameStats["maxPlayers"]*10 >= $playerFish && $gameStats['fishInSea'] >= $playerFish){
         $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -186,7 +193,7 @@ function submitFish($game_id, $playerFish, $team_id){
     }         
 }
 
-function createGame(){
+function createGame(){ // checks if came id is already used, if not creates new game. Deletes old games after 1 day. Calls generateGameCode
     $dateNow = new DateTime();
     $dateNow->modify('-1 day');
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -224,10 +231,11 @@ function createGame(){
     $game_id = $stmt->insert_id;
     $stmt->close();
     $mysqli->close(); 
-    return(['id' => $game_id ,'gameCode' => $gameCode]); 
+    $_SESSION['gameId'] = $game_id;
+    return(['gameCode' => $gameCode]); 
 }
 
-function generateGameCode(){
+function generateGameCode(){ // generates random gameCode from charakters, length is 4 chars
     $codeLenght = 4;
     $characters = 'abdefghjklmpqrsvwxyz2345678923456789';
     $charArrayLength = strlen($characters)-1;
@@ -250,7 +258,7 @@ function generateGameCode(){
     return $gameCode;
 }
 
-function startGame($game_id){
+function startGame($game_id){ // starts the game
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT COUNT(name) FROM team WHERE game_id = ?"); 
     $stmt->bind_param("i", $game_id);
@@ -273,7 +281,7 @@ function startGame($game_id){
     return (["success" => true, "maxPlayers" => $maxPlayers]);
 }
 
-function getPlayers($game_id){
+function getPlayers($game_id){ // calls team names from database
     $names = [];
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT name FROM team WHERE game_id = ?"); 
@@ -291,7 +299,7 @@ function getPlayers($game_id){
     return (['names' => $names]);          
 }
 
-function gameStarted($game_id){
+function gameStarted($game_id){ // checks game status
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT gameStarted FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
@@ -303,7 +311,7 @@ function gameStarted($game_id){
     return (['gameStarted' => $gameStarted]);         
 }
 
-function playersReady($game_id){
+function playersReady($game_id){ // checks how many players are ready
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT currentRound FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
@@ -321,7 +329,7 @@ function playersReady($game_id){
     return (['playersReady' => $playersReady]); 
 }
 
-function gameStats($game_id){
+function gameStats($game_id){ // calls game stats from database
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT currentRound, players FROM game WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
@@ -339,7 +347,7 @@ function gameStats($game_id){
     return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);
 }
 
-function joinGame($gameCode, $teamName) {   
+function joinGame($gameCode, $teamName) { // adds players to game in database, also checks if inputs are alphanumeric and if the length is right
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT id FROM game WHERE gameCode = ? and gameStarted = 0"); 
     $stmt->bind_param("s", $gameCode);
@@ -348,29 +356,25 @@ function joinGame($gameCode, $teamName) {
     $result = $stmt->fetch();
     $stmt->close();
     if(!$gameId) {
-        //var_dump($gameId ); die;
+        // var_dump($gameId ); die;
         $mysqli->close();
         return ['success' => false];
     } else {
-        if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
-            if(preg_match('/[A-z0-9À-ž]/', $teamName) && preg_match('/[A-z0-9]/', $teamName)){
-                $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
-                //var_dump($gameId, $teamName); die;
-                $stmt->bind_param("is", $gameId, $teamName);
-                $stmt->execute();
-                $teamId = $stmt->insert_id;
-                $stmt->close();
-                $mysqli->close();
-                return ['gameId' => $gameId, 'teamId' => $teamId];
-            }else{
-                $mysqli->close();
-                return ['success' => false];
-            }
-        }
+        $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
+        //var_dump($gameId, $teamName); die;
+        $stmt->bind_param("is", $gameId, $teamName);
+        $stmt->execute();
+        $teamId = $stmt->insert_id;
+        $stmt->close();
+        $mysqli->close();
+        $_SESSION['gameId'] = $gameId;
+        $_SESSION['teamId'] = $teamId;   
+        return ['success' => true];
+        // return ['gameId' => $gameId, 'teamId' => $teamId];  
     }
 }
 
-function roundOver($game_id) {
+function roundOver($game_id) { // inserts round info into database after round ends
     $gameStats = gameStats($game_id);
     $turns = [];
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -420,7 +424,7 @@ function roundOver($game_id) {
     return ['success' => true];
 }
 
-function playerFish($team_id) {
+function playerFish($team_id) { // calls player info from database(fish cught in last round, fish caught in game)
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("SELECT game_id FROM team WHERE id = ?"); 
     $stmt->bind_param("i", $team_id);
@@ -444,7 +448,7 @@ function playerFish($team_id) {
     return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
 }
 
-function endGame($game_id) {
+function endGame($game_id) { // changes game status to ended and returns game statistics
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
     $stmt = $mysqli->prepare("UPDATE game SET gameStarted = '2' WHERE id = ?"); 
     $stmt->bind_param("i", $game_id);
@@ -452,6 +456,8 @@ function endGame($game_id) {
     $stmt->fetch();
     $stmt->close();
     
+    $game_id= 701; // debug reasons
+
     $overallStats = (object)[];
     
     $stmt = $mysqli->prepare("SELECT currentRound-1 FROM game WHERE id = ?"); 
@@ -460,7 +466,7 @@ function endGame($game_id) {
     $stmt->execute();
     $stmt->fetch();
     $stmt->close();
-    
+
     $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_wanted), max(fish_wanted) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->fishSum, $overallStats->fishAvg, $overallStats->fishMin, $overallStats->fishMax);
