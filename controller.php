@@ -76,9 +76,9 @@ switch($action) {
         break;
         
     case "submitFish":
-        if(isset($_POST['game_id']) && isset($_POST['playerFish']) && isset($_POST['team_id']) && is_numeric($_POST['game_id']) && is_numeric($_POST['playerFish']) && is_numeric($_POST['team_id']) && (filter_var($_POST['playerFish'], FILTER_VALIDATE_INT) || $_POST['playerFish'] === '0')) {
-            //echo json_encode(gameStats($game_id));
-            echo json_encode(submitFish($_POST["game_id"], $_POST['playerFish'], $_POST['team_id']));
+        if(isset($_SESSION['gameId']) && isset($_POST['playerFish']) && isset($_SESSION['teamId']) && (filter_var($_POST['playerFish'], FILTER_VALIDATE_INT) || $_POST['playerFish'] === '0')) {
+            // echo json_encode(gameStats($game_id));
+            echo json_encode(submitFish($_SESSION["gameId"], $_POST['playerFish'], $_SESSION['teamId']));
         } else {
             echo json_encode(["success" => false]);
         }
@@ -86,9 +86,8 @@ switch($action) {
 
     case "roundOver":
         if (isset($_SESSION["loggedIn"])){     
-            
-            if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
-                echo json_encode(roundOver($_POST['game_id'])); 
+            if(isset($_SESSION['gameId'])) { 
+                echo json_encode(roundOver($_SESSION['gameId'])); 
             } else {
                 echo json_encode(["success" => false]);
             }
@@ -120,23 +119,25 @@ switch($action) {
         session_unset();
         echo json_encode(["success" => true]);
         break;
+
     case "playerFish":
-        if(isset($_POST["team_id"]) && is_numeric($_POST['team_id'])) {
-            echo json_encode(playerFish($_POST["team_id"]));
+        if(isset($_SESSION["teamId"])) {
+            echo json_encode(playerFish($_SESSION["teamId"]));
         }
         break;
+
     case "endGame":
         if (isset($_SESSION["loggedIn"])){     
-            if(isset($_POST['game_id']) && is_numeric($_POST['game_id'])) { 
-                echo endGame($_POST['game_id']); 
+            if(isset($_SESSION['gameId'])) { 
+                echo endGame($_SESSION['gameId']); 
             }
         } else {
             echo json_encode(["success" => false]);
-            
         }
         break;
+
     default:
-        echo  "Invalid action";
+        echo "Invalid action";
         break;
     }
 
@@ -224,7 +225,8 @@ function createGame(){
     $game_id = $stmt->insert_id;
     $stmt->close();
     $mysqli->close(); 
-    return(['id' => $game_id ,'gameCode' => $gameCode]); 
+    $_SESSION['gameId'] = $gameId;
+    return(['gameCode' => $gameCode]); 
 }
 
 function generateGameCode(){
@@ -361,7 +363,10 @@ function joinGame($gameCode, $teamName) {
                 $teamId = $stmt->insert_id;
                 $stmt->close();
                 $mysqli->close();
-                return ['gameId' => $gameId, 'teamId' => $teamId];
+                $_SESSION['gameId'] = $gameId;
+                $_SESSION['teamId'] = $teamId;   
+                return ['success' => false];
+                // return ['gameId' => $gameId, 'teamId' => $teamId];
             }else{
                 $mysqli->close();
                 return ['success' => false];
@@ -452,7 +457,7 @@ function endGame($game_id) {
     $stmt->fetch();
     $stmt->close();
     
-    $game_id= 701
+    $game_id= 701; // debug reasons
 
     $overallStats = (object)[];
     
@@ -462,7 +467,7 @@ function endGame($game_id) {
     $stmt->execute();
     $stmt->fetch();
     $stmt->close();
-    |||||||||||||||||
+
     $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_wanted), max(fish_wanted) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->fishSum, $overallStats->fishAvg, $overallStats->fishMin, $overallStats->fishMax);
