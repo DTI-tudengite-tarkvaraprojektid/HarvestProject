@@ -8,17 +8,7 @@
   box-shadow: 5px 10px 220px black inset;
   overflow: hidden; 
 }
-    
-/*svg#fish {
-      top: 20em;
-    }*/
 
-    /* Fish Animation 
-svg .fish {
-      overflow: hidden;
-    }
-    */
-    
 @-webkit-keyframes swim {
   0% {margin-left: -100%}
   100% {margin-left: 100%;}
@@ -51,15 +41,16 @@ svg .fish {
   position: absolute;	
   animation: swim 10s;
   -webkit-animation: swim 10s;
-  animation-iteration-count: infinite;
-  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: 1;
+  -webkit-animation-iteration-count: 1;
   animation-timing-function: linear;
   -webkit-animation-timing-function: linear;
   animation-direction: reverse;
 }
 
 .fish > path {
-  fill:#74f8f8;
+  fill:#528484;
+  box-shadow: 1px 25px 0px rgb(14, 75, 80) inset;
   -moz-animation: bounce 2s infinite;
   -webkit-animation: bounce 2s infinite;
   animation: bounce 2s infinite;
@@ -67,14 +58,10 @@ svg .fish {
 
 .fishReverse > path {
   fill:#528484;
+  box-shadow: 1px 25px 0px rgb(14, 75, 80) inset;
   -moz-animation: bounce 4s infinite;
   -webkit-animation: bounce 4s infinite;
   animation: bounce 4s infinite;
-}
-
-.bounce > path {
-  animation-delay: 0s;
-  -webkit-animation-delay: 0s;
 }
 
 .bounce2 > path {

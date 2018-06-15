@@ -142,13 +142,13 @@ switch($action) {
 
 function login($username, $password){
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-    $stmt= $mysqli->prepare("SELECT id, username, password FROM users WHERE username = ?");
+    $stmt= $mysqli->prepare("SELECT username, password FROM users WHERE username = ?");
 	$stmt->bind_param("s", $username);
-	$stmt->bind_result($id, $username, $passwordDB);
+	$stmt->bind_result($usernameDB, $passwordDB);
 	$stmt->execute();
 
     if($stmt->fetch()){
-        if(hash("sha512", $password) == $passwordDB){	
+        if(hash("sha512", $password) == $passwordDB && $username == $usernameDB){	
             $_SESSION["loggedIn"] = true;
         }
 	}
@@ -173,12 +173,14 @@ function submitFish($game_id, $playerFish, $team_id){
         $stmt->execute();
         $result = $stmt->fetch();
         $stmt->close();
-        $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
-        $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
-        $stmt->execute();   
-        $stmt->close();
-        $mysqli->close();
-        return ['success' => true];
+        if(is_numeric($playerFish)){
+            $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
+            $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
+            $stmt->execute();   
+            $stmt->close();
+            $mysqli->close();
+            return ['success' => true];
+        }
     }else{
         return ['success' => false];
     }         
@@ -350,18 +352,20 @@ function joinGame($gameCode, $teamName) {
         $mysqli->close();
         return ['success' => false];
     } else {
-        if(strlen($teamName) <= 15){
-            $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
-            // var_dump($gameId, $teamName); die;
-            $stmt->bind_param("is", $gameId, $teamName);
-            $stmt->execute();
-            $teamId = $stmt->insert_id;
-            $stmt->close();
-            $mysqli->close();
-            $_SESSION['gameId'] = $gameId;
-            $_SESSION['teamId'] = $teamId;    
-            return ['success' => true];
-            // return ['gameId' => $gameId, 'teamId' => $teamId];
+        if(strlen($teamName) <= 15 && strlen($gameCode) == 4){
+            if(preg_match('/[A-z0-9À-ž]/', $teamName) && preg_match('/[A-z0-9]/', $teamName)){
+                $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
+                //var_dump($gameId, $teamName); die;
+                $stmt->bind_param("is", $gameId, $teamName);
+                $stmt->execute();
+                $teamId = $stmt->insert_id;
+                $stmt->close();
+                $mysqli->close();
+                return ['gameId' => $gameId, 'teamId' => $teamId];
+            }else{
+                $mysqli->close();
+                return ['success' => false];
+            }
         }
     }
 }
