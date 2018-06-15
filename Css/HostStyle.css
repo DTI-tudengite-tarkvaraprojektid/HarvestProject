@@ -185,22 +185,23 @@ table {
     border: 2px solid #2B3856;
     border-radius:6px;
     -moz-border-radius:8px;
-    text-align: left;
+    /*text-align: left;*/
     margin-bottom: 12px;
     font-size: 30px;
     width: 100%;
     border-spacing: 1px;
+    text-align: center;
 }
 
 th {
     font-weight: bold;
 }
 
-td,th{
+td{
     border:none;
 }
 
-tr:nth-child(even) {background: #a89772}
+tr:nth-child(even) {background: #d8caac}
 tr:nth-child(odd) {background: #e5e4c4}
 
 .fishRobbery{
