@@ -456,7 +456,7 @@ function endGame($game_id) { // changes game status to ended and returns game st
     $stmt->fetch();
     $stmt->close();
     
-    $game_id= 701; // debug reasons
+    //$game_id= 701; // debug reasons
 
     $overallStats = (object)[];
     
