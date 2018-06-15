@@ -58,7 +58,7 @@ window.onload = function () {
   }
 }
 
-function gameJoin () {
+function gameJoin () { // lets player join game and checks inputs(is alphanumeric? is right length?), if joined directs to other view, starts interval for function gameStart
   let button = document.getElementById('joinButton')
   button.addEventListener('click', function (event) {
     if (!locked) {
@@ -66,16 +66,6 @@ function gameJoin () {
       button.disabled = true
       let gameCode = document.getElementById('gameCode').value
       let teamName = document.getElementById('teamName').value
-      // check inputs
-      /* if (teamName.match(/[^A-z0-9À-ž]+/g) && gameCode.match(/[^A-z0-9À-ž]+/g)) {
-        console.log('tiimi nimi not OK')
-        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
-        document.getElementById('teamName').style.borderColor = 'red'
-        button.disabled = false
-        errorDivMoveDown()
-
-        locked = false
-      } else { */
       if (gameCode.length === 4 && teamName.length < 15 && teamName.match(/[A-z0-9À-ž]+/g) && gameCode.match(/[A-z0-9]+/g)) {
         console.log('tiimi nimi OK')
         let data = new FormData()
@@ -114,7 +104,7 @@ function gameJoin () {
   })
 }
 
-function gameStart () {
+function gameStart () { // checks if game has started yet, if yes directs to other view, if not then stays
   let gameStartInterval = setInterval(function () {
     let data = new FormData()
     data.append('game_id', gameId)
@@ -141,7 +131,7 @@ function gameStart () {
   }, 1000)
 }
 
-function waitPlayers () {
+function waitPlayers () { // checks how many players are ready and shows it to player who has submitted fihWanted
   let waitSpan = document.getElementById('waitSpan')
   let waitPlayersInterval = setInterval(function () {
     let data = new FormData()
@@ -173,7 +163,7 @@ function waitPlayers () {
   }, 1000)
 }
 
-function round () {
+function round () { // shows player how many fishes was caught last round and how many have been caught by him/her this game
   locked = false
   fishInput.value = ''
   currentFishLabel = document.getElementById('currentFish')
@@ -188,11 +178,11 @@ function round () {
   })
 }
 
-function isInteger (x) {
+function isInteger (x) { // checks if is integrer
   return (typeof x === 'number') && (x % 1 === 0)
 }
 
-function submitFish () {
+function submitFish () { // checks if fish input is integrer and is there that much fish in sea, if yes, submits fishWanted
   if (!locked) {
     locked = true
     console.log('click')
@@ -240,7 +230,7 @@ function submitFish () {
   }
 }
 
-function isGameOver () {
+function isGameOver () { // if game is over directs to other view
   let data = new FormData()
   data.append('game_id', gameId)
   ajaxPost('gameStarted', data, function (response) {

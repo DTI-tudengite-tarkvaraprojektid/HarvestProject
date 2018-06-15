@@ -25,7 +25,7 @@ function loadHTML (myDivId, url, cFunction) { // https://stackoverflow.com/quest
   xmlhttp.send()
 }
 
-function ajaxPost (action, data, cFunction) {
+function ajaxPost (action, data, cFunction) { // performs POST actions
   let request = new XMLHttpRequest()
   let url = 'controller.php?action=' + action
   // let data = new FormData()
@@ -49,7 +49,7 @@ function ajaxPost (action, data, cFunction) {
   request.send(data)
 }
 
-function ajaxGet (action, cFunction) {
+function ajaxGet (action, cFunction) { // performs GET actions
   let request = new XMLHttpRequest()
   let url = 'controller.php?action=' + action
   request.open('GET', url, true)
@@ -69,7 +69,7 @@ function ajaxGet (action, cFunction) {
   request.send()
 }
 
-function switchView (view, toView) {
+function switchView (view, toView) { // switches views
   let currentView = document.getElementById(view)
   let newView = document.getElementById(toView)
   currentView.style.display = 'none'
@@ -116,7 +116,7 @@ function UpdateQueryString (key, value) { // https://stackoverflow.com/questions
   }
 }
 
-function errorDivMoveDown () {
+function errorDivMoveDown () { // moves error div
   let elem = document.getElementById('errorDiv')
   // console.log(elem.offsetTop)
   if (elem.offsetTop !== -45) {
