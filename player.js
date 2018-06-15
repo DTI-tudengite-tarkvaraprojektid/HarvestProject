@@ -100,6 +100,14 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
         errorDivMoveDown()
         locked = false
         }
+      }else {
+        console.log('errorDiv tuleb')
+        errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
+        document.getElementById('gameCode').style.borderColor = 'red'
+        document.getElementById('teamName').style.borderColor = 'red'
+        button.disabled = false
+        errorDivMoveDown()
+        locked = false
       }
     }
   })
