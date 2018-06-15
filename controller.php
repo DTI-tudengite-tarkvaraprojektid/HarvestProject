@@ -11,28 +11,28 @@ session_start();
 
 switch($action) {
     case "gameStarted" : 
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(gameStarted($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(gameStarted($_SESSION["gameId"]));
         }
         break;
 
     case "gameStats":
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(gamestats($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(gamestats($_SESSION["gameId"]));
         } else {
             echo json_encode(["success" => false]);
         }
         break;
 
     case "playersReady":
-        if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-            echo json_encode(playersReady($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(playersReady($_SESSION["gameId"]));
         }
         break;
 
     case "getPlayers":
-        if(isset($_POST["game_id"])) {
-            echo json_encode(getPlayers($_POST["game_id"]));
+        if(isset($_SESSION["gameId"])) {
+            echo json_encode(getPlayers($_SESSION["gameId"]));
         } else {
             echo json_encode(["success" => false]);
         }
@@ -57,8 +57,8 @@ switch($action) {
 
     case "startGame":
         if (isset($_SESSION["loggedIn"])) {
-            if(isset($_POST["game_id"]) && is_numeric($_POST["game_id"])) {
-                echo json_encode(startGame($_POST["game_id"]));
+            if(isset($_SESSION["gameId"])) {
+                echo json_encode(startGame($_SESSION["gameId"]));
             } else {
                 echo json_encode(["success" => false]);
             }
@@ -228,7 +228,7 @@ function createGame(){
 function generateGameCode(){
     $codeLenght = 4;
     $characters = 'abdefghjklmpqrsvwxyz2345678923456789';
-    $charArrayLength = strlen($characters)-1;
+    $charArrayLength = strlen($characters);
     $codesArray = [];
 
     $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
@@ -242,7 +242,7 @@ function generateGameCode(){
     do {
         $gameCode = ""; 
         for ($i = 0; $i < $codeLenght; $i++) {
-            $gameCode .= $characters[mt_rand(0, $charArrayLength)];
+            $gameCode .= $characters[mt_rand(0, $charArrayLength)]; // generates random game code from characters string
         }
     } while(in_array($gameCode, $codesArray)); 
     return $gameCode;
@@ -346,19 +346,22 @@ function joinGame($gameCode, $teamName) {
     $result = $stmt->fetch();
     $stmt->close();
     if(!$gameId) {
-        //var_dump($gameId ); die;
+        // var_dump($gameId ); die;
         $mysqli->close();
         return ['success' => false];
     } else {
         if(strlen($teamName) <= 15){
             $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
-            //var_dump($gameId, $teamName); die;
+            // var_dump($gameId, $teamName); die;
             $stmt->bind_param("is", $gameId, $teamName);
             $stmt->execute();
             $teamId = $stmt->insert_id;
             $stmt->close();
             $mysqli->close();
-            return ['gameId' => $gameId, 'teamId' => $teamId];
+            $_SESSION['gameId'] = $gameId;
+            $_SESSION['teamId'] = $teamId;    
+            return ['success' => true];
+            // return ['gameId' => $gameId, 'teamId' => $teamId];
         }
     }
 }
@@ -445,6 +448,8 @@ function endGame($game_id) {
     $stmt->fetch();
     $stmt->close();
     
+    $game_id= 701
+
     $overallStats = (object)[];
     
     $stmt = $mysqli->prepare("SELECT currentRound-1 FROM game WHERE id = ?"); 
@@ -453,7 +458,7 @@ function endGame($game_id) {
     $stmt->execute();
     $stmt->fetch();
     $stmt->close();
-    
+    |||||||||||||||||
     $stmt = $mysqli->prepare("SELECT sum(fish_caught), avg(fish_caught), min(fish_wanted), max(fish_wanted) FROM turn WHERE round_id IN (SELECT id FROM `round` where game_id = ?)"); 
     $stmt->bind_param("i", $game_id);
     $stmt->bind_result($overallStats->fishSum, $overallStats->fishAvg, $overallStats->fishMin, $overallStats->fishMax);
