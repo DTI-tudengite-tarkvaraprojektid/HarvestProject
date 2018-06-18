@@ -14,6 +14,8 @@ switch($action) {
     case "gameStarted" : 
         if(isset($_SESSION["gameId"])) {
             echo json_encode(gameStarted($_SESSION["gameId"]));
+        } else {
+            echo json_encode(["success" => false]);
         }
         break;
 
@@ -343,7 +345,7 @@ function gameStats($game_id){ // calls game stats from database
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound, "fishInSea" => $fishInSea, "playerFishTimes" => (($_SESSION['fishTimes']) ? $_SESSION['fishTimes'] : null)]);
+    return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound, "fishInSea" => $fishInSea, "playerFishTimes" => $_SESSION['fishTimes']]);
 }
 
 function joinGame($gameCode, $teamName) { // adds players to game in database, also checks if inputs are alphanumeric and if the length is right
@@ -499,7 +501,7 @@ function endGame($game_id) { // changes game status to ended and returns game st
          $teams[] = ['id' => $teamId, 'name' => $teamName, 'rounds' => $rounds];
     }
     $stmt->close();
-    for ($i = 0; $i <= sizeof($teams)-1; $i++) {
+    for ($i = 0; $i < sizeof($teams); $i++) {
         $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE round_id IN (SELECT id FROM round where game_id = ? ORDER BY roundNr DESC) AND team_id = ?"); 
         $stmt->bind_param("ii", $game_id, $teams[$i]['id']);
         $stmt->bind_result($caught);

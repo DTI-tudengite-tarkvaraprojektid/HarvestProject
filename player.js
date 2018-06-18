@@ -3,70 +3,97 @@ let locked = false
 
 window.onload = function () {
   errorDiv = document.getElementById('errorDiv')
-  loadHTML('content', 'views/joinScreen.html', function () {
-    history.replaceState({}, document.title, '.')
-    gameJoin()
+  ajaxGet('gameStarted', function (response) {
+    if (response.gameStarted === 0) {
+      loadHTML('content', 'views/joinScreen.html', function () {
+        gameStart()
+      })
+    } else if (response.gameStarted === 1) {
+      ajaxGet('gameStats', function (response) {
+        if (response.maxPlayers) {
+          if (response.currentRound === response.playerFishTimes) {
+            gameStart()
+            switchView('fish-view', 'wait-view')
+            waitPlayers()
+          } else {
+            gameStart()
+          }
+        }
+      })
+    } else if (response.gameStarted === 2) {
+      loadHTML('content', 'views/joinScreen.html', function () {
+        gameJoin()
+      })
+    } else {
+      loadHTML('content', 'views/joinScreen.html', function () {
+        gameJoin()
+      })
+    }
   })
 }
 
 function gameJoin () { // lets player join game and checks inputs(is alphanumeric? is right length?), if joined directs to other view, starts interval for function gameStart
-  let button = document.getElementById('joinButton')
-  button.addEventListener('click', function (event) {
-    if (!locked) {
-      locked = true
-      button.disabled = true
-      let gameCode = document.getElementById('gameCode').value
-      let teamName = document.getElementById('teamName').value
-      // check inputs
-      let regex = /^(?=.*[A-Za-z0-9À-ž])[A-Za-z0-9À-ž _\-]*$/g
-      if (regex.test(teamName) && teamName.length < 15) {
-      // if (!teamName.match(regex) && !gameCode.match(regex)) {
-        let regex2 = /^[a-zA-Z0-9]*$/g
-        if (regex2.test(gameCode) && gameCode.length == 4) {
-          console.log('testin gameCode')
-          console.log('tiimi nimi OK')
-          let data = new FormData()
-          data.append('gameCode', gameCode)
-          data.append('teamName', teamName)
-          ajaxPost('joinGame', data, function (response) {
-            if (response.success === true) {
-              errorDiv.innerHTML = ''
-              // gameId = response.gameId
-              // teamId = response.teamId
-              // UpdateQueryString('gameId', response.gameId)
-              // UpdateQueryString('teamId', response.teamId)
-              loadHTML('content', 'views/joinedScreen.html', function () {
-                location.hash = 'joined'
-                gameStart()
+  ajaxGet('logOut', function (response) {
+    if (response.success) {
+      let button = document.getElementById('joinButton')
+      button.addEventListener('click', function (event) {
+        if (!locked) {
+          locked = true
+          button.disabled = true
+          let gameCode = document.getElementById('gameCode').value
+          let teamName = document.getElementById('teamName').value
+          // check inputs
+          let regex = /^(?=.*[A-Za-z0-9À-ž])[A-Za-z0-9À-ž _\-]*$/g
+          if (regex.test(teamName) && teamName.length < 15) {
+          // if (!teamName.match(regex) && !gameCode.match(regex)) {
+            let regex2 = /^[a-zA-Z0-9]*$/g
+            if (regex2.test(gameCode) && gameCode.length == 4) {
+              console.log('testin gameCode')
+              console.log('tiimi nimi OK')
+              let data = new FormData()
+              data.append('gameCode', gameCode)
+              data.append('teamName', teamName)
+              ajaxPost('joinGame', data, function (response) {
+                if (response.success === true) {
+                  errorDiv.innerHTML = ''
+                  // gameId = response.gameId
+                  // teamId = response.teamId
+                  // UpdateQueryString('gameId', response.gameId)
+                  // UpdateQueryString('teamId', response.teamId)
+                  loadHTML('content', 'views/joinedScreen.html', function () {
+                    location.hash = 'joined'
+                    gameStart()
+                  })
+                } else {
+                  errorDiv.innerHTML = 'Vigane mängukood!'
+                  document.getElementById('gameCode').style.borderColor = 'red'
+                  button.disabled = false
+                  errorDivMoveDown()
+                  locked = false
+                }
               })
+            }
+          } else {
+            console.log('tiimi nimi not OK')
+            errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
+            document.getElementById('teamName').style.borderColor = 'red'
+            button.disabled = false
+            errorDivMoveDown()
+            locked = false
+            if (gameCode.length === 4 && teamName.length < 15) {
+
             } else {
-              errorDiv.innerHTML = 'Vigane mängukood!'
+              console.log('errorDiv tuleb')
+              errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
               document.getElementById('gameCode').style.borderColor = 'red'
+              document.getElementById('teamName').style.borderColor = 'red'
               button.disabled = false
               errorDivMoveDown()
               locked = false
             }
-          })
+          }
         }
-      } else {
-        console.log('tiimi nimi not OK')
-        errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
-        document.getElementById('teamName').style.borderColor = 'red'
-        button.disabled = false
-        errorDivMoveDown()
-        locked = false
-        if (gameCode.length === 4 && teamName.length < 15) {
-
-        } else {
-          console.log('errorDiv tuleb')
-          errorDiv.innerHTML = 'Vigane tiimi nimi või mängukood!'
-          document.getElementById('gameCode').style.borderColor = 'red'
-          document.getElementById('teamName').style.borderColor = 'red'
-          button.disabled = false
-          errorDivMoveDown()
-          locked = false
-        }
-      }
+      })
     }
   })
 }
@@ -85,10 +112,9 @@ function gameStart () { // checks if game has started yet, if yes directs to oth
         fishInput = document.getElementById('fishInput')
         let backButton = document.getElementById('backButton')
         backButton.addEventListener('click', function (event) {
-          history.replaceState({}, document.title, '.')
           location.reload()
         })
-        endInterval = setInterval(isGameOver(), 3000)
+        endInterval = setInterval(isGameOver, 3000)
       } /* else {
         console.log('ilmnes viga')
       } */
