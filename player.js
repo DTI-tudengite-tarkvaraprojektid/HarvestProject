@@ -12,11 +12,15 @@ window.onload = function () {
       ajaxGet('gameStats', function (response) {
         if (response.maxPlayers) {
           if (response.currentRound === response.playerFishTimes) {
-            gameStart()
-            switchView('fish-view', 'wait-view')
-            waitPlayers()
+            loadHTML('content', 'views/joinedScreen.html', function () {
+              gameStart()
+              switchView('fish-view', 'wait-view')
+              waitPlayers()
+            })
           } else {
-            gameStart()
+            loadHTML('content', 'views/joinedScreen.html', function () {
+              gameStart()
+            })
           }
         }
       })
@@ -61,7 +65,6 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
                   // UpdateQueryString('gameId', response.gameId)
                   // UpdateQueryString('teamId', response.teamId)
                   loadHTML('content', 'views/joinedScreen.html', function () {
-                    location.hash = 'joined'
                     gameStart()
                   })
                 } else {

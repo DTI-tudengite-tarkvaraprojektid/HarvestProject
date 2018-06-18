@@ -435,7 +435,7 @@ function playerFish($team_id) { // calls player info from database(fish cught in
     $stmt->fetch();
     $stmt->close();
     $gameStats = gameStats($gameId);
-    if($_SESSION['fishTimes']+1 === $gameStats['currentRound']) {
+    if($_SESSION['fishTimes'] === $gameStats['currentRound']) {
         $totalFish = 0;
         $lastFish = 0;
         $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id IN (SELECT id FROM `round` WHERE game_id = ?)"); 
