@@ -209,8 +209,8 @@ function isGameOver () { // if game is over directs to other view
     if (response.gameStarted === 2) {
       clearInterval(waitPlayersInterval)
       clearInterval(endInterval)
-      switchView('fish-view', 'end-view')
-      switchView('wait-view', 'end-view')
+      switchView('fish-view', 'over-view')
+      switchView('wait-view', 'over-view')
       ajaxGet('logOut', function (response) {})
     }
   })
