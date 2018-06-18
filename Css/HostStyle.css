@@ -13,9 +13,10 @@
 }
 
 .main {
-    overflow: hidden !important;
+    /*overflow: hidden !important;*/
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
     margin:0px;
+    overflow-y: scroll;
 }
 
 .inputBox {
