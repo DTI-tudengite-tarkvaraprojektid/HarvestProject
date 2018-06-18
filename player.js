@@ -11,7 +11,7 @@ window.onload = function () {
     } else if (response.gameStarted === 1) {
       ajaxGet('gameStats', function (response) {
         if (response.maxPlayers) {
-          if (response.currentRound === response.playerFishTimes) {
+          if (response.currentRound === response.playerFishTimes + 2) {
             loadHTML('content', 'views/joinedScreen.html', function () {
               gameStart()
               switchView('fish-view', 'wait-view')
