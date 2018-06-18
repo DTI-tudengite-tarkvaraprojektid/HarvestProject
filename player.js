@@ -1,61 +1,12 @@
-let errorDiv, gameId, teamId, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound, endInterval
+let errorDiv, maxPlayers, currentFishLabel, lastRoundFishLabel, fishSubmitButton, fishInput, currentRound, endInterval, waitPlayersInterval
 let locked = false
 
 window.onload = function () {
   errorDiv = document.getElementById('errorDiv')
-  let params = getParameters()
-  if (params.gameId && params.teamId && location.hash) {
-    gameId = params.gameId
-    teamId = params.teamId
-    let data = new FormData()
-    data.append('game_id', gameId)
-    ajaxPost('gameStarted', data, function (response) {
-      if (response.gameStarted || response.gameStarted === 0) {
-        // let <-- uuri mis let see olema oleks pidanud
-        if (response.gameStarted === 2 || response.gameStarted === 3) {
-          loadHTML('content', 'views/joinScreen.html', function () {
-            history.replaceState({}, document.title, '.')
-            gameJoin()
-          })
-        } else if (response.gameStarted === 1) {
-          ajaxPost('gameStats', data, function (response) {
-            if (response.maxPlayers) {
-              loadHTML('content', 'views/joinedScreen.html', function () {
-                switch (location.hash) {
-                  case '#joined':
-                    gameStart(gameId)
-                    break
-                  case '#fish':
-                    // code block
-                    break
-                  case '#wait':
-                    // code block
-                    break
-                  default:
-                    alert('vigane view')
-                }
-              })
-            }
-          })
-        } else {
-          loadHTML('content', 'views/joinedScreen.html', function () {
-            location.hash = 'joined'
-            // gameStart(gameId)
-          })
-        }
-      } else {
-        loadHTML('content', 'views/joinScreen.html', function () {
-          history.replaceState({}, document.title, '.')
-          gameJoin()
-        })
-      }
-    })
-  } else {
-    loadHTML('content', 'views/joinScreen.html', function () {
-      history.replaceState({}, document.title, '.')
-      gameJoin()
-    })
-  }
+  loadHTML('content', 'views/joinScreen.html', function () {
+    history.replaceState({}, document.title, '.')
+    gameJoin()
+  })
 }
 
 function gameJoin () { // lets player join game and checks inputs(is alphanumeric? is right length?), if joined directs to other view, starts interval for function gameStart
@@ -86,7 +37,7 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
               // UpdateQueryString('teamId', response.teamId)
               loadHTML('content', 'views/joinedScreen.html', function () {
                 location.hash = 'joined'
-                gameStart(gameId)
+                gameStart()
               })
             } else {
               errorDiv.innerHTML = 'Vigane mängukood!'
@@ -103,7 +54,6 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
         document.getElementById('teamName').style.borderColor = 'red'
         button.disabled = false
         errorDivMoveDown()
-
         locked = false
         if (gameCode.length === 4 && teamName.length < 15) {
 
@@ -148,7 +98,7 @@ function gameStart () { // checks if game has started yet, if yes directs to oth
 
 function waitPlayers () { // checks how many players are ready and shows it to player who has submitted fihWanted
   let waitSpan = document.getElementById('waitSpan')
-  let waitPlayersInterval = setInterval(function () {
+  waitPlayersInterval = setInterval(function () {
     ajaxGet('playersReady', function (response) {
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
@@ -239,6 +189,7 @@ function submitFish () { // checks if fish input is integrer and is there that m
 function isGameOver () { // if game is over directs to other view
   ajaxGet('gameStarted', function (response) {
     if (response.gameStarted === 2) {
+      clearInterval(waitPlayersInterval)
       clearInterval(endInterval)
       switchView('fish-view', 'end-view')
       switchView('wait-view', 'end-view')

@@ -264,31 +264,31 @@ function updateFish (currentFish) { // creates fish animation on game view
 
   fishInterval = setInterval(function () {
     randomFishPlace = Math.round(((Math.random() * newHeight) + 100), 3)
-    let newFish = document.createElementNS('http://www.w3.org/2000/svg','svg') 
-    let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    let gradient = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+    let newFish = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
+    let gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient')
     let stops = [
       {
-        "color": "rgb(225, 174, 182)",
-        "offset": "0%"
-    },{
-        "color": "rgb(33, 131, 138)",
-        "offset": "100%"
-    }] 
+        'color': 'rgb(225, 174, 182)',
+        'offset': '0%'
+      }, {
+        'color': 'rgb(33, 131, 138)',
+        'offset': '100%'
+      }]
     for (let i = 0, length = stops.length; i < length; i++) {
-      let stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      stop.setAttribute('offset', stops[i].offset);
-      stop.setAttribute('stop-color', stops[i].color);
-      gradient.appendChild(stop);
+      let stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop')
+      stop.setAttribute('offset', stops[i].offset)
+      stop.setAttribute('stop-color', stops[i].color)
+      gradient.appendChild(stop)
     }
-    gradient.id = 'Gradient';
-    gradient.setAttribute('x1', '0%');
-    gradient.setAttribute('x2', '0%');
-    gradient.setAttribute('y1', '100%');
-    gradient.setAttribute('y2', '0%');
-    defs.appendChild(gradient);
+    gradient.id = 'Gradient'
+    gradient.setAttribute('x1', '0%')
+    gradient.setAttribute('x2', '0%')
+    gradient.setAttribute('y1', '100%')
+    gradient.setAttribute('y2', '0%')
+    defs.appendChild(gradient)
 
-    if(fishSwitch===1 || fishSwitch===3){
+    if (fishSwitch === 1 || fishSwitch === 3) {
       newFish.setAttribute('class', 'fish')
       if (fishSwitch === 3) {
         newFish.setAttribute('class', 'fish bounce2')
