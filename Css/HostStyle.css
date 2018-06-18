@@ -199,6 +199,12 @@ td,th {
     padding: 10px;
 }
 
+table >tbody>tr:nth-child(2){
+    background:#c4b598 !important;
+}
+table >thead>tr:nth-child(2){
+    background:#c4b598 !important;
+}
 tr:nth-child(even) {background: #d8caac}
 tr:nth-child(odd) {background: #e5e4c4}
 
