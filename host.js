@@ -182,6 +182,17 @@ function endGame () { // ends the gameand directs to statistics view and creates
       cell = row.insertCell(5)
       cell.innerHTML = response.overallStats.fishMax
 
+      let leaderboard = document.getElementById('leaderboard')
+      for (let i = 0; i < response.teams.length; i++) {
+        row = leaderboard.insertRow(i + 1)
+        cell = row.insertCell(0)
+        cell.innerHTML = '<b>' + (i + 1) + '.</b>'
+        cell = row.insertCell(1)
+        cell.innerHTML = response.teams[i]['name']
+        cell = row.insertCell(2)
+        cell.innerHTML = response.teams[i]['total']
+      }
+
       let scoreTabel = document.getElementById('scoreTabel')
       let header = scoreTabel.createTHead()
       row = header.insertRow(0)
@@ -333,11 +344,8 @@ function updateFish (currentFish) { // creates fish animation on game view
 }
 
 function deleteFish () { // deletes fish animation
-  let fishElements = document.getElementsByClassName('fish')
-  let fishElementsReverse = document.getElementsByClassName('fishReverse')
-  while (fishElements.length > 0 && fishElementsReverse.length > 0) {
-    fishElements[0].parentNode.removeChild(fishElements[0])
-    fishElementsReverse[0].parentNode.removeChild(fishElementsReverse[0])
+  while (seaDiv.length > 0) {
+    seaDiv[0].parentNode.removeChild(seaDiv[0])
   }
 }
 
