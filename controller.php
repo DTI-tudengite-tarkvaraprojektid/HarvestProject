@@ -173,25 +173,28 @@ function login($username, $password){ // checks if user name and password matche
 
 function submitFish($game_id, $playerFish, $team_id){ // adds players fishWanted to database
     $gameStats = gameStats($game_id);
-    if($gameStats["maxPlayers"]*10 >= $playerFish && $gameStats['fishInSea'] >= $playerFish){
-        $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
-        $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND roundNr = ?"); 
-        $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
-        $stmt->bind_result($round_id);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        $stmt->close();
-        if(is_numeric($playerFish)){
-            $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
-            $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
-            $stmt->execute();   
+    if($_SESSION['fishTimes']+1 === $gameStats['currentRound']) {
+        if($gameStats["maxPlayers"]*10 >= $playerFish && $gameStats['fishInSea'] >= $playerFish){
+            $mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]); 
+            $stmt = $mysqli->prepare("SELECT id FROM round WHERE game_id = ? AND roundNr = ?"); 
+            $stmt->bind_param("ii", $game_id, $gameStats['currentRound']);
+            $stmt->bind_result($round_id);
+            $stmt->execute();
+            $result = $stmt->fetch();
             $stmt->close();
-            $mysqli->close();
-            return ['success' => true];
-        }
-    }else{
-        return ['success' => false];
-    }         
+            if(is_numeric($playerFish)){
+                $stmt = $mysqli->prepare("INSERT INTO turn (round_id, fish_wanted, team_id) VALUES(?, ?, ?)");
+                $stmt->bind_param("iii",$round_id, $playerFish, $team_id);
+                $stmt->execute();   
+                $stmt->close();
+                $mysqli->close();
+                $_SESSION['fishTimes']++;
+                return ['success' => true];
+            }
+        } else {
+            return ['success' => false];
+        }  
+    } else return ['success' => false];
 }
 
 function createGame(){ // checks if came id is already used, if not creates new game. Deletes old games after 1 day. Calls generateGameCode
@@ -360,11 +363,8 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
     $stmt->execute();
     $result = $stmt->fetch();
     $stmt->close();
-    if(!$gameId) {
+    if($gameId) {
         // var_dump($gameId ); die;
-        $mysqli->close();
-        return ['success' => false];
-    } else {
         $stmt = $mysqli->prepare("INSERT into team (`game_id`, `name`) VALUES (?, ?)"); 
         //var_dump($gameId, $teamName); die;
         $stmt->bind_param("is", $gameId, $teamName);
@@ -376,7 +376,10 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
         $_SESSION['teamId'] = $teamId;
         $_SESSION['fishTimes'] = 0;
         return ['success' => true];
+    } else {
         // return ['gameId' => $gameId, 'teamId' => $teamId];  
+        $mysqli->close();
+        return ['success' => false];
     }
 }
 
@@ -439,24 +442,19 @@ function playerFish($team_id) { // calls player info from database(fish cught in
     $stmt->fetch();
     $stmt->close();
     $gameStats = gameStats($gameId);
-    if($_SESSION['fishTimes']+2 === $gameStats['currentRound']) {
-        $totalFish = 0;
-        $lastFish = 0;
-        $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id IN (SELECT id FROM `round` WHERE game_id = ?)"); 
-        $stmt->bind_param("ii", $team_id, $gameId);
-        $stmt->bind_result($fish);
-        $stmt->execute();
-        while($stmt->fetch()) {
-            $totalFish += $fish;
-        }
-        $lastFish = $fish;
-        $stmt->close();
-        $mysqli->close();
-        $_SESSION['fishTimes'] += 1;
-        return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
-    } else {
-        return ['success' => false];
+    $totalFish = 0;
+    $lastFish = 0;
+    $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id IN (SELECT id FROM `round` WHERE game_id = ?)"); 
+    $stmt->bind_param("ii", $team_id, $gameId);
+    $stmt->bind_result($fish);
+    $stmt->execute();
+    while($stmt->fetch()) {
+        $totalFish += $fish;
     }
+    $lastFish = $fish;
+    $stmt->close();
+    $mysqli->close();
+    return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
 }
 
 function endGame($game_id) { // changes game status to ended and returns game statistics

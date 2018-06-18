@@ -11,7 +11,7 @@ window.onload = function () {
     } else if (response.gameStarted === 1) {
       ajaxGet('gameStats', function (response) {
         if (response.maxPlayers) {
-          if (response.currentRound === response.playerFishTimes) {
+          if (response.currentRound === response.playerFishTimes + 2) {
             loadHTML('content', 'views/joinedScreen.html', function () {
               gameStart()
               switchView('fish-view', 'wait-view')
@@ -180,6 +180,7 @@ function submitFish () { // checks if fish input is integrer and is there that m
                 waitPlayers()
               } else if (response.success === false) {
                 errorDiv.innerHTML = 'Ilmnes viga!'
+                document.getElementById('fishInput').style.borderColor = 'red'
                 errorDivMoveDown()
                 locked = false
               // error div
