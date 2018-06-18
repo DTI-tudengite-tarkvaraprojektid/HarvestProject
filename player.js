@@ -182,6 +182,7 @@ function isGameOver () { // if game is over directs to other view
       clearInterval(endInterval)
       switchView('fish-view', 'end-view')
       switchView('wait-view', 'end-view')
+      ajaxGet('logOut', function (response) {})
     }
   })
 }
