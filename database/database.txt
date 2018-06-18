@@ -1,0 +1,49 @@
+Table "game"
+
+CREATE TABLE IF NOT EXISTS `game` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `players` int(11) DEFAULT NULL,
+  `gameCode` varchar(60) NOT NULL,
+  `gameStarted` tinyint(4) DEFAULT NULL,
+  `currentRound` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp()
+);
+
+Table "round"
+
+CREATE TABLE IF NOT EXISTS `round` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `roundNr` int(11) NOT NULL,
+  `fish_start` int(11) NOT NULL,
+  `fish_end` int(11) DEFAULT NULL,
+  `game_id` int(11) NOT NULL
+);
+
+Table "team"
+
+CREATE TABLE IF NOT EXISTS `team` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `game_id` int(11) NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp()
+);
+
+Table "turn"
+
+CREATE TABLE IF NOT EXISTS `turn` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `round_id` int(11) NOT NULL,
+  `fish_wanted` int(11) NOT NULL,
+  `fish_caught` int(11) DEFAULT NULL,
+  `queue` int(11) DEFAULT NULL,
+  `team_id` int(11) NOT NULL
+);
+
+Table "users"
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `username` varchar(60) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp()
+);
