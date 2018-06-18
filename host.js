@@ -184,7 +184,7 @@ function endGame () { // ends the gameand directs to statistics view and creates
 
       let leaderboard = document.getElementById('leaderboard')
       for (let i = 0; i < response.teams.length; i++) {
-        row = leaderboard.insertRow(i + 1)
+        row = leaderboard.insertRow(i + 2)
         cell = row.insertCell(0)
         cell.innerHTML = '<b>' + (i + 1) + '.</b>'
         cell = row.insertCell(1)
@@ -197,11 +197,11 @@ function endGame () { // ends the gameand directs to statistics view and creates
       let header = scoreTabel.createTHead()
       row = header.insertRow(0)
       cell = row.insertCell(0)
-      row.innerHTML= '<th colspan="100">Tiimide Statistika</th>'
+      row.innerHTML = '<th colspan="100">Tiimide Statistika</th>'
       row = header.insertRow(1)
       cell = row.insertCell(0)
       cell.innerHTML = '<b>Tiimi nimi</b>'
-      
+
       for (let i = 1; i <= response.overallStats.roundsPlayed; i++) {
         cell = row.insertCell(i)
         cell.innerHTML = '<b>' + i + '</b>'
