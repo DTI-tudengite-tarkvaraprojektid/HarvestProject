@@ -8,6 +8,7 @@ if(isset($_GET['action']) && $_GET['action']) {
 }
 
 session_start();
+$_SESSION['fishTimes'] = null;
 
 switch($action) {
     case "gameStarted" : 
@@ -342,7 +343,7 @@ function gameStats($game_id){ // calls game stats from database
     $result = $stmt->fetch();
     $stmt->close();
     $mysqli->close();
-    return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound,"fishInSea" => $fishInSea]);
+    return (["maxPlayers" => $maxPlayers, "currentRound" => $currentRound, "fishInSea" => $fishInSea, "playerFishTimes" => (($_SESSION['fishTimes']) ? $_SESSION['fishTimes'] : null)]);
 }
 
 function joinGame($gameCode, $teamName) { // adds players to game in database, also checks if inputs are alphanumeric and if the length is right
@@ -366,7 +367,8 @@ function joinGame($gameCode, $teamName) { // adds players to game in database, a
         $stmt->close();
         $mysqli->close();
         $_SESSION['gameId'] = $gameId;
-        $_SESSION['teamId'] = $teamId;   
+        $_SESSION['teamId'] = $teamId;
+        $_SESSION['fishTimes'] = 0;
         return ['success' => true];
         // return ['gameId' => $gameId, 'teamId' => $teamId];  
     }
@@ -431,19 +433,24 @@ function playerFish($team_id) { // calls player info from database(fish cught in
     $stmt->fetch();
     $stmt->close();
     $gameStats = gameStats($gameId);
-    $totalFish = 0;
-    $lastFish = 0;
-    $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id IN (SELECT id FROM `round` WHERE game_id = ?)"); 
-    $stmt->bind_param("ii", $team_id, $gameId);
-    $stmt->bind_result($fish);
-    $stmt->execute();
-    while($stmt->fetch()) {
-        $totalFish += $fish;
+    if($_SESSION['fishTimes']+1 === $gameStats['currentRound']) {
+        $totalFish = 0;
+        $lastFish = 0;
+        $stmt = $mysqli->prepare("SELECT fish_caught FROM turn WHERE team_id = ? AND round_id IN (SELECT id FROM `round` WHERE game_id = ?)"); 
+        $stmt->bind_param("ii", $team_id, $gameId);
+        $stmt->bind_result($fish);
+        $stmt->execute();
+        while($stmt->fetch()) {
+            $totalFish += $fish;
+        }
+        $lastFish = $fish;
+        $stmt->close();
+        $mysqli->close();
+        $_SESSION['fishTimes']++;
+        return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
+    } else {
+        return ['success' => false];
     }
-    $lastFish = $fish;
-    $stmt->close();
-    $mysqli->close();
-    return (["totalFish" => $totalFish, "lastFish" => $lastFish]);
 }
 
 function endGame($game_id) { // changes game status to ended and returns game statistics
@@ -537,4 +544,5 @@ function endGame($game_id) { // changes game status to ended and returns game st
     */
     return json_encode(['overallStats' => $overallStats, 'teams' => $teams]);
 }
+
 ?>

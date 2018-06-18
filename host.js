@@ -168,7 +168,7 @@ function endGame () { // ends the gameand directs to statistics view and creates
       clearInterval(waitPlayersInterval)
       console.log(response.overallStats) // debug
       let statsTable = document.getElementById('OverallStatsTabel')
-      let row = statsTable.insertRow(1)
+      let row = statsTable.insertRow(2)
       let cell = row.insertCell(0)
       cell.innerHTML = response.overallStats.roundsPlayed
       cell = row.insertCell(1)
@@ -182,17 +182,32 @@ function endGame () { // ends the gameand directs to statistics view and creates
       cell = row.insertCell(5)
       cell.innerHTML = response.overallStats.fishMax
 
+      let leaderboard = document.getElementById('leaderboard')
+      for (let i = 0; i < response.teams.length; i++) {
+        row = leaderboard.insertRow(i + 1)
+        cell = row.insertCell(0)
+        cell.innerHTML = '<b>' + (i + 1) + '.</b>'
+        cell = row.insertCell(1)
+        cell.innerHTML = response.teams[i]['name']
+        cell = row.insertCell(2)
+        cell.innerHTML = response.teams[i]['total']
+      }
+
       let scoreTabel = document.getElementById('scoreTabel')
       let header = scoreTabel.createTHead()
       row = header.insertRow(0)
       cell = row.insertCell(0)
+      row.innerHTML= '<th colspan="100">Tiimide Statistika</th>'
+      row = header.insertRow(1)
+      cell = row.insertCell(0)
       cell.innerHTML = '<b>Tiimi nimi</b>'
+      
       for (let i = 1; i <= response.overallStats.roundsPlayed; i++) {
         cell = row.insertCell(i)
         cell.innerHTML = '<b>' + i + '</b>'
       }
       for (let i = 0; i < response.teams.length; i++) {
-        row = scoreTabel.insertRow(i + 1)
+        row = scoreTabel.insertRow(i + 2)
         cell = row.insertCell(0)
         cell.innerHTML = response.teams[i]['name']
         for (let j = 0; j < response.overallStats.roundsPlayed; j++) {
@@ -264,31 +279,31 @@ function updateFish (currentFish) { // creates fish animation on game view
 
   fishInterval = setInterval(function () {
     randomFishPlace = Math.round(((Math.random() * newHeight) + 100), 3)
-    let newFish = document.createElementNS('http://www.w3.org/2000/svg','svg') 
-    let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    let gradient = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+    let newFish = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
+    let gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient')
     let stops = [
       {
-        "color": "rgb(225, 174, 182)",
-        "offset": "0%"
-    },{
-        "color": "rgb(33, 131, 138)",
-        "offset": "100%"
-    }] 
+        'color': 'rgb(225, 174, 182)',
+        'offset': '0%'
+      }, {
+        'color': 'rgb(33, 131, 138)',
+        'offset': '100%'
+      }]
     for (let i = 0, length = stops.length; i < length; i++) {
-      let stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      stop.setAttribute('offset', stops[i].offset);
-      stop.setAttribute('stop-color', stops[i].color);
-      gradient.appendChild(stop);
+      let stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop')
+      stop.setAttribute('offset', stops[i].offset)
+      stop.setAttribute('stop-color', stops[i].color)
+      gradient.appendChild(stop)
     }
-    gradient.id = 'Gradient';
-    gradient.setAttribute('x1', '0%');
-    gradient.setAttribute('x2', '0%');
-    gradient.setAttribute('y1', '100%');
-    gradient.setAttribute('y2', '0%');
-    defs.appendChild(gradient);
+    gradient.id = 'Gradient'
+    gradient.setAttribute('x1', '0%')
+    gradient.setAttribute('x2', '0%')
+    gradient.setAttribute('y1', '100%')
+    gradient.setAttribute('y2', '0%')
+    defs.appendChild(gradient)
 
-    if(fishSwitch===1 || fishSwitch===3){
+    if (fishSwitch === 1 || fishSwitch === 3) {
       newFish.setAttribute('class', 'fish')
       if (fishSwitch === 3) {
         newFish.setAttribute('class', 'fish bounce2')
@@ -329,7 +344,7 @@ function updateFish (currentFish) { // creates fish animation on game view
 }
 
 function deleteFish () { // deletes fish animation
-  while (seaDiv.length > 0 ) {
+  while (seaDiv.length > 0) {
     seaDiv[0].parentNode.removeChild(seaDiv[0])
   }
 }
