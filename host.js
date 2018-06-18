@@ -181,6 +181,20 @@ function endGame () { // ends the gameand directs to statistics view and creates
       cell.innerHTML = response.overallStats.fishRobbery
       cell = row.insertCell(5)
       cell.innerHTML = response.overallStats.fishMax
+      row = header.insertRow(1)
+      cell = row.insertCell(0)
+
+      let leaderboard = document.getElementById('leaderboard')
+      let headerL = leaderboard.createTHead()
+      for (let i = 1; i <= response.teams; i++) {
+        let rowL = headerL.insertRow(i)
+        let cell1 = rowL.insertCell(0)
+        cell1.innerHTML = '<b>' + i + '</b>'
+        let cell2 = rowL.insertCell(1)
+        cell2.innerHTML = response.teams[i]['name']
+        let cell3 = rowL.insertCell(2)
+        cell3.innerHTML = response.teams[i]['total']
+      }
 
       let scoreTabel = document.getElementById('scoreTabel')
       let header = scoreTabel.createTHead()
@@ -264,31 +278,31 @@ function updateFish (currentFish) { // creates fish animation on game view
 
   fishInterval = setInterval(function () {
     randomFishPlace = Math.round(((Math.random() * newHeight) + 100), 3)
-    let newFish = document.createElementNS('http://www.w3.org/2000/svg','svg') 
-    let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    let gradient = document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+    let newFish = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    let defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
+    let gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient')
     let stops = [
       {
-        "color": "rgb(225, 174, 182)",
-        "offset": "0%"
-    },{
-        "color": "rgb(33, 131, 138)",
-        "offset": "100%"
-    }] 
+        'color': 'rgb(225, 174, 182)',
+        'offset': '0%'
+      }, {
+        'color': 'rgb(33, 131, 138)',
+        'offset': '100%'
+      }]
     for (let i = 0, length = stops.length; i < length; i++) {
-      let stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-      stop.setAttribute('offset', stops[i].offset);
-      stop.setAttribute('stop-color', stops[i].color);
-      gradient.appendChild(stop);
+      let stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop')
+      stop.setAttribute('offset', stops[i].offset)
+      stop.setAttribute('stop-color', stops[i].color)
+      gradient.appendChild(stop)
     }
-    gradient.id = 'Gradient';
-    gradient.setAttribute('x1', '0%');
-    gradient.setAttribute('x2', '0%');
-    gradient.setAttribute('y1', '100%');
-    gradient.setAttribute('y2', '0%');
-    defs.appendChild(gradient);
+    gradient.id = 'Gradient'
+    gradient.setAttribute('x1', '0%')
+    gradient.setAttribute('x2', '0%')
+    gradient.setAttribute('y1', '100%')
+    gradient.setAttribute('y2', '0%')
+    defs.appendChild(gradient)
 
-    if(fishSwitch===1 || fishSwitch===3){
+    if (fishSwitch === 1 || fishSwitch === 3) {
       newFish.setAttribute('class', 'fish')
       if (fishSwitch === 3) {
         newFish.setAttribute('class', 'fish bounce2')
