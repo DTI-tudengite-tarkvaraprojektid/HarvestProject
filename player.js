@@ -180,6 +180,7 @@ function submitFish () { // checks if fish input is integrer and is there that m
                 waitPlayers()
               } else if (response.success === false) {
                 errorDiv.innerHTML = 'Ilmnes viga!'
+                document.getElementById('fishInput').style.borderColor = 'red'
                 errorDivMoveDown()
                 locked = false
               // error div
