@@ -143,12 +143,6 @@
     }
 }
 
-  /* panel looks, temp */
-#game-view {
-    height: 75vh;
-    width: 100%;
-}
-
 .currentRound {
     font-size: 75px;
     font-weight: bold;
