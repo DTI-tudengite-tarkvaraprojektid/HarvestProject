@@ -27,13 +27,14 @@
 
 .inputBox {
     width: 100%;
-    padding: 12px 20px;
+    padding: 8px 15px;
     margin: 10px 0;
     box-sizing: border-box;
     border: 2px solid #2a547e;
     border-radius: 4px;
     margin-left: auto;
-    margin-right: auto;    
+    margin-right: auto;
+    font-size: 20px;
 }
 
 #note {
@@ -109,7 +110,7 @@
 }
 
 .button {
-    margin-top:5%;
+    margin-top:1%;
     font-size: 10px;
    	background-color:white;
     border: 2px solid #2a547e;
