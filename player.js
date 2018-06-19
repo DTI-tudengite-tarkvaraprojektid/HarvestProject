@@ -46,24 +46,16 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
           button.disabled = true
           let gameCode = document.getElementById('gameCode').value
           let teamName = document.getElementById('teamName').value
-          // check inputs
           let regex = /^(?=.*[A-Za-z0-9À-ž])[A-Za-z0-9À-ž _\-]*$/g
           if (regex.test(teamName) && teamName.length < 15) {
-          // if (!teamName.match(regex) && !gameCode.match(regex)) {
             let regex2 = /^[a-zA-Z0-9]*$/g
             if (regex2.test(gameCode) && gameCode.length == 4) {
-              console.log('testin gameCode')
-              console.log('tiimi nimi OK')
               let data = new FormData()
               data.append('gameCode', gameCode)
               data.append('teamName', teamName)
               ajaxPost('joinGame', data, function (response) {
                 if (response.success === true) {
                   errorDiv.innerHTML = ''
-                  // gameId = response.gameId
-                  // teamId = response.teamId
-                  // UpdateQueryString('gameId', response.gameId)
-                  // UpdateQueryString('teamId', response.teamId)
                   loadHTML('content', 'views/joinedScreen.html', function () {
                     gameStart()
                   })
@@ -77,7 +69,6 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
               })
             }
           } else {
-            console.log('tiimi nimi not OK')
             errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
             document.getElementById('teamName').style.borderColor = 'red'
             button.disabled = false
@@ -105,13 +96,11 @@ function gameStart () { // checks if game has started yet, if yes directs to oth
         let backButton = document.getElementById('backButton')
         backButton.addEventListener('click', function (event) {
           ajaxGet('logOut', function (response) {
-            location.reload()
+            location.reload(true)
           })
         })
         endInterval = setInterval(isGameOver, 3000)
-      } /* else {
-        console.log('ilmnes viga')
-      } */
+      }
     })
   }, 1000)
 }
@@ -137,11 +126,7 @@ function waitPlayers () { // checks how many players are ready and shows it to p
         } else {
           waitSpan.innerHTML = '(' + response.playersReady + '/' + maxPlayers + ')'
         }
-      } /* else {
-        errorDiv.innerHTML = 'Ilmnes viga!'
-        errorDivMoveDown()
-        // error div or redirect ilmnes viga
-      } */
+      }
     })
   }, 1000)
 }
@@ -166,7 +151,6 @@ function isInteger (x) { // checks if is integrer
 function submitFish () { // checks if fish input is integrer and is there that much fish in sea, if yes, submits fishWanted
   if (!locked) {
     locked = true
-    console.log('click')
     let fishInputValue = fishInput.value
     ajaxGet('gameStats', function (response) {
       if (response.maxPlayers) {
@@ -185,7 +169,6 @@ function submitFish () { // checks if fish input is integrer and is there that m
                 document.getElementById('fishInput').style.borderColor = 'red'
                 errorDivMoveDown()
                 locked = false
-              // error div
               }
             })
           } else {
