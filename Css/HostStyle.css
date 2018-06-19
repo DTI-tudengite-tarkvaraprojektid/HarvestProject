@@ -195,18 +195,18 @@ td,th {
 
 table >tbody>tr:nth-child(2){
     background:#c4b598 !important;
-    border-top: 4px #909090;
-    border-bottom: 4px #909090;
+    border-top: 4px solid #909090;
+    border-bottom: 4px solid #909090;
 }
 table >thead>tr:nth-child(2){
     background:#c4b598 !important;
-    border-top: 4px #909090;
-    border-bottom: 4px #909090;
+    border-top: 4px solid #909090;
+    border-bottom: 4px solid #909090;
 }
 tr:nth-child(even) {background: #d8caac}
 tr:nth-child(odd) {background: #e5e4c4}
 
 .fishRobbery{
     color:#2B3856;
-    background-color: rgb(253, 137, 127);
+    background-color: rgb(255, 170, 170);
 }
