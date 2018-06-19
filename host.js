@@ -73,7 +73,6 @@ function panel () { // loads in host views
 function createGame () { // creates game and directs to other view or shows error, crates interval for updatePlayerList
   ajaxGet('createGame', function (response) {
     if (response.gameCode) {
-      // gameId = response.id
       let gameCode = response.gameCode
       switchView('create-view', 'start-view')
       gameCode = gameCode.toUpperCase()
@@ -93,7 +92,6 @@ function updatePlayerList () { // shows joined players on screen
       while (playersList.firstChild) {
         playersList.firstChild.remove()
       }
-      console.log(response.names)
       for (let i = 0; i < response.names.length; i++) {
         listNode = document.createElement('li')
         textNode = document.createTextNode(response.names[i])
