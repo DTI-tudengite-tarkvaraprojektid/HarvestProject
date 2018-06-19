@@ -17,12 +17,13 @@
     box-shadow: 0px 6px 40px 23px rgba(112,112,112,0.31);
     padding: 5%;
     margin-top: 25%;
-    margin-bottom: 50%; 
+    margin-bottom: 25%; 
 }
 
 .main {
     height: 100% !important;
     background : linear-gradient(to right, #dbc594, #e6e4b3, #dbc594);
+    overflow:hidden;
 }
 
 .inputBox {
