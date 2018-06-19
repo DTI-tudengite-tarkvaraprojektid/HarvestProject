@@ -1,4 +1,5 @@
 # HarvestProject
+![screenshot](images/screenShot.JPG "screenshot")
 # Grupi liikmed
 Teet Triisa, Kertu Mikk, Grete Ojavere, Kärt Nigols
 # Installijuhend
