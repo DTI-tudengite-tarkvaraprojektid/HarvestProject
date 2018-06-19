@@ -9,7 +9,6 @@ if(isset($_GET['action']) && $_GET['action']) {
 
 session_start();
 
-
 switch($action) {
     case "gameStarted" : 
         if(isset($_SESSION["gameId"])) {

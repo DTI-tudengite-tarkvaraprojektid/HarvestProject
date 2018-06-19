@@ -104,7 +104,9 @@ function gameStart () { // checks if game has started yet, if yes directs to oth
         fishInput = document.getElementById('fishInput')
         let backButton = document.getElementById('backButton')
         backButton.addEventListener('click', function (event) {
-          location.reload()
+          ajaxGet('logOut', function (response) {
+            location.reload()
+          })
         })
         endInterval = setInterval(isGameOver, 3000)
       } /* else {

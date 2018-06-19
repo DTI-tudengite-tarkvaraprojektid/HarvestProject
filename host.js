@@ -65,7 +65,7 @@ function panel () { // loads in host views
       endGameButton.disabled = false
     })
     newGameButton.addEventListener('click', function (event) {
-      location.reload()
+      location.reload(true)
     })
   })
 }
