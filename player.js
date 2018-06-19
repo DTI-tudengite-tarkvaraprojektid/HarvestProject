@@ -67,6 +67,12 @@ function gameJoin () { // lets player join game and checks inputs(is alphanumeri
                   locked = false
                 }
               })
+            } else{
+              errorDiv.innerHTML = 'Vigane mängukood!'
+              document.getElementById('gameCode').style.borderColor = 'red'
+              button.disabled = false
+              errorDivMoveDown()
+              locked = false
             }
           } else {
             errorDiv.innerHTML = 'Palun sisesta uus tiiminimi!'
