@@ -1,6 +1,6 @@
 # HarvestProject
 ![screenshot](images/screenShot.JPG "screenshot")
-#Eesmärk
+# Eesmärk
 Eesmärgiks oli luua kalapüügiteemaline browseripõhine mäng, et klient ei peaks enam kasutama paberist lauamängu.
 Klient loob oma arvutist mängu, millega õpilased oma sedamest liituda saavad. Nende eesmärgiks on püüda võimalikult palju kalu nii, et merest kalad otsa ei saaks.
 Projekt sai loodud digitehnoloogiate instituudis tarkvaraarenduse praktika kursuse raames.
