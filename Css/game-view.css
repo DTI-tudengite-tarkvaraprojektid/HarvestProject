@@ -7,7 +7,18 @@
   box-shadow: 5px 10px 220px black inset;
   overflow: hidden; 
   top:20%;
-  
+}
+
+.seaNumberView {
+  height: 80%;
+  width: 100%;
+  position: absolute;
+  overflow: hidden; 
+  top:20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
 @-webkit-keyframes swim {
@@ -146,10 +157,7 @@
   font-weight: bold;
   color: white;
   text-align: center;
-  margin-top:15%;
-  position: absolute;
-  padding-left: 42%;
-  z-index: 2;
+  z-index: 3;
 }
 
 .buttonGameView {

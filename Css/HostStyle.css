@@ -118,6 +118,8 @@
     z-index: 100;
     top:-100%;
     left:0px;
+    display: flex;
+    justify-content: center;
 }
 
 .animation {
@@ -127,9 +129,6 @@
 .fishie {
     width: 382px;
     height: 215px;
-    right: 40%;
-    top:30%;
-    position: absolute;
     background-image: url("../images/pufferfishLoader.png");
 }
 

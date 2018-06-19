@@ -137,7 +137,6 @@ function waitPlayers () { // shows players that join game
       if (response.playersReady) {
         if (response.playersReady === maxPlayers) {
           clearInterval(waitPlayersInterval)
-          document.getElementById('fishtank').style.display = 'block'
           hypnofishMoveDown()
           setTimeout(roundOver, 2000)
         } else {
@@ -218,6 +217,7 @@ function endGame () { // ends the gameand directs to statistics view and creates
 function hypnofishMoveDown () { // moves wait screen pufferfish
   let h = parseInt(window.innerHeight)
   let fish = document.getElementById('fishtank')
+  fish.style.display = 'flex'
   let fishie = document.getElementById('fishie')
   let temp = parseInt(window.getComputedStyle(fish).getPropertyValue('top'))
   let prc = Math.round(((temp / h) * 100))
