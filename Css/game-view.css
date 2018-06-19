@@ -1,12 +1,12 @@
 .seaGameView {
-  height: 100%;
+  height: 80%;
   width: 100%;
   position: absolute;
   display: block;
   background-image: url(../images/TEST.jpg);
   box-shadow: 5px 10px 220px black inset;
   overflow: hidden; 
-  top:15%;
+  top:20%;
   
 }
 
